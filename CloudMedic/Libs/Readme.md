@@ -1,0 +1,3 @@
+- Signup at [crypteron.com](http://www.crypteron.com) 
+- Download the agents from your [My Crypteron Dashboard](https://my.crypteron.com/#/downloads)
+- Extract the agent .DLLs into this folder

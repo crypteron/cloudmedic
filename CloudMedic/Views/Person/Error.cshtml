@@ -1,0 +1,12 @@
+﻿@{
+    ViewBag.Title = "Error";
+}
+
+<h1> Oh no, an error <i class="fa fa-exclamation-circle"></i></h1>
+
+<div>
+    <pre>@ViewBag.ErrorMessage</pre>
+</div>
+<p>    
+    @Html.ActionLink("Back to List", "Index")
+</p>
