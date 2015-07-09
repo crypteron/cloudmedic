@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudMedicMVC", "CloudMedic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudMedic.Tests", "CloudMedic.Tests\CloudMedic.Tests.csproj", "{6CA23E2B-CD6F-4E57-AEF1-9F11DF47BB36}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudMedicApi", "CloudMedicApi\CloudMedicApi.csproj", "{93896396-39BD-4B27-9A29-EC3E10FB9B1B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{6CA23E2B-CD6F-4E57-AEF1-9F11DF47BB36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CA23E2B-CD6F-4E57-AEF1-9F11DF47BB36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CA23E2B-CD6F-4E57-AEF1-9F11DF47BB36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93896396-39BD-4B27-9A29-EC3E10FB9B1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93896396-39BD-4B27-9A29-EC3E10FB9B1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93896396-39BD-4B27-9A29-EC3E10FB9B1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93896396-39BD-4B27-9A29-EC3E10FB9B1B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
