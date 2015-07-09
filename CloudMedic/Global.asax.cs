@@ -16,7 +16,7 @@ namespace CloudMedic
         protected void Application_Start()
         {
             // Init code-first database, switch in production!
-            Database.SetInitializer(new CreateDatabaseIfNotExists<MyDbContext>()); // Development
+            Database.SetInitializer(new CloudMedicDbInitializer()); // Development
             //Database.SetInitializer<MyDbContext>(null); // Production
 
             GlobalConfiguration.Configure(WebApiConfig.Register);

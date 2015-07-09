@@ -7,14 +7,6 @@ namespace CloudMedic.DAL
     // Usually DbContext, it's IdentityDbContext to pull in ASP.NET Identity Framework's context
     public class MyDbContext : IdentityDbContext<ApplicationUser>
     {
-        // Static c'tor to init the Initializer once per app domain (or put in global.asax / Application_Start)
-        static MyDbContext()
-        {
-            // CloudMedicDbInitializer will recreate the database 
-            // when model changes
-            Database.SetInitializer(new CloudMedicDbInitializer());
-        }
-
         public MyDbContext(bool byPassCipherDb = false)
             : base("MyDbContext", throwIfV1Schema: true)
         {
