@@ -92,9 +92,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CloudMedic\CloudMedic.csproj">
+    <ProjectReference Include="..\CloudMedicMVC\CloudMedicMVC.csproj">
       <Project>{69D1106C-3CA5-4431-8143-73AFF9F267E3}</Project>
-      <Name>CipherDoc</Name>
+      <Name>CloudMedicMVC</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
