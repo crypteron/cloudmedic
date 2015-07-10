@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudMedicMVC", "CloudMedicMVC\CloudMedicMVC.csproj", "{69D1106C-3CA5-4431-8143-73AFF9F267E3}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudMedic.Tests", "CloudMedic.Tests\CloudMedic.Tests.csproj", "{6CA23E2B-CD6F-4E57-AEF1-9F11DF47BB36}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudMedicApi", "CloudMedicApi\CloudMedicApi.csproj", "{93896396-39BD-4B27-9A29-EC3E10FB9B1B}"
@@ -15,10 +13,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{69D1106C-3CA5-4431-8143-73AFF9F267E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{69D1106C-3CA5-4431-8143-73AFF9F267E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{69D1106C-3CA5-4431-8143-73AFF9F267E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{69D1106C-3CA5-4431-8143-73AFF9F267E3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6CA23E2B-CD6F-4E57-AEF1-9F11DF47BB36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6CA23E2B-CD6F-4E57-AEF1-9F11DF47BB36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CA23E2B-CD6F-4E57-AEF1-9F11DF47BB36}.Release|Any CPU.ActiveCfg = Release|Any CPU

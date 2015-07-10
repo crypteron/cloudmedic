@@ -18,15 +18,15 @@ using Omu.ValueInjecter;
 using System.Collections.Generic;
 using CloudMedicApi.BLL;
 
-namespace CloudMedicApi.Controllers.Api
+namespace CloudMedicApi.Controllers
 {
-    [RoutePrefix("api/users")]
-    public class UsersApiController : ApiController
+    [RoutePrefix("Users")]
+    public class UsersController : ApiController
     {
         private ApplicationUserManager _userManager;
         private MyDbContext _db;
 
-        public UsersApiController()
+        public UsersController()
         {
             _db = new MyDbContext();
             _userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(_db));

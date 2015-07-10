@@ -14,6 +14,7 @@ using Microsoft.AspNet.Identity.Owin;
 
 namespace CloudMedicApi.Controllers
 {
+    [RoutePrefix("Person")]
     public class PersonController : Controller
     {
         private readonly MyDbContext _db = new MyDbContext();

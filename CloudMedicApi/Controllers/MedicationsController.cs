@@ -12,7 +12,7 @@ using System.Web.Http.Description;
 using CloudMedicApi.DAL;
 using CloudMedicApi.Models;
 
-namespace CloudMedicApi.Controllers.Api
+namespace CloudMedicApi.Controllers
 {
     public class MedicationsController : ApiController
     {

@@ -36,6 +36,7 @@ namespace CloudMedicApi.Models
     {
         [Required]
         [Display(Name = "Email")]
+        [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string Email { get; set; }
 
         [Required]
@@ -48,6 +49,8 @@ namespace CloudMedicApi.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        // Add the other 'required' properties from the ApplicationUser class over here
     }
 
     public class RegisterExternalBindingModel
