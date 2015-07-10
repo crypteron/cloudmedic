@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using CloudMedicApi.DAL;
 
 namespace CloudMedicApi
 {
@@ -13,6 +15,10 @@ namespace CloudMedicApi
     {
         protected void Application_Start()
         {
+            // Init code-first database, switch in production!
+            Database.SetInitializer(new CloudMedicDbInitializer()); // Development
+            //Database.SetInitializer<MyDbContext>(null); // Production
+
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
