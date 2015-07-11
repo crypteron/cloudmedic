@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 using CloudMedic.Models;
 
 namespace CloudMedic.DAL
 {
-    // Based on http://gunston.gmu.edu/healthscience/709/DataWarehouses.asp
+    /// <summary>
+    /// This class or table will capture all medication events
+    /// for a given patient.
+    /// 
+    /// Based on http://gunston.gmu.edu/healthscience/709/DataWarehouses.asp
+    /// </summary>
     public class MedicationAdministered
     {
         public Guid Id { get; set; }
@@ -18,7 +20,7 @@ namespace CloudMedic.DAL
 
         public virtual ICollection<Medication> Medications { get; set; }
         
-        public virtual ICollection<ApplicationUser> MedicalTeam { get; set; }
+        public virtual ICollection<ApplicationUser> CareTeam { get; set; }
 
         public virtual ApplicationUser Patient { get; set; }
     }

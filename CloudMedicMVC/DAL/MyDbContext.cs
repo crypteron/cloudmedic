@@ -47,7 +47,7 @@ namespace CloudMedic.DAL
             // http://www.entityframeworktutorial.net/code-first/configure-many-to-many-relationship-in-code-first.aspx
             modelBuilder.Entity<ApplicationUser>()
                 .HasMany(u => u.MedicationAdministered)
-                .WithMany(ma => ma.MedicalTeam)
+                .WithMany(ma => ma.CareTeam)
                 .Map(em =>
                 {
                     em.ToTable("UserMedicationsAdministered");

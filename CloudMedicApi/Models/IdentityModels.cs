@@ -39,7 +39,6 @@ namespace CloudMedicApi.Models
         public string DOB { get; set; }
 
         [Secure]
-        [Required]
         [Display(Name = "Specialty")]
         public string Specialty { get; set; }
 

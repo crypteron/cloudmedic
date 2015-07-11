@@ -20,14 +20,19 @@ namespace CloudMedicApi
             // Web API routes
             config.MapHttpAttributeRoutes();
 
+            // The default controller when all else fails
             config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
+                name: "Default",
+                routeTemplate: "{controller}/{*id}",
+                defaults: new
+                {
+                    controller = "Default",
+                    action = "Get",
+                    id = RouteParameter.Optional
+                });
 
             // Enforce HTTPS
-            config.Filters.Add(new CloudMedicApi.Filters.RequireHttpsAttribute());
+            config.Filters.Add(new Filters.RequireHttpsAttribute());
         }
     }
 }

@@ -222,6 +222,7 @@
     <Compile Include="BLL\RoleManager.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Api\MedicationsController.cs" />
+    <Compile Include="DAL\Careteam.cs" />
     <Compile Include="Models\CloudMedicContext.cs" />
     <Compile Include="Models\DTOs\UserDto.cs" />
     <Compile Include="Controllers\HomeController.cs" />
