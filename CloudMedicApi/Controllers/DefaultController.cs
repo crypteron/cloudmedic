@@ -26,7 +26,7 @@ namespace CloudMedicApi.Controllers
 @"Current time (UTC) : {0}" + NewLine;
         #endregion
 
-    [HttpGet]
+        [HttpGet]
         public HttpResponseMessage Get()
         {
             var strResp = String.Format(WelcomeMsg, DateTime.UtcNow.ToString("F"));                
