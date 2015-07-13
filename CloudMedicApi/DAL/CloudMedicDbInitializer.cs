@@ -143,7 +143,7 @@ namespace CloudMedicApi.DAL
                 Id = Guid.NewGuid(),
                 Patient = p[0],
                 Medications = new Collection<Medication> { meds[0], meds[1] },
-                MedicalTeam = new Collection<ApplicationUser> { n[0], n[7], dr[0] },
+                CareTeam = new Collection<ApplicationUser> { n[0], n[7], dr[0] },
                 Pharmacy = pharmacies[0],
                 TreatmentDate = PersonRandomizer.GetRandomTime(1)
             });
@@ -152,7 +152,7 @@ namespace CloudMedicApi.DAL
                 Id = Guid.NewGuid(),
                 Patient = p[1],
                 Medications = new Collection<Medication> { meds[2], meds[3] },
-                MedicalTeam = new Collection<ApplicationUser> { n[3] , dr[1] },
+                CareTeam = new Collection<ApplicationUser> { n[3] , dr[1] },
                 Pharmacy = pharmacies[1],
                 TreatmentDate = PersonRandomizer.GetRandomTime(1)
             });
@@ -161,7 +161,7 @@ namespace CloudMedicApi.DAL
                 Id = Guid.NewGuid(),
                 Patient = p[0],
                 Medications = new Collection<Medication> { meds[0], meds[3] },
-                MedicalTeam = new Collection<ApplicationUser> { n[1], n[2], n[6] , dr[2] },
+                CareTeam = new Collection<ApplicationUser> { n[1], n[2], n[6] , dr[2] },
                 Pharmacy = pharmacies[0],
                 TreatmentDate = PersonRandomizer.GetRandomTime(1)
             });
@@ -170,7 +170,7 @@ namespace CloudMedicApi.DAL
                 Id = Guid.NewGuid(),
                 Patient = p[2],
                 Medications = new Collection<Medication> { meds[0], meds[1], meds[3] },
-                MedicalTeam = new Collection<ApplicationUser> { n[0], n[4], n[5] , dr[0], dr[3] },
+                CareTeam = new Collection<ApplicationUser> { n[0], n[4], n[5] , dr[0], dr[3] },
                 Pharmacy = pharmacies[1],
                 TreatmentDate = PersonRandomizer.GetRandomTime(1)
             });

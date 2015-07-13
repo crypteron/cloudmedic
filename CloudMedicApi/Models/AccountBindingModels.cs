@@ -50,7 +50,6 @@ namespace CloudMedicApi.Models
         [Display(Name = "Date of birth")]
         public string DOB { get; set; }
 
-        [Required]
         [Display(Name = "Specialty")]
         public string Specialty { get; set; }
 
