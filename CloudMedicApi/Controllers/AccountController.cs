@@ -318,7 +318,7 @@ namespace CloudMedicApi.Controllers
             return logins;
         }
 
-        // POST api/Account/Register
+        // POST Account/Register
         [AllowAnonymous]
         [Route("Register")]
         public async Task<IHttpActionResult> Register(RegisterBindingModel model)
