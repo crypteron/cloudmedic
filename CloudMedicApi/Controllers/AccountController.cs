@@ -114,7 +114,7 @@ namespace CloudMedicApi.Controllers
             };
         }
 
-        // POST api/Account/ChangePassword
+        // POST Account/ChangePassword
         [Route("ChangePassword")]
         public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
         {
@@ -328,10 +328,11 @@ namespace CloudMedicApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, Gender = model.Gender, DOB = model.DOB, Specialty = model.Specialty };
+            var user = new ApplicationUser() { UserName = model.UserName, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, Gender = model.Gender, DOB = model.DOB, Specialty = model.Specialty };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
-
+            //await UserManager.AddToRoleAsync(user.Id, "Patient");
+            
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);
