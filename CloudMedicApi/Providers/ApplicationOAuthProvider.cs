@@ -31,6 +31,8 @@ namespace CloudMedicApi.Providers
         {
             var userManager = context.OwinContext.GetUserManager<ApplicationUserManager>();
 
+            context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
+
             ApplicationUser user = await userManager.FindAsync(context.UserName, context.Password);
 
             if (user == null)
