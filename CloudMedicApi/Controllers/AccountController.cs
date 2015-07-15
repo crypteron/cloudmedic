@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Web.Security;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ using Microsoft.Owin.Security.OAuth;
 using CloudMedicApi.Models;
 using CloudMedicApi.Providers;
 using CloudMedicApi.Results;
+using System.Web.Mail;
 
 namespace CloudMedicApi.Controllers
 {
@@ -317,7 +319,32 @@ namespace CloudMedicApi.Controllers
 
             return logins;
         }
-
+        // POST Account/ForgetPassword
+        [AllowAnonymous]
+        [Route("ForgetPassword")]
+        public  async Task<IHttpActionResult> ForgetPassword(ForgetPasswordBindingModel model)
+        {
+            
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var user = await UserManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                return BadRequest(ModelState); 
+            }
+            string NewPassword = Membership.GeneratePassword(6, 1);
+            //string NewPassword="Cjm@12345"
+            NewPassword = "Aa" + NewPassword;
+            string resetToken = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+            IdentityResult result = await UserManager.ResetPasswordAsync(user.Id, resetToken,NewPassword);
+            if (!result.Succeeded)
+            {
+                return GetErrorResult(result);
+            }
+            return Ok();
+        }
         // POST Account/Register
         [AllowAnonymous]
         [Route("Register")]
