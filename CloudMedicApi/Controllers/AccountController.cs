@@ -17,11 +17,8 @@ using Microsoft.Owin.Security.OAuth;
 using CloudMedicApi.Models;
 using CloudMedicApi.Providers;
 using CloudMedicApi.Results;
-<<<<<<< HEAD
 using System.Web.Mail;
-=======
 using CloudMedicApi.BLL;
->>>>>>> 0274d3c7d6517a51466f234e52b53be841cd1a26
 
 namespace CloudMedicApi.Controllers
 {
