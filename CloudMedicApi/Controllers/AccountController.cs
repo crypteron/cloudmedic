@@ -156,7 +156,6 @@ namespace CloudMedicApi.Controllers
 
             return Ok();
         }
-
         // POST api/Account/AddExternalLogin
         [Route("AddExternalLogin")]
         public async Task<IHttpActionResult> AddExternalLogin(AddExternalLoginBindingModel model)
@@ -416,6 +415,24 @@ namespace CloudMedicApi.Controllers
             }
             return Ok();
         }
+        // POST /Account/ProfileUpdate
+        [Route("ProfileUpdate")]
+        public async Task<IHttpActionResult> ProfileUpdate(ProfileUpdateBindingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            ApplicationUser currentuser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            currentuser.FirstName = model.FirstName;
+            currentuser.LastName=model.LastName;
+            currentuser.Gender = model.Gender;
+            currentuser.Email = model.Email;
+            currentuser.DOB = model.DOB;
+            await UserManager.UpdateAsync(currentuser);
+            return Ok();
+        }
+
 
         protected override void Dispose(bool disposing)
         {
