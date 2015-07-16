@@ -34,6 +34,15 @@ namespace CloudMedicApi.Models
         public string LoginProvider { get; set; }
     }
 
+    public class UserProfileViewModel
+    {
+        public string Email { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Gender { get; set; }
+        public string DOB { get; set; }    
+    }
+
     public class UserLoginInfoViewModel
     {
         public string LoginProvider { get; set; }

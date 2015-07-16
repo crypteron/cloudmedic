@@ -77,7 +77,19 @@ namespace CloudMedicApi.Controllers
             Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
             return Ok();
         }
-
+        //GET Account/Profile
+        [Route("Profile")]
+         public async Task<UserProfileViewModel> GetProfile()
+        {
+           ApplicationUser currentuser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+           var model=new UserProfileViewModel();
+           model.FirstName=currentuser.FirstName;
+           model.LastName=currentuser.LastName;
+           model.Gender=currentuser.Gender;
+           model.Email=currentuser.Email;
+           model.DOB=currentuser.DOB;
+           return model;
+        }
         // GET api/Account/ManageInfo?returnUrl=%2F&generateState=true
         [Route("ManageInfo")]
         public async Task<ManageInfoViewModel> GetManageInfo(string returnUrl, bool generateState = false)
