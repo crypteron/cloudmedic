@@ -41,14 +41,7 @@ namespace CloudMedicApi.Models
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
-        [Required]
-        [Display(Name = "Gender")]
-        public string Gender { get; set; }
-
-        [Required]
-        [Display(Name = "Date of birth")]
-        public string DOB { get; set; }
-
+        
         [Required]
         [Display(Name = "Email")]
         [EmailAddress(ErrorMessage = "Invalid Email Address")]

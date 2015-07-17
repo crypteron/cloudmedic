@@ -85,9 +85,7 @@ namespace CloudMedicApi.Controllers
            var model=new UserProfileViewModel();
            model.FirstName=currentuser.FirstName;
            model.LastName=currentuser.LastName;
-           model.Gender=currentuser.Gender;
-           model.Email=currentuser.Email;
-           model.DOB=currentuser.DOB;
+           model.Email=currentuser.Email;           
            return model;
         }
         // GET api/Account/ManageInfo?returnUrl=%2F&generateState=true
@@ -437,10 +435,8 @@ namespace CloudMedicApi.Controllers
             }
             ApplicationUser currentuser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
             currentuser.FirstName = model.FirstName;
-            currentuser.LastName=model.LastName;
-            currentuser.Gender = model.Gender;
+            currentuser.LastName=model.LastName;            
             currentuser.Email = model.Email;
-            currentuser.DOB = model.DOB;
             await UserManager.UpdateAsync(currentuser);
             return Ok();
         }
