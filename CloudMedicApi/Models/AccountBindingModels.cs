@@ -89,7 +89,6 @@ namespace CloudMedicApi.Models
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
-        // Add the other 'required' properties from the ApplicationUser class over here
     }
 
     public class RegisterExternalBindingModel

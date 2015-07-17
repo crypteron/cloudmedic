@@ -107,8 +107,8 @@ namespace CloudMedicApi.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/users
-        [Route("")]
+        // POST: users
+        [Route("Add")]
         public async Task<IHttpActionResult> PostUser(UserDto userDto)
         {
             if (!ModelState.IsValid)
@@ -131,23 +131,30 @@ namespace CloudMedicApi.Controllers
             if (!identityResult.Succeeded)
                 return BuildErrorResult(identityResult);
 
-            return Created("api/users/" + user.Id, userDto);
+            return Created("users/" + user.Id, userDto);
             
         }
 
-        // DELETE: api/users/5
-        [Route("{id}")]
-        public async Task<IHttpActionResult> DeleteUser(string id)
+        // DELETE: users/5
+        [Route("")]
+        public async Task<IHttpActionResult> DeleteUser(string userName)
         {
-            var patient = await _userManager.FindByIdAsync(id);
-            if (patient == null)
+            if (string.IsNullOrWhiteSpace(userName))
             {
                 return NotFound();
             }
+            else
+            {
+                var patient = await _userManager.FindByNameAsync(userName);
+                if (patient == null)
+                {
+                    return NotFound();
+                }
 
-            await _userManager.DeleteAsync(patient);            
+                await _userManager.DeleteAsync(patient);
 
-            return Ok(patient);
+                return Ok(patient);
+            }
         }
 
         private IHttpActionResult BuildErrorResult(IdentityResult identityResult)
