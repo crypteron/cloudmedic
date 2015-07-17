@@ -427,8 +427,8 @@ namespace CloudMedicApi.Controllers
             }
             return Ok();
         }
-        // POST /Account/ProfileUpdate
-        [Route("ProfileUpdate")]
+        // POST /Account/Profile
+        [Route("Profile")]
         public async Task<IHttpActionResult> ProfileUpdate(ProfileUpdateBindingModel model)
         {
             if (!ModelState.IsValid)
