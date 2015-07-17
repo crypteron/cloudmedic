@@ -107,8 +107,8 @@ namespace CloudMedicApi.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/users
-        [Route("")]
+        // POST: users
+        [Route("Add")]
         public async Task<IHttpActionResult> PostUser(UserDto userDto)
         {
             if (!ModelState.IsValid)
@@ -131,7 +131,7 @@ namespace CloudMedicApi.Controllers
             if (!identityResult.Succeeded)
                 return BuildErrorResult(identityResult);
 
-            return Created("api/users/" + user.Id, userDto);
+            return Created("users/" + user.Id, userDto);
             
         }
 
