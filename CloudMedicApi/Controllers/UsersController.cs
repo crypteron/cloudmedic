@@ -7,24 +7,19 @@ using System.Web.Http.Results;
 using CloudMedicApi.DAL;
 using CloudMedicApi.Models;
 using Crypteron.CipherCore.Entropy;
-using Crypteron.CipherCore.KeyManagement;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using Newtonsoft.Json;
-using System;
-using System.Diagnostics;
 using System.Linq;
 using Omu.ValueInjecter;
 using System.Collections.Generic;
-using CloudMedicApi.BLL;
 
 namespace CloudMedicApi.Controllers
 {
     [RoutePrefix("Users")]
     public class UsersController : ApiController
     {
-        private ApplicationUserManager _userManager;
-        private MyDbContext _db;
+        private readonly ApplicationUserManager _userManager;
+        private readonly MyDbContext _db;
 
         public UsersController()
         {
