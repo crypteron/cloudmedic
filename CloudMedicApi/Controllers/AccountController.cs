@@ -437,7 +437,11 @@ namespace CloudMedicApi.Controllers
             currentuser.FirstName = model.FirstName;
             currentuser.LastName=model.LastName;            
             currentuser.Email = model.Email;
-            await UserManager.UpdateAsync(currentuser);
+            IdentityResult result = await UserManager.UpdateAsync(currentuser);
+            if (!result.Succeeded)
+            {
+                return GetErrorResult(result);
+            }
             return Ok();
         }
 
