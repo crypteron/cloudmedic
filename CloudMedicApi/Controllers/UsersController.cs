@@ -12,6 +12,8 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System.Linq;
 using Omu.ValueInjecter;
 using System.Collections.Generic;
+using System.Net.Mail;
+using System;
 
 namespace CloudMedicApi.Controllers
 {
@@ -131,8 +133,22 @@ namespace CloudMedicApi.Controllers
             if (!identityResult.Succeeded)
                 return BuildErrorResult(identityResult);
 
-            return Created("users/" + user.Id, userDto);
-            
+            SmtpClient client = new SmtpClient("smtp-mail.outlook.com");
+            client.Port = 587;
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.UseDefaultCredentials = false;
+            System.Net.NetworkCredential credentials = new System.Net.NetworkCredential("crypterondummytest@outlook.com", "cloudmedicrocks!");
+            client.EnableSsl = true;
+            client.Credentials = credentials;
+            MailMessage mail = new MailMessage();
+            mail.From = new MailAddress("crypterondummytest@outlook.com");
+            mail.To.Add(new MailAddress(user.Email));
+            mail.Subject = "Invitation to join CloudMedic";
+            mail.Body = "Dear " + userDto.FirstName + " " + userDto.LastName + ", you have been added by an administor. Your password is: " + password + "\n";
+
+            client.Send(mail);
+
+            return Created("users/" + user.Id, userDto);       
         }
 
         // DELETE: users/5
