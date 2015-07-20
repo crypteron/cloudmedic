@@ -188,6 +188,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\MedicationsController.cs" />
+    <Compile Include="Controllers\PrescriptionsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -196,6 +197,7 @@
     <Compile Include="DAL\MedicationAdministered.cs" />
     <Compile Include="DAL\MyDbContext.cs" />
     <Compile Include="DAL\Pharmacy.cs" />
+    <Compile Include="DAL\Prescription.cs" />
     <Compile Include="Filters\RequireHttpsAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -204,6 +206,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CloudMedicContext.cs" />
     <Compile Include="Models\DTOs\MedicationDto.cs" />
+    <Compile Include="Models\DTOs\PrescriptionDto.cs" />
     <Compile Include="Models\DTOs\UserDto.cs" />
     <Compile Include="Models\GenderEnum.cs" />
     <Compile Include="Models\IdentityModels.cs" />

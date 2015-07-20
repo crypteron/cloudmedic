@@ -88,19 +88,21 @@ namespace CloudMedicApi.DAL
             {
                 dr.Add(PersonRandomizer.CreateRandomPhysician());
             }
+
             #region [ Prescriptions ]
             var pres = new List<Prescription>
             {
               new Prescription
               {
-                MedicationID=Guid.NewGuid(),                
-                PrescriptionID=Guid.NewGuid(),
+                MedicationId = new Guid("40cc7596-5f59-4851-aff0-237470a8afc0"),   
+                PrescriptionId = Guid.NewGuid(),
                 Frequency="Twice a day",
                 Dosage="Two pills",
                 Notes="N/A"
-              }    
-            
+              }             
             };
+            #endregion
+
             #region [ Medications ]
             var meds = new List<Medication>
             {

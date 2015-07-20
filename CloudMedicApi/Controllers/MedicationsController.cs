@@ -23,7 +23,7 @@ namespace CloudMedicApi.Controllers
 
         // GET: Medications
         [Route("")]
-        public async Task<IHttpActionResult> GetUsers()
+        public async Task<IHttpActionResult> GetMedications()
         {
             List<Medication> medications;
 
@@ -102,6 +102,7 @@ namespace CloudMedicApi.Controllers
 
             var medication = new Medication();
             medication.InjectFrom(medicationDto);
+            medication.MedicationId = Guid.NewGuid();
             db.Medication.Add(medication);
 
             try
