@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
+using Omu.ValueInjecter;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -14,21 +15,38 @@ using CloudMedicApi.Models;
 
 namespace CloudMedicApi.Controllers
 {
+    [RoutePrefix("Medications")]
     public class MedicationsController : ApiController
     {
-        private CloudMedicContext db = new CloudMedicContext();
+        //private CloudMedicContext db = new CloudMedicContext();
+        private MyDbContext db = new MyDbContext();
 
-        // GET: api/Medications
-        public IQueryable<Medication> GetMedications()
+        // GET: Medications
+        [Route("")]
+        public async Task<IHttpActionResult> GetUsers()
         {
-            return db.Medications;
+            List<Medication> medications;
+
+            medications = await db.Medication
+                .Take(30)
+                .ToListAsync();
+
+            var medicationsDto = new List<MedicationDto>();
+
+            foreach (var medication in medications)
+            {
+                medicationsDto.Add(MedicationToDto(medication));
+            }
+
+            return Ok(medicationsDto);
         }
 
         // GET: api/Medications/5
+        [Route("")]
         [ResponseType(typeof(Medication))]
         public async Task<IHttpActionResult> GetMedication(Guid id)
         {
-            Medication medication = await db.Medications.FindAsync(id);
+            Medication medication = await db.Medication.FindAsync(id);
             if (medication == null)
             {
                 return NotFound();
@@ -72,16 +90,19 @@ namespace CloudMedicApi.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Medications
+        // POST: Medications/Add
+        [Route("Add")]
         [ResponseType(typeof(Medication))]
-        public async Task<IHttpActionResult> PostMedication(Medication medication)
+        public async Task<IHttpActionResult> PostMedication(MedicationDto medicationDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Medications.Add(medication);
+            var medication = new Medication();
+            medication.InjectFrom(medicationDto);
+            db.Medication.Add(medication);
 
             try
             {
@@ -98,25 +119,33 @@ namespace CloudMedicApi.Controllers
                     throw;
                 }
             }
-
-            return CreatedAtRoute("DefaultApi", new { id = medication.MedicationId }, medication);
+            return Created("medications/" + medication.MedicationId, medicationDto);
         }
 
-        // DELETE: api/Medications/5
+        // DELETE: Medications/5
+        [Route("")]
         [ResponseType(typeof(Medication))]
         public async Task<IHttpActionResult> DeleteMedication(Guid id)
         {
-            Medication medication = await db.Medications.FindAsync(id);
+            Medication medication = await db.Medication.FindAsync(id);
             if (medication == null)
             {
                 return NotFound();
             }
 
-            db.Medications.Remove(medication);
+            db.Medication.Remove(medication);
             await db.SaveChangesAsync();
 
             return Ok(medication);
         }
+
+        public static MedicationDto MedicationToDto(Medication medication)
+        {
+            var medicationDto = new MedicationDto();
+            medicationDto.InjectFrom(medication);
+            return medicationDto;
+        }
+
 
         protected override void Dispose(bool disposing)
         {
@@ -129,7 +158,7 @@ namespace CloudMedicApi.Controllers
 
         private bool MedicationExists(Guid id)
         {
-            return db.Medications.Count(e => e.MedicationId == id) > 0;
+            return db.Medication.Count(e => e.MedicationId == id) > 0;
         }
     }
 }

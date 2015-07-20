@@ -141,10 +141,10 @@ namespace CloudMedicApi.Controllers
             client.EnableSsl = true;
             client.Credentials = credentials;
             MailMessage mail = new MailMessage();
-            mail.From = new MailAddress("crypterondummytest@outlook.com");
+            mail.From = new MailAddress("crypterondummytest@outlook.com", "no_repy_cloudmedic");
             mail.To.Add(new MailAddress(user.Email));
             mail.Subject = "Invitation to join CloudMedic";
-            mail.Body = "Dear " + userDto.FirstName + " " + userDto.LastName + ", you have been added by an administor. Your password is: " + password + "\n";
+            mail.Body = "Dear " + userDto.FirstName + " " + userDto.LastName + ", you have been added to CloudMedic by an administor. Your password is: \n" + password + "\nPlease login and change your password under the profile tab.";
 
             client.Send(mail);
 
