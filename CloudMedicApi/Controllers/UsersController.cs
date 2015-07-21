@@ -31,7 +31,7 @@ namespace CloudMedicApi.Controllers
         }
       
 
-        // GET: api/users
+        // GET: users
         [Route("")]
         public async Task<IHttpActionResult> GetUsers(string role = null)
         {
@@ -74,7 +74,7 @@ namespace CloudMedicApi.Controllers
             return Ok(usersDto);
         }
 
-        // GET: api/users/5
+        // GET: users/5
         [Route("{id}")]
         [ResponseType(typeof(ApplicationUser))]
         public async Task<IHttpActionResult> GetUser(string id)
@@ -88,8 +88,8 @@ namespace CloudMedicApi.Controllers
             return Ok(UserToDto(user, roles));
         }
 
-        // PUT: api/users/5
-        [Route("{id}")]        
+        // PUT: users/5
+        [Route("{id}")]
         public async Task<IHttpActionResult> PutUser(string id, ApplicationUser user)
         {
             if (!ModelState.IsValid)
@@ -101,11 +101,11 @@ namespace CloudMedicApi.Controllers
             {
                 return BadRequest();
             }
-            
+
             var identityResult = await _userManager.UpdateAsync(user);
             if (!identityResult.Succeeded)
                 return BuildErrorResult(identityResult);
-            
+
             return StatusCode(HttpStatusCode.NoContent);
         }
 
@@ -153,15 +153,15 @@ namespace CloudMedicApi.Controllers
 
         // DELETE: users/5
         [Route("")]
-        public async Task<IHttpActionResult> DeleteUser(string userName)
+        public async Task<IHttpActionResult> DeleteUser(string id)
         {
-            if (string.IsNullOrWhiteSpace(userName))
+            if (string.IsNullOrWhiteSpace(id))
             {
                 return NotFound();
             }
             else
             {
-                var patient = await _userManager.FindByNameAsync(userName);
+                var patient = await _userManager.FindByIdAsync(id);
                 if (patient == null)
                 {
                     return NotFound();
@@ -204,6 +204,11 @@ namespace CloudMedicApi.Controllers
                 _db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private bool PrescriptionAssigned(Prescription p, ApplicationUser user)
+        {
+            return user.Prescriptions.Contains(p);
         }
     }
 }

@@ -76,10 +76,18 @@ namespace CloudMedicApi.Models
             }
         }
 
-        [Display(Name = "Treatments")]
-        public List<string> Treatments { get; set; }
+        [Secure]
+        public override string Email { get; set; }
 
-        //public virtual ICollection<MedicationAdministered> MedicationAdministered { get; set; }
+        [Secure]
+        public override string UserName { get; set; }
+
+        [Secure]
+        public override string PhoneNumber { get; set; }
+
+        public virtual ICollection<Prescription> Prescriptions { get; set; }
+
+        public virtual ICollection<MedicationAdministered> MedicationAdministered { get; set; }
         #endregion
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager, string authenticationType)
