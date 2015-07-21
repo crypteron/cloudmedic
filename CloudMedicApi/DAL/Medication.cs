@@ -12,7 +12,7 @@ namespace CloudMedicApi.DAL
 {
     public class Medication
     {
-        public Guid MedicationId { get; set; }
+        public Guid Id { get; set; }
 
         public string GenericName { get; set; }
 

@@ -82,10 +82,10 @@ namespace CloudMedicApi.Controllers
          public async Task<UserProfileViewModel> GetProfile()
         {
            ApplicationUser currentuser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-           var model=new UserProfileViewModel();
-           model.FirstName=currentuser.FirstName;
-           model.LastName=currentuser.LastName;
-           model.Email=currentuser.Email;           
+           var model = new UserProfileViewModel();
+           model.FirstName = currentuser.FirstName;
+           model.LastName = currentuser.LastName;
+           model.Email = currentuser.Email;           
            return model;
         }
         // GET api/Account/ManageInfo?returnUrl=%2F&generateState=true
@@ -366,13 +366,14 @@ namespace CloudMedicApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { 
-                UserName = model.UserName, 
-                Email = model.Email, 
-                FirstName = model.FirstName, 
-                LastName = model.LastName, 
-                Gender = model.Gender, 
-                DOB = model.DOB, 
+            var user = new ApplicationUser() {
+                UserName = model.UserName,
+                Email = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Gender = model.Gender,
+                DOB = model.DOB,
+                PhoneNumber = model.PhoneNumber,
                 Specialty = model.Specialty 
             };
 
