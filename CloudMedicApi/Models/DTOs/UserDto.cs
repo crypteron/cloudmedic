@@ -18,5 +18,6 @@ namespace CloudMedicApi.Controllers
         public DateTime DateOfBirth { get; set; }
         public string Gender { get; set; }
         public List<string> Roles { get; set; }
+        public List<string> Treatments { get; set; }
     }
 }

@@ -76,7 +76,10 @@ namespace CloudMedicApi.Models
             }
         }
 
-        public virtual ICollection<MedicationAdministered> MedicationAdministered { get; set; }
+        [Display(Name = "Treatments")]
+        public List<string> Treatments { get; set; }
+
+        //public virtual ICollection<MedicationAdministered> MedicationAdministered { get; set; }
         #endregion
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager, string authenticationType)
