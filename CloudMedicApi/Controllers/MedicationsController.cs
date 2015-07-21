@@ -64,7 +64,7 @@ namespace CloudMedicApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (id != medication.Id)
+            if (id != medication.MedicationId)
             {
                 return BadRequest();
             }
@@ -102,7 +102,7 @@ namespace CloudMedicApi.Controllers
 
             var medication = new Medication();
             medication.InjectFrom(medicationDto);
-            medication.Id = Guid.NewGuid();
+            medication.MedicationId = Guid.NewGuid();
             db.Medication.Add(medication);
 
             try
@@ -111,7 +111,7 @@ namespace CloudMedicApi.Controllers
             }
             catch (DbUpdateException)
             {
-                if (MedicationExists(medication.Id))
+                if (MedicationExists(medication.MedicationId))
                 {
                     return Conflict();
                 }
@@ -120,7 +120,7 @@ namespace CloudMedicApi.Controllers
                     throw;
                 }
             }
-            return Created("medications/" + medication.Id, medicationDto);
+            return Created("medications/" + medication.MedicationId, medicationDto);
         }
 
         // DELETE: Medications/5
@@ -159,7 +159,7 @@ namespace CloudMedicApi.Controllers
 
         private bool MedicationExists(Guid id)
         {
-            return db.Medication.Count(e => e.Id == id) > 0;
+            return db.Medication.Count(e => e.MedicationId == id) > 0;
         }
     }
 }

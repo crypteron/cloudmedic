@@ -8,7 +8,7 @@ namespace CloudMedicApi.DAL
 {
     public class Prescription
     {
-        public Guid Id { get; set; }
+        public Guid PrescriptionId { get; set; }
 
         public Guid MedicationId { get; set; }
 

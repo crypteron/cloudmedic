@@ -10,11 +10,9 @@ namespace CloudMedicApi.Controllers
     /// </summary>
     public class PrescriptionDto
     {
-        public Guid Id { get; set; }
+        public Guid PrescriptionId { get; set; }
 
         public Guid MedicationId { get; set; }
-
-        public string PatientId { get; set; }
 
         public string Dosage { get; set; }
 
