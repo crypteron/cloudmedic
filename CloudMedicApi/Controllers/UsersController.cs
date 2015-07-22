@@ -30,7 +30,6 @@ namespace CloudMedicApi.Controllers
 
         }
       
-
         // GET: users
         [Route("")]
         public async Task<IHttpActionResult> GetUsers(string role = null)
@@ -193,6 +192,7 @@ namespace CloudMedicApi.Controllers
                     userDto.Roles.Add(roles[role.RoleId].Name);
                 }
             }
+            userDto.UserId = user.Id;
             return userDto;
         }
 
