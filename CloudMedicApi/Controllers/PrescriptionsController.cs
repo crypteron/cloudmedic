@@ -12,13 +12,21 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using CloudMedicApi.DAL;
 using CloudMedicApi.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace CloudMedicApi.Controllers
 {
     [RoutePrefix("Prescriptions")]
-    public class PresciptionsController : ApiController
+    public class PrescriptionsController : ApiController
     {
         private MyDbContext db = new MyDbContext();
+        private ApplicationUserManager userManager;
+
+        public PrescriptionsController()
+        {
+            db = new MyDbContext();
+            userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(db));
+        }
 
         // GET: Prescriptions
         [Route("")]
@@ -92,16 +100,29 @@ namespace CloudMedicApi.Controllers
         // POST: Prescriptions/Add
         [Route("Add")]
         [ResponseType(typeof(Prescription))]
-        public async Task<IHttpActionResult> PostPrescription(PrescriptionDto prescriptionDto)
+        public async Task<IHttpActionResult> PostPrescription(PrescribeBindingModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var prescription = new Prescription();
-            prescription.InjectFrom(prescriptionDto);
-            prescription.PrescriptionId = Guid.NewGuid();
+            var patient = await userManager.FindByIdAsync(model.PatientId);
+            if (patient == null)
+            {
+                return NotFound();
+            }
+
+            var prescription = new Prescription()
+            {
+                PrescriptionId = Guid.NewGuid(),
+                MedicationId = new Guid(model.MedicationId),
+                Dosage = model.Dosage,
+                Frequency = model.Frequency,
+                Notes = model.Notes,
+                Patient = patient
+            };
+
             db.Prescription.Add(prescription);
 
             try
@@ -119,9 +140,7 @@ namespace CloudMedicApi.Controllers
                     throw;
                 }
             }
-
-            prescriptionDto.PrescriptionId = prescription.PrescriptionId;
-            return Created("prescriptions/" + prescription.PrescriptionId, prescriptionDto);
+            return Created("prescriptions/" + prescription.PrescriptionId, PrescriptionToDto(prescription));
         }
 
         // DELETE: Prescriptions/5
@@ -145,6 +164,7 @@ namespace CloudMedicApi.Controllers
         {
             var prescriptionDto = new PrescriptionDto();
             prescriptionDto.InjectFrom(prescription);
+            prescriptionDto.PatientId = prescription.Patient.Id;
             return prescriptionDto;
         }
 

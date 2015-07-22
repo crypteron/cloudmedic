@@ -193,6 +193,14 @@ namespace CloudMedicApi.Controllers
                 }
             }
             userDto.UserId = user.Id;
+            userDto.Prescriptions = new List<string>();
+            if (user.Prescriptions != null)
+            {
+                foreach (var prescription in user.Prescriptions)
+                {
+                    userDto.Prescriptions.Add(prescription.PrescriptionId.ToString());
+                }
+            }
             return userDto;
         }
 

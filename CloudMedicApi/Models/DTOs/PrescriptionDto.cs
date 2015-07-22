@@ -14,6 +14,8 @@ namespace CloudMedicApi.Controllers
 
         public Guid MedicationId { get; set; }
 
+        public string PatientId { get; set; }
+
         public string Dosage { get; set; }
 
         public string Frequency { get; set; }
