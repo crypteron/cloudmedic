@@ -15,6 +15,7 @@ using CloudMedicApi.Models;
 
 namespace CloudMedicApi.Controllers
 {
+    [Authorize]
     [RoutePrefix("Medications")]
     public class MedicationsController : ApiController
     {

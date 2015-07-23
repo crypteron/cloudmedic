@@ -16,6 +16,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace CloudMedicApi.Controllers
 {
+    [Authorize]
     [RoutePrefix("Prescriptions")]
     public class PrescriptionsController : ApiController
     {
@@ -174,7 +175,6 @@ namespace CloudMedicApi.Controllers
             prescriptionDto.PatientName = prescription.Patient.FirstName + " " + prescription.Patient.LastName;
             return prescriptionDto;
         }
-
 
         protected override void Dispose(bool disposing)
         {
