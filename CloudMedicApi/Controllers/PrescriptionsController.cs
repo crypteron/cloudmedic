@@ -148,7 +148,6 @@ namespace CloudMedicApi.Controllers
             }
             return Created("prescriptions/" + prescription.PrescriptionId, PrescriptionToDto(prescription));
         }
-
         // DELETE: Prescriptions/5
         [Route("")]
         [ResponseType(typeof(Prescription))]

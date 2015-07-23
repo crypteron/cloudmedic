@@ -72,7 +72,24 @@ namespace CloudMedicApi.Controllers
 
             return Ok(usersDto);
         }
-
+        // GET: Users/Find
+        [Route("Find")]
+        [ResponseType(typeof(List<PatientDto>))]
+        public async Task<IHttpActionResult> GetPatients(string lastname)
+        {
+            var users = await _db.Users.ToListAsync();
+            if (users == null)
+            {
+                return NotFound();
+            }
+            var PatientsDto = new List<PatientDto>();
+            foreach (var user in users)
+            {
+                if (String.Compare(lastname,user.LastName,true)==0)
+                    PatientsDto.Add(UserToPatientDto(user));
+            }
+            return Ok(PatientsDto);
+        }
         // GET: users/5
         [Route("{id}")]
         [ResponseType(typeof(ApplicationUser))]
@@ -178,6 +195,14 @@ namespace CloudMedicApi.Controllers
             {
                 return new BadRequestErrorMessageResult(errMsg, this);
             }
+        }
+        public static PatientDto UserToPatientDto(ApplicationUser user)
+        {
+            PatientDto patientdto = new PatientDto();
+            patientdto.FirstName = user.FirstName;
+            patientdto.LastName = user.LastName;
+            patientdto.UserId = user.Id;
+            return patientdto;
         }
 
         public static UserDto UserToDto(ApplicationUser user, Dictionary<string, IdentityRole> roles = null)

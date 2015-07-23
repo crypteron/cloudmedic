@@ -209,6 +209,7 @@
     <Compile Include="Models\DTOs\MedicationDto.cs" />
     <Compile Include="Models\DTOs\PrescriptionDto.cs" />
     <Compile Include="Models\DTOs\UserDto.cs" />
+    <Compile Include="Models\DTOs\PatientDto.cs" />
     <Compile Include="Models\GenderEnum.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
