@@ -87,6 +87,25 @@ namespace CloudMedicApi.Controllers
             return Ok(UserToDto(user, roles));
         }
 
+        // GET: users/prescriptions/5
+        [Route("Prescriptions")]
+        public async Task<IHttpActionResult> GetPrescriptions(string id) {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var prescriptionsDto = new List<PrescriptionDto>();
+
+            foreach (var prescription in user.Prescriptions)
+            {
+                prescriptionsDto.Add(PrescriptionToDto(prescription));
+            }
+
+            return Ok(prescriptionsDto);
+        }
+
         // PUT: users/5
         [Route("{id}")]
         public async Task<IHttpActionResult> PutUser(string id, ApplicationUser user)
@@ -143,7 +162,7 @@ namespace CloudMedicApi.Controllers
             mail.From = new MailAddress("crypterondummytest@outlook.com", "no_repy_cloudmedic");
             mail.To.Add(new MailAddress(user.Email));
             mail.Subject = "Invitation to join CloudMedic";
-            mail.Body = "Dear " + userDto.FirstName + " " + userDto.LastName + ", you have been added to CloudMedic by an administor. Your password is: \n" + password + "\nPlease login and change your password under the profile tab.";
+            mail.Body = "Dear " + userDto.FirstName + " " + userDto.LastName + ", you have been added to CloudMedic by an administor. Your password is: \n\n" + password + "\n\nPlease login with your assigned uersname:\n\n" + user.UserName + "\n\nand change your password under the profile tab.";
 
             client.Send(mail);
 
@@ -202,6 +221,16 @@ namespace CloudMedicApi.Controllers
                 }
             }
             return userDto;
+        }
+
+        public static PrescriptionDto PrescriptionToDto(Prescription prescription)
+        {
+            var prescriptionDto = new PrescriptionDto();
+            prescriptionDto.InjectFrom(prescription);
+            prescriptionDto.MedicationName = prescription.Medication.GenericName;
+            prescriptionDto.MedicationCode = prescription.Medication.Code;
+            prescriptionDto.PatientName = prescription.Patient.FirstName + " " + prescription.Patient.LastName;
+            return prescriptionDto;
         }
 
         protected override void Dispose(bool disposing)
