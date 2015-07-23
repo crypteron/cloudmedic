@@ -113,10 +113,16 @@ namespace CloudMedicApi.Controllers
                 return NotFound();
             }
 
+            var medication = await db.Medication.FindAsync(new Guid(model.MedicationId));
+            if (medication == null)
+            {
+                return NotFound();
+            }
+
             var prescription = new Prescription()
             {
                 PrescriptionId = Guid.NewGuid(),
-                MedicationId = new Guid(model.MedicationId),
+                Medication = medication,
                 Dosage = model.Dosage,
                 Frequency = model.Frequency,
                 Notes = model.Notes,
@@ -164,7 +170,9 @@ namespace CloudMedicApi.Controllers
         {
             var prescriptionDto = new PrescriptionDto();
             prescriptionDto.InjectFrom(prescription);
-            prescriptionDto.PatientId = prescription.Patient.Id;
+            prescriptionDto.MedicationName = prescription.Medication.GenericName;
+            prescriptionDto.MedicationCode = prescription.Medication.Code;
+            prescriptionDto.PatientName = prescription.Patient.FirstName + " " + prescription.Patient.LastName;
             return prescriptionDto;
         }
 
