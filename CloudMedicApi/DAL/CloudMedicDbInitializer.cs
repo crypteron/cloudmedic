@@ -89,20 +89,6 @@ namespace CloudMedicApi.DAL
                 dr.Add(PersonRandomizer.CreateRandomPhysician());
             }
 
-            #region [ Prescriptions ]
-            var pres = new List<Prescription>
-            {
-              new Prescription
-              {
-                MedicationId = new Guid("40cc7596-5f59-4851-aff0-237470a8afc0"),   
-                PrescriptionId = Guid.NewGuid(),
-                Frequency="Twice a day",
-                Dosage="Two pills",
-                Notes="N/A"
-              }             
-            };
-            #endregion
-
             #region [ Medications ]
             var meds = new List<Medication>
             {
@@ -130,6 +116,21 @@ namespace CloudMedicApi.DAL
                     GenericName = "Insulin",
                     MedicationId = Guid.NewGuid()
                 }
+            };
+            #endregion
+
+            #region [ Prescriptions ]
+            var pres = new List<Prescription>
+            {
+              new Prescription
+              {
+                Medication = meds[0],
+                PrescriptionId = Guid.NewGuid(),
+                Patient = p[0],
+                Frequency="Twice a day",
+                Dosage="Two pills",
+                Notes="N/A"
+              }
             };
             #endregion
 
