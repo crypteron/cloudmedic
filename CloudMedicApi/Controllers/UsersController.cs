@@ -74,7 +74,7 @@ namespace CloudMedicApi.Controllers
         }
         // GET: Users/Find
         [Route("Find")]
-        [ResponseType(typeof(List<PatientDto>))]
+        [ResponseType(typeof(List<UserDto>))]
         public async Task<IHttpActionResult> GetPatients(string lastname)
         {
             var users = await _db.Users.ToListAsync();
@@ -82,11 +82,11 @@ namespace CloudMedicApi.Controllers
             {
                 return NotFound();
             }
-            var PatientsDto = new List<PatientDto>();
+            var PatientsDto = new List<UserDto>();
             foreach (var user in users)
             {
-                if (String.Compare(lastname,user.LastName,true)==0)
-                    PatientsDto.Add(UserToPatientDto(user));
+                if (String.Compare(lastname,user.LastName,true)==0 && isPatient(user))
+                    PatientsDto.Add(UserToDto(user,null));
             }
             return Ok(PatientsDto);
         }
@@ -215,14 +215,6 @@ namespace CloudMedicApi.Controllers
                 return new BadRequestErrorMessageResult(errMsg, this);
             }
         }
-        public static PatientDto UserToPatientDto(ApplicationUser user)
-        {
-            PatientDto patientdto = new PatientDto();
-            patientdto.FirstName = user.FirstName;
-            patientdto.LastName = user.LastName;
-            patientdto.UserId = user.Id;
-            return patientdto;
-        }
 
         public static UserDto UserToDto(ApplicationUser user, Dictionary<string, IdentityRole> roles = null)
         {
@@ -247,7 +239,15 @@ namespace CloudMedicApi.Controllers
             }
             return userDto;
         }
-
+        public static Boolean isPatient(ApplicationUser user)
+        {
+            foreach (var role in user.Roles)
+            {
+                if (role.RoleId == "0")
+                    return true;
+            }
+            return false;
+        }
         public static PrescriptionDto PrescriptionToDto(Prescription prescription)
         {
             var prescriptionDto = new PrescriptionDto();
