@@ -76,7 +76,7 @@ namespace CloudMedicApi.Controllers
         // GET: Users/Find
         [Route("Find")]
         [ResponseType(typeof(List<UserDto>))]
-        public async Task<IHttpActionResult> GetPatients(string lastname)
+        public async Task<IHttpActionResult> GetPatients(string Name)
         {
             List<ApplicationUser> users;
             var query = from roleObj in _db.Roles
@@ -93,11 +93,11 @@ namespace CloudMedicApi.Controllers
                 return NotFound();
             }
             var usersDto = new List<UserDto>();
-            for (int i = 0; i <= lastname.Length / 4 + 1;i++ )
+            for (int i = 0; i <= Name.Length / 4 + 1;i++ )
             {
                 foreach (var user in users)
                 {
-                    if (EditDistance(lastname, user.LastName) ==i)
+                    if (EditDistance(Name, user.FirstName+" "+user.LastName) ==i)
                         usersDto.Add(UserToDto(user));
                 }
             }
