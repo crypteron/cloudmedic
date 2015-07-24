@@ -95,13 +95,13 @@ namespace CloudMedicApi.DAL
                 new Medication
                 {
                     Code = "50410",
-                    GenericName = "Asprin",
+                    GenericName = "Aspirin",
                     MedicationId = Guid.NewGuid()
                 },
                 new Medication
                 {
                     Code = "52730",
-                    GenericName = "Ibuprufen",
+                    GenericName = "Ibuprofen",
                     MedicationId = Guid.NewGuid()
                 },
                 new Medication
@@ -114,6 +114,18 @@ namespace CloudMedicApi.DAL
                 {
                     Code = "52790",
                     GenericName = "Insulin",
+                    MedicationId = Guid.NewGuid()
+                },
+                new Medication
+                {
+                    Code = "52411",
+                    GenericName = "Loratadine",
+                    MedicationId = Guid.NewGuid()
+                },
+                new Medication
+                {
+                    Code = "50161",
+                    GenericName = "Hydrocortisone",
                     MedicationId = Guid.NewGuid()
                 }
             };
