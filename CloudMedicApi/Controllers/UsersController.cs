@@ -72,24 +72,37 @@ namespace CloudMedicApi.Controllers
 
             return Ok(usersDto);
         }
+
         // GET: Users/Find
         [Route("Find")]
         [ResponseType(typeof(List<UserDto>))]
         public async Task<IHttpActionResult> GetPatients(string lastname)
         {
-            var users = await _db.Users.ToListAsync();
+            List<ApplicationUser> users;
+            var query = from roleObj in _db.Roles
+                        where roleObj.Name == "Patient"
+                        from userRoles in roleObj.Users
+                        join user in _db.Users
+                        on userRoles.UserId equals user.Id
+                        select user;
+
+            users = await query.ToListAsync();
+
             if (users == null)
             {
                 return NotFound();
             }
-            var PatientsDto = new List<UserDto>();
+            var usersDto = new List<UserDto>();
             foreach (var user in users)
             {
-                if (String.Compare(lastname,user.LastName,true)==0 && isPatient(user))
-                    PatientsDto.Add(UserToDto(user,null));
+                if (String.Compare(lastname, user.LastName, true) == 0)
+                    usersDto.Add(UserToDto(user));
+
             }
-            return Ok(PatientsDto);
+
+            return Ok(usersDto);
         }
+
         // GET: users/5
         [Route("{id}")]
         [ResponseType(typeof(ApplicationUser))]
