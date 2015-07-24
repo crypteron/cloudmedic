@@ -79,6 +79,10 @@ namespace CloudMedicApi.Controllers
         public async Task<IHttpActionResult> GetPatients(string Name)
         {
             List<ApplicationUser> users;
+            string[] names=new string[2];
+            names[0] = Name.Split(' ')[0];
+            if (Name.Split(' ').Length == 1)
+                names[1] = "";
             var query = from roleObj in _db.Roles
                         where roleObj.Name == "Patient"
                         from userRoles in roleObj.Users
@@ -93,14 +97,24 @@ namespace CloudMedicApi.Controllers
                 return NotFound();
             }
             var usersDto = new List<UserDto>();
-            for (int i = 0; i <= Name.Length / 4 + 1;i++ )
-            {
-                foreach (var user in users)
+            if (names[1]!="")
+              for (int i = 0; i <=6;i++ )
+              {
+                  foreach (var user in users)
+                  {
+                     if (EditDistance(Name,user.FirstName+" "+user.LastName) ==i)
+                         usersDto.Add(UserToDto(user));
+                  }
+              }
+            else
+                for (int i = 0; i <= 3; i++)
                 {
-                    if (EditDistance(Name, user.FirstName+" "+user.LastName) ==i)
-                        usersDto.Add(UserToDto(user));
+                    foreach (var user in users)
+                    {
+                        if (EditDistance(names[0], user.FirstName)==i||EditDistance(names[0], user.LastName) == i)
+                            usersDto.Add(UserToDto(user));
+                    }
                 }
-            }
             return Ok(usersDto);
         }
 
