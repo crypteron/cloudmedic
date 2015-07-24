@@ -192,7 +192,10 @@ namespace CloudMedicApi.Controllers
 
             Crypteron.CipherDb.Session.Unseal(user);
             identityResult = await _userManager.AddToRolesAsync(user.Id, userDto.Roles.ToArray());
-            
+
+
+            Crypteron.CipherDb.Session.Unseal(user);
+
             if (!identityResult.Succeeded)
                 return BuildErrorResult(identityResult);
 
@@ -207,7 +210,7 @@ namespace CloudMedicApi.Controllers
             mail.From = new MailAddress("crypterondummytest@outlook.com", "no_repy_cloudmedic");
             mail.To.Add(new MailAddress(user.Email));
             mail.Subject = "Invitation to join CloudMedic";
-            mail.Body = "Dear " + userDto.FirstName + " " + userDto.LastName + ", you have been added to CloudMedic by an administor. Your password is: \n\n" + password + "\n\nPlease login with your assigned uersname:\n\n" + user.UserName + "\n\nand change your password under the profile tab.";
+            mail.Body = "Dear " + userDto.FirstName + " " + userDto.LastName + ", you have been added to CloudMedic by an administor. Your password is: \n\n" + password + "\n\nPlease login with your assigned username:\n\n" + user.UserName + "\n\nand change your password under the profile tab.";
 
             client.Send(mail);
 

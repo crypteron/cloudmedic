@@ -76,14 +76,14 @@ namespace CloudMedicApi.Models
             }
         }
 
-        //[Secure]
-        //public override string Email { get; set; }
+        [Secure]
+        public override string Email { get; set; }
+
+        [Secure]
+        public override string PhoneNumber { get; set; }
 
         //[Secure]
         //public override string UserName { get; set; }
-
-        //[Secure]
-        //public override string PhoneNumber { get; set; }
 
         public virtual ICollection<Prescription> Prescriptions { get; set; }
 

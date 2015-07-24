@@ -94,16 +94,20 @@ namespace CloudMedicApi.Controllers
         // POST: Medications/Add
         [Route("Add")]
         [ResponseType(typeof(Medication))]
-        public async Task<IHttpActionResult> PostMedication(MedicationDto medicationDto)
+        public async Task<IHttpActionResult> PostMedication(MedicationBindingModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var medication = new Medication();
-            medication.InjectFrom(medicationDto);
-            medication.MedicationId = Guid.NewGuid();
+            var medication = new Medication()
+            {
+                MedicationId = Guid.NewGuid(),
+                GenericName = model.GenericName,
+                Code = model.Code
+            };
+
             db.Medication.Add(medication);
 
             try
@@ -121,7 +125,7 @@ namespace CloudMedicApi.Controllers
                     throw;
                 }
             }
-            return Created("medications/" + medication.MedicationId, medicationDto);
+            return Created("medications/" + medication.MedicationId, MedicationToDto(medication));
         }
 
         // DELETE: Medications/5

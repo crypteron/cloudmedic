@@ -126,6 +126,8 @@ namespace CloudMedicApi.Controllers
                 Medication = medication,
                 Dosage = model.Dosage,
                 Frequency = model.Frequency,
+                StartDate = model.StartDate,
+                EndDate = model.EndDate,
                 Notes = model.Notes,
                 Patient = patient
             };

@@ -17,7 +17,7 @@ namespace CloudMedicApi.DAL
     /// DropCreateDatabaseIfModelChanges, Seed data, test accounts etc). 
     /// Alter for production as needed
     /// </summary>
-    public class CloudMedicDbInitializer : DropCreateDatabaseIfModelChanges<MyDbContext>
+    public class CloudMedicDbInitializer : DropCreateDatabaseAlways<MyDbContext>
     {      
         protected override void Seed(MyDbContext myDbContext)
         {

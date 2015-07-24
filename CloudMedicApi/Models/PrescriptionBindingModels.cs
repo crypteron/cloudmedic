@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace CloudMedicApi.Models
 {
-    // Models used as parameters to AccountController actions.
+    // Models used as parameters to PrescriptionsController actions.
 
     public class PrescribeBindingModel
     {
@@ -23,6 +23,14 @@ namespace CloudMedicApi.Models
         [Required]
         [Display(Name = "Notes")]
         public string Notes { get; set; }
+
+        [Required]
+        [Display(Name = "Start Date")]
+        public string StartDate { get; set; }
+
+        [Required]
+        [Display(Name = "End Date")]
+        public string EndDate { get; set; }
 
         [Required]
         [Display(Name = "Patient Id")]
