@@ -78,14 +78,14 @@ namespace CloudMedicApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!MedicationExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                //if (!MedicationExists(id))
+                //{
+                //    return NotFound();
+                //}
+                //else
+                //{
+                //    throw;
+                //}
             }
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -104,23 +104,30 @@ namespace CloudMedicApi.Controllers
             var medication = new Medication();
             medication.InjectFrom(medicationDto);
             medication.MedicationId = Guid.NewGuid();
-            db.Medication.Add(medication);
-
-            try
-            {
+            
+            if(MedicationExists(medication) == false) { 
+                db.Medication.Add(medication);
                 await db.SaveChangesAsync();
+
             }
-            catch (DbUpdateException)
+            else
             {
-                if (MedicationExists(medication.MedicationId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+                return Conflict();
             }
+            //try
+            //{
+            //}
+            //catch (DbUpdateException)
+            //{
+            //    if (MedicationExists(medication))
+            //    {
+            //        return Conflict();
+            //    }
+            //    else
+            //    {
+            //        throw;
+            //    }
+            //}
             return Created("medications/" + medication.MedicationId, medicationDto);
         }
 
@@ -158,9 +165,21 @@ namespace CloudMedicApi.Controllers
             base.Dispose(disposing);
         }
 
-        private bool MedicationExists(Guid id)
+        private bool MedicationExists(Medication medication)
         {
-            return db.Medication.Count(e => e.MedicationId == id) > 0;
+            bool code_check = false, name_check = false;
+
+           code_check = db.Medication.Count(e => e.Code == medication.Code) > 0;
+            name_check = db.Medication.Count(e => e.GenericName == medication.GenericName) > 0;
+
+            if(code_check || name_check)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
