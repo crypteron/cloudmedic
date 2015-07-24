@@ -93,13 +93,14 @@ namespace CloudMedicApi.Controllers
                 return NotFound();
             }
             var usersDto = new List<UserDto>();
-            foreach (var user in users)
+            for (int i = 0; i <= lastname.Length / 4 + 1;i++ )
             {
-                if (String.Compare(lastname, user.LastName, true) == 0)
-                    usersDto.Add(UserToDto(user));
-
+                foreach (var user in users)
+                {
+                    if (EditDistance(lastname, user.LastName) ==i)
+                        usersDto.Add(UserToDto(user));
+                }
             }
-
             return Ok(usersDto);
         }
 
@@ -273,31 +274,27 @@ namespace CloudMedicApi.Controllers
         public static int EditDistance(String StrA, String StrB)
         {
             int[,] matrix=new int[StrA.Length+1,StrB.Length+1];
-            for (int i=0;i<=StrA.Length;i++)
-            {
-                matrix[i, 0] = i;
-            }
-            for (int i = 0; i < StrB.Length; i++)
-            {
-                matrix[0, i] = i;
-            }
             char[] ArrayA=StrA.ToCharArray();
             char[] ArrayB=StrB.ToCharArray();
-            int threshold=0;
-            for (int i = 1; i <StrA.Length; i++)
-                for (int j = 1; j <StrB.Length; j++)
-                { 
-                  threshold=0;
-                  if (ArrayA[i-1] == ArrayB[j-1])
-                      threshold++;
-                  matrix[i, j] = matrix[i - 1, j - 1] + threshold;
+            int current;
+            for (int i = 0; i <= StrA.Length; i++)
+                matrix[i, 0] = i;
+            for (int i = 0; i <= StrB.Length; i++)
+                matrix[0, i] = i;
+	        for (int i=1;i<=StrA.Length;i++)
+	    	  for(int j=1;j<=StrB.Length;j++)
+	    	  {
+	    		  current=1;
+	    		  if (Char.ToLower(ArrayA[i-1])==Char.ToLower(ArrayB[j-1]))
+	    		     current=0;
+	    		  matrix[i,j]=matrix[i-1,j-1]+current;
                   if (matrix[i, j] > matrix[i - 1, j] + 1)
                       matrix[i, j] = matrix[i - 1, j] + 1;
-                  if (matrix[i, j] > matrix[i, j - 1] + 1)
-                      matrix[i, j] = matrix[i, j - 1] + 1;
-                }
+                  if (matrix[i, j] > matrix[i , j-1] + 1)
+                      matrix[i, j] = matrix[i, j-1] + 1;
+	    	  }
             return matrix[StrA.Length, StrB.Length];
-        }
+           }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
