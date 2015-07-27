@@ -87,7 +87,10 @@ namespace CloudMedicApi.Models
 
         public virtual ICollection<Prescription> Prescriptions { get; set; }
 
+        public virtual ICollection<CareTeam> CareTeams { get; set; }
+
         public virtual ICollection<MedicationAdministered> MedicationAdministered { get; set; }
+
         #endregion
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager, string authenticationType)

@@ -76,7 +76,7 @@ namespace CloudMedicApi.Controllers
         // GET: Users/Find
         [Route("Find")]
         [ResponseType(typeof(List<UserDto>))]
-        public async Task<IHttpActionResult> GetPatients(string Name)
+        public async Task<IHttpActionResult> GetPatientsbyName(string Name)
         {
             List<ApplicationUser> users;
             string[] names=new string[2];
@@ -107,14 +107,41 @@ namespace CloudMedicApi.Controllers
                   }
               }
             else
-                for (int i = 0; i <= 3; i++)
+                foreach (var user in users)
                 {
-                    foreach (var user in users)
-                    {
-                        if (EditDistance(names[0], user.FirstName)==i||EditDistance(names[0], user.LastName) == i)
-                            usersDto.Add(UserToDto(user));
-                    }
+                    if (EditDistance(names[0], user.FirstName) <=3|| EditDistance(names[0], user.LastName)<=3)
+                        usersDto.Add(UserToDto(user));
                 }
+            return Ok(usersDto);
+        }
+        //GET: users/GetPatients
+        [Route("GetPatients")]
+        [ResponseType(typeof(ApplicationUser))]
+        public async Task<IHttpActionResult> GetPatients(string id)
+        {
+            Guid CareTeamId=new Guid(id);
+            List<ApplicationUser> users;
+            var query = from roleObj in _db.Roles
+                        where roleObj.Name == "Patient"
+                        from userRoles in roleObj.Users
+                        join user in _db.Users
+                        on userRoles.UserId equals user.Id
+                        select user;
+            users = await query.ToListAsync();
+
+            if (users == null)
+            {
+                return NotFound();
+            }
+            var usersDto = new List<UserDto>();
+            foreach (var user in users)
+            {
+                foreach (var careteam in user.CareTeams)
+                {
+                    if (careteam.TeamId == CareTeamId)
+                        usersDto.Add(UserToDto(user));
+                }
+            }
             return Ok(usersDto);
         }
 
