@@ -25,6 +25,8 @@ namespace CloudMedicApi.DAL
 
         public DbSet<Prescription> Prescription { get; set; }
 
+        public DbSet<CareTeam> CareTeam { get; set; }
+
         // To work with boilerplate code generated in VS2013.3
         public static MyDbContext Create()
         {
