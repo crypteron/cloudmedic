@@ -131,20 +131,20 @@ namespace CloudMedicApi.DAL
             };
             #endregion
 
-            #region [ Prescriptions ]
-            var pres = new List<Prescription>
-            {
-              new Prescription
-              {
-                Medication = meds[0],
-                PrescriptionId = Guid.NewGuid(),
-                Patient = p[0],
-                Frequency="Twice a day",
-                Dosage="Two pills",
-                Notes="N/A"
-              }
-            };
-            #endregion
+            //#region [ Prescriptions ]
+            //var pres = new List<Prescription>
+            //{
+            //  new Prescription
+            //  {
+            //    Medication = meds[0],
+            //    PrescriptionId = Guid.NewGuid(),
+            //    Patient = p[0],
+            //    Frequency="Twice a day",
+            //    Dosage="Two pills",
+            //    Notes="N/A"
+            //  }
+            //};
+            //#endregion
 
             #region [ Pharmacies ]
             var pharmacies = new List<Pharmacy>

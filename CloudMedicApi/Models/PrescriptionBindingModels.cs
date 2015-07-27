@@ -36,4 +36,18 @@ namespace CloudMedicApi.Models
         [Display(Name = "Patient Id")]
         public string PatientId { get; set; }
     }
+    public class UpdatePrescriptionBindingModel
+    {
+        [Required]
+        [Display(Name = "PrescriptionId")]
+        public string PrescriptionId { get; set; }
+
+        [Required]
+        [Display(Name = "Notes")]
+        public string Notes { get; set; }
+
+        [Required]
+        [Display(Name = "End Date")]
+        public string EndDate { get; set; }
+    }
 }
