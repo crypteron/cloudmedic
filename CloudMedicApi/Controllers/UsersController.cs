@@ -114,35 +114,20 @@ namespace CloudMedicApi.Controllers
                 }
             return Ok(usersDto);
         }
+
         //GET: users/GetPatients
         [Route("GetPatients")]
         [ResponseType(typeof(ApplicationUser))]
         public async Task<IHttpActionResult> GetPatients(string id)
         {
-            Guid CareTeamId=new Guid(id);
-            List<ApplicationUser> users;
-            var query = from roleObj in _db.Roles
-                        where roleObj.Name == "Patient"
-                        from userRoles in roleObj.Users
-                        join user in _db.Users
-                        on userRoles.UserId equals user.Id
-                        select user;
-            users = await query.ToListAsync();
-
-            if (users == null)
+            var careTeam = await _db.CareTeam.FindAsync(new Guid(id));
+            if (careTeam == null)
             {
                 return NotFound();
             }
-            var usersDto = new List<UserDto>();
-            foreach (var user in users)
-            {
-                foreach (var careteam in user.CareTeams)
-                {
-                    if (careteam.TeamId == CareTeamId)
-                        usersDto.Add(UserToDto(user));
-                }
-            }
-            return Ok(usersDto);
+            var userDto = UserToDto(careTeam.Patient);
+
+            return Ok(userDto);
         }
 
         // GET: users/5

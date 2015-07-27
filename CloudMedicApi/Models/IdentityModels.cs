@@ -87,7 +87,9 @@ namespace CloudMedicApi.Models
 
         public virtual ICollection<Prescription> Prescriptions { get; set; }
 
-        public virtual ICollection<CareTeam> CareTeams { get; set; }
+        public virtual ICollection<CareTeam> PatientCareTeams { get; set; }
+
+        public virtual ICollection<CareTeam> ProviderCareTeams { get; set; }
 
         public virtual ICollection<MedicationAdministered> MedicationAdministered { get; set; }
 

@@ -13,14 +13,14 @@ namespace CloudMedicApi.DAL
 {
     public class CareTeam
     {
-        public Guid TeamId { get; set; }
+        public Guid Id { get; set; }
 
         public string Name { get; set; }
 
-        public virtual ICollection<ApplicationUser> Staff { get; set; }
+        public bool Active { get; set; }
+
+        public virtual ICollection<ApplicationUser> Providers { get; set; }
 
         public virtual ApplicationUser Patient { get; set; }
-
-        public Boolean Active { get; set; }
     }
 }

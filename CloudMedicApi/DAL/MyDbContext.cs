@@ -58,6 +58,16 @@ namespace CloudMedicApi.DAL
                     em.MapLeftKey("UserId");
                     em.MapRightKey("MedicationsAdministeredId");
                 });
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(u => u.ProviderCareTeams)
+                .WithMany(p => p.Providers)
+                .Map(em =>
+                {
+                    em.ToTable("UserProviderCareTeams");
+                    em.MapLeftKey("UserId");
+                    em.MapRightKey("CareTeamId");
+                });
         }
     }
 }
