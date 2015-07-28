@@ -42,9 +42,11 @@ namespace CloudMedicApi.Controllers
 
             var careTeamsDto = new List<CareTeamDto>();
 
+            var roles = await db.Roles.ToDictionaryAsync(r => r.Id);
+
             foreach (var careTeam in careTeams)
             {
-                careTeamsDto.Add(CareTeamToDto(careTeam));
+                careTeamsDto.Add(CareTeamToDto(careTeam, roles));
             }
 
             return Ok(careTeamsDto);
@@ -61,7 +63,9 @@ namespace CloudMedicApi.Controllers
                 return NotFound();
             }
 
-            return Ok(CareTeamToDto(careTeam));
+            var roles = await db.Roles.ToDictionaryAsync(r => r.Id);
+
+            return Ok(CareTeamToDto(careTeam, roles));
         }
 
         // PUT: CareTeams/5
@@ -171,20 +175,45 @@ namespace CloudMedicApi.Controllers
             return Ok(careTeam);
         }
 
-        public static CareTeamDto CareTeamToDto(CareTeam careTeam)
+        public static CareTeamDto CareTeamToDto(CareTeam careTeam, Dictionary<string, IdentityRole> roles = null)
         {
             var careTeamDto = new CareTeamDto();
             careTeamDto.InjectFrom(careTeam);
-            careTeamDto.PatientId = careTeam.Patient.Id;
-            careTeamDto.ProviderIds = new List<string>();
+            //careTeamDto.PatientId = careTeam.Patient.Id;
+            careTeamDto.Patient = UserToDto(careTeam.Patient, roles);
+            //careTeamDto.ProviderIds = new List<string>();
+            careTeamDto.Providers = new List<UserDto>();
             foreach (var provider in careTeam.Providers)
             {
-                careTeamDto.ProviderIds.Add(provider.Id);
+                //careTeamDto.ProviderIds.Add(provider.Id);
+                careTeamDto.Providers.Add(UserToDto(provider, roles));
 
             }
             return careTeamDto;
         }
-
+        public static UserDto UserToDto(ApplicationUser user, Dictionary<string, IdentityRole> roles = null)
+        {
+            var userDto = new UserDto();
+            userDto.InjectFrom(user);
+            userDto.Roles = new List<string>();
+            if (roles != null)
+            {
+                foreach (var role in user.Roles)
+                {
+                    userDto.Roles.Add(roles[role.RoleId].Name);
+                }
+            }
+            userDto.UserId = user.Id;
+            userDto.Prescriptions = new List<string>();
+            if (user.Prescriptions != null)
+            {
+                foreach (var prescription in user.Prescriptions)
+                {
+                    userDto.Prescriptions.Add(prescription.PrescriptionId.ToString());
+                }
+            }
+            return userDto;
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

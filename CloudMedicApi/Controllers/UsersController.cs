@@ -148,6 +148,48 @@ namespace CloudMedicApi.Controllers
             return Ok(prescriptionsDto);
         }
 
+        // GET: users/provider/5
+        [Route("Provider")]
+        public async Task<IHttpActionResult> GetProviderCareTeams(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var careTeamsDto = new List<CareTeamDto>();
+            var roles = await _db.Roles.ToDictionaryAsync(r => r.Id);
+
+            foreach (var careTeam in user.ProviderCareTeams)
+            {
+                careTeamsDto.Add(CareTeamToDto(careTeam, roles));
+            }
+
+            return Ok(careTeamsDto);
+        }
+
+        // GET: users/patient/5
+        [Route("Patient")]
+        public async Task<IHttpActionResult> GetPatientCareTeams(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var careTeamsDto = new List<CareTeamDto>();
+            var roles = await _db.Roles.ToDictionaryAsync(r => r.Id);
+
+            foreach (var careTeam in user.PatientCareTeams)
+            {
+                careTeamsDto.Add(CareTeamToDto(careTeam, roles));
+            }
+
+            return Ok(careTeamsDto);
+        }
+
         // PUT: users/5
         [Route("{id}")]
         public async Task<IHttpActionResult> PutUser(string id, ApplicationUser user)
@@ -244,6 +286,22 @@ namespace CloudMedicApi.Controllers
             }
         }
 
+        public static CareTeamDto CareTeamToDto(CareTeam careTeam, Dictionary<string, IdentityRole> roles = null)
+        {
+            var careTeamDto = new CareTeamDto();
+            careTeamDto.InjectFrom(careTeam);
+            //careTeamDto.PatientId = careTeam.Patient.Id;
+            careTeamDto.Patient = UserToDto(careTeam.Patient, roles);
+            //careTeamDto.ProviderIds = new List<string>();
+            careTeamDto.Providers = new List<UserDto>();
+            foreach (var provider in careTeam.Providers)
+            {
+                //careTeamDto.ProviderIds.Add(provider.Id);
+                careTeamDto.Providers.Add(UserToDto(provider, roles));
+
+            }
+            return careTeamDto;
+        }
         public static UserDto UserToDto(ApplicationUser user, Dictionary<string, IdentityRole> roles = null)
         {
             var userDto = new UserDto();
