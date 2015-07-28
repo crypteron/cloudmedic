@@ -72,6 +72,7 @@ namespace CloudMedicApi.DAL
             var p = new List<ApplicationUser>();
             for (var i = 0; i < 12; i++)
             {
+                //manager.CreateAsync(PersonRandomizer.CreateRandomPatient());
                 p.Add(PersonRandomizer.CreateRandomPatient());
             }
 
@@ -131,20 +132,24 @@ namespace CloudMedicApi.DAL
             };
             #endregion
 
-            //#region [ Prescriptions ]
-            //var pres = new List<Prescription>
-            //{
-            //  new Prescription
-            //  {
-            //    Medication = meds[0],
-            //    PrescriptionId = Guid.NewGuid(),
-            //    Patient = p[0],
-            //    Frequency="Twice a day",
-            //    Dosage="Two pills",
-            //    Notes="N/A"
-            //  }
-            //};
-            //#endregion
+            #region [ CareTeams ]
+            secDb.CareTeam.Add(new CareTeam
+            {
+                Id = Guid.NewGuid(),
+                Name = "Justice League",
+                Active = true,
+                Providers = new Collection<ApplicationUser> { n[0], n[7], n[2], n[4], dr[0] },
+                Patient = p[4]
+            });
+            secDb.CareTeam.Add(new CareTeam
+            {
+                Id = Guid.NewGuid(),
+                Name = "Suicide Squad",
+                Active = true,
+                Providers = new Collection<ApplicationUser> { n[3], n[5], n[6], dr[1] },
+                Patient = p[3]
+            });
+            #endregion
 
             #region [ Pharmacies ]
             var pharmacies = new List<Pharmacy>

@@ -115,21 +115,6 @@ namespace CloudMedicApi.Controllers
             return Ok(usersDto);
         }
 
-        //GET: users/GetPatients
-        [Route("GetPatients")]
-        [ResponseType(typeof(ApplicationUser))]
-        public async Task<IHttpActionResult> GetPatients(string id)
-        {
-            var careTeam = await _db.CareTeam.FindAsync(new Guid(id));
-            if (careTeam == null)
-            {
-                return NotFound();
-            }
-            var userDto = UserToDto(careTeam.Patient);
-
-            return Ok(userDto);
-        }
-
         // GET: users/5
         [Route("{id}")]
         [ResponseType(typeof(ApplicationUser))]

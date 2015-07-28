@@ -16,8 +16,10 @@ namespace CloudMedicApi.Controllers
 
         public bool Active { get; set; }
 
-        public PatientDto Patient { get; set; }
+        //public PatientDto Patient { get; set; }
+        public string PatientId { get; set; }
         
-        public List<UserDto> Providers { get; set; }
+        //public List<UserDto> Providers { get; set; }
+        public List<string> ProviderIds { get; set; }
     }
 }

@@ -10,15 +10,15 @@ namespace CloudMedicApi.Models
     public class CareTeamBindingModel
     {
         [Required]
-        [Display(Name = "Code")]
-        public string Code { get; set; }
+        [Display(Name = "Name")]
+        public string Name { get; set; }
 
         [Required]
-        [Display(Name = "Staff")]
-        public List <string> StaffId { get; set; }
+        [Display(Name = "Staff Ids")]
+        public List <string> ProviderIds { get; set; }
 
         [Required]
-        [Display(Name = "Patient")]
-        public string Patient {get;set;}
+        [Display(Name = "Patient Id")]
+        public string PatientId {get;set;}
     }
 }

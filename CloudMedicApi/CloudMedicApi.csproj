@@ -187,6 +187,7 @@
     <Compile Include="BLL\RoleId.cs" />
     <Compile Include="BLL\RoleManager.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CareTeamController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\MedicationsController.cs" />
     <Compile Include="Controllers\PrescriptionsController.cs" />
