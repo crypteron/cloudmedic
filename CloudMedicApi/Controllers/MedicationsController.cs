@@ -107,18 +107,18 @@ namespace CloudMedicApi.Controllers
                 Code = model.Code
             };
 
-            if (MedicationExists(medication) == false)
-            {
-                db.Medication.Add(medication);
-            }
-            else
-            {
-                return Conflict();
-            }
-
             try
             {
-                await db.SaveChangesAsync();
+                if (MedicationExists(medication) == false)
+                {
+                    db.Medication.Add(medication);
+                    await db.SaveChangesAsync();
+
+                }
+                else
+                {
+                    return BadRequest("The medication name or code already exists in the databae.");
+                }
             }
             catch (DbUpdateException)
             {
@@ -164,10 +164,8 @@ namespace CloudMedicApi.Controllers
 
         private bool MedicationExists(Medication medication)
         {
-            bool code_check = false, name_check = false;
-
-           code_check = db.Medication.Count(e => e.Code == medication.Code) > 0;
-            name_check = db.Medication.Count(e => e.GenericName == medication.GenericName) > 0;
+            bool code_check = db.Medication.Count(e => e.Code == medication.Code) > 0;
+            bool name_check = db.Medication.Count(e => e.GenericName == medication.GenericName) > 0;
 
             if(code_check || name_check)
             {
@@ -178,5 +176,6 @@ namespace CloudMedicApi.Controllers
                 return false;
             }
         }
+
     }
 }
