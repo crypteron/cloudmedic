@@ -43,7 +43,7 @@ namespace CloudMedicApi.Controllers
 
             foreach (var prescription in prescriptions)
             {
-                prescriptionsDto.Add(PrescriptionToDto(prescription));
+                prescriptionsDto.Add(ToDto.PrescriptionToDto(prescription));
             }
 
             return Ok(prescriptionsDto);
@@ -149,7 +149,7 @@ namespace CloudMedicApi.Controllers
                     throw;
                 }
             }
-            return Created("prescriptions/" + prescription.PrescriptionId, PrescriptionToDto(prescription));
+            return Created("prescriptions/" + prescription.PrescriptionId, ToDto.PrescriptionToDto(prescription));
         }
 
         // POST: Prescriptions/Update
@@ -217,16 +217,6 @@ namespace CloudMedicApi.Controllers
             await db.SaveChangesAsync();
 
             return Ok(prescription);
-        }
-
-        public static PrescriptionDto PrescriptionToDto(Prescription prescription)
-        {
-            var prescriptionDto = new PrescriptionDto();
-            prescriptionDto.InjectFrom(prescription);
-            prescriptionDto.MedicationName = prescription.Medication.GenericName;
-            prescriptionDto.MedicationCode = prescription.Medication.Code;
-            prescriptionDto.PatientName = prescription.Patient.FirstName + " " + prescription.Patient.LastName;
-            return prescriptionDto;
         }
 
         protected override void Dispose(bool disposing)

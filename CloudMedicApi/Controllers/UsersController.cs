@@ -67,7 +67,7 @@ namespace CloudMedicApi.Controllers
             var roles = await _db.Roles.ToDictionaryAsync(r => r.Id);
             foreach (var user in users)
             {   
-                usersDto.Add(UserToDto(user, roles));
+                usersDto.Add(ToDto.UserToDto(user, roles));
             }
 
             return Ok(usersDto);
@@ -103,14 +103,14 @@ namespace CloudMedicApi.Controllers
                   foreach (var user in users)
                   {
                      if (EditDistance(Name,user.FirstName+" "+user.LastName) ==i)
-                         usersDto.Add(UserToDto(user));
+                         usersDto.Add(ToDto.UserToDto(user));
                   }
               }
             else
                 foreach (var user in users)
                 {
                     if (EditDistance(names[0], user.FirstName) <=3|| EditDistance(names[0], user.LastName)<=3)
-                        usersDto.Add(UserToDto(user));
+                        usersDto.Add(ToDto.UserToDto(user));
                 }
             return Ok(usersDto);
         }
@@ -126,7 +126,7 @@ namespace CloudMedicApi.Controllers
                 return NotFound();
             }
             var roles = await _db.Roles.ToDictionaryAsync(r => r.Id);
-            return Ok(UserToDto(user, roles));
+            return Ok(ToDto.UserToDto(user, roles));
         }
 
         // GET: users/prescriptions/5
@@ -142,12 +142,12 @@ namespace CloudMedicApi.Controllers
 
             foreach (var prescription in user.Prescriptions)
             {
-                prescriptionsDto.Add(PrescriptionToDto(prescription));
+                prescriptionsDto.Add(ToDto.PrescriptionToDto(prescription));
             }
 
             return Ok(prescriptionsDto);
         }
-
+        
         // GET: users/provider/5
         [Route("Provider")]
         public async Task<IHttpActionResult> GetProviderCareTeams(string id)
@@ -163,7 +163,7 @@ namespace CloudMedicApi.Controllers
 
             foreach (var careTeam in user.ProviderCareTeams)
             {
-                careTeamsDto.Add(CareTeamToDto(careTeam, roles));
+                careTeamsDto.Add(ToDto.CareTeamToDto(careTeam, roles));
             }
 
             return Ok(careTeamsDto);
@@ -184,12 +184,12 @@ namespace CloudMedicApi.Controllers
 
             foreach (var careTeam in user.PatientCareTeams)
             {
-                careTeamsDto.Add(CareTeamToDto(careTeam, roles));
+                careTeamsDto.Add(ToDto.CareTeamToDto(careTeam, roles));
             }
 
             return Ok(careTeamsDto);
         }
-
+        
         // PUT: users/5
         [Route("{id}")]
         public async Task<IHttpActionResult> PutUser(string id, ApplicationUser user)
@@ -249,7 +249,7 @@ namespace CloudMedicApi.Controllers
             mail.From = new MailAddress("crypterondummytest@outlook.com", "no_repy_cloudmedic");
             mail.To.Add(new MailAddress(user.Email));
             mail.Subject = "Invitation to join CloudMedic";
-            mail.Body = "Dear " + userDto.FirstName + " " + userDto.LastName + ", you have been added to CloudMedic by an administor. Your password is: \n\n" + password + "\n\nPlease login with your assigned username:\n\n" + user.UserName + "\n\nand change your password under the profile tab.";
+            mail.Body = "Dear " + userDto.FirstName + " " + userDto.LastName + ", you have been added to CloudMedic by an administrator.\n\nPlease login with your assigned username and password:\n\nUsername: " + user.UserName + "\nPassword: " + password + "\n\n After logging in, change your password under the profile tab.";
 
             client.Send(mail);
 
@@ -286,45 +286,6 @@ namespace CloudMedicApi.Controllers
             }
         }
 
-        public static CareTeamDto CareTeamToDto(CareTeam careTeam, Dictionary<string, IdentityRole> roles = null)
-        {
-            var careTeamDto = new CareTeamDto();
-            careTeamDto.InjectFrom(careTeam);
-            //careTeamDto.PatientId = careTeam.Patient.Id;
-            careTeamDto.Patient = UserToDto(careTeam.Patient, roles);
-            //careTeamDto.ProviderIds = new List<string>();
-            careTeamDto.Providers = new List<UserDto>();
-            foreach (var provider in careTeam.Providers)
-            {
-                //careTeamDto.ProviderIds.Add(provider.Id);
-                careTeamDto.Providers.Add(UserToDto(provider, roles));
-
-            }
-            return careTeamDto;
-        }
-        public static UserDto UserToDto(ApplicationUser user, Dictionary<string, IdentityRole> roles = null)
-        {
-            var userDto = new UserDto();
-            userDto.InjectFrom(user);
-            userDto.Roles = new List<string>();
-            if (roles != null)
-            {
-                foreach (var role in user.Roles)
-                {
-                    userDto.Roles.Add(roles[role.RoleId].Name);
-                }
-            }
-            userDto.UserId = user.Id;
-            userDto.Prescriptions = new List<string>();
-            if (user.Prescriptions != null)
-            {
-                foreach (var prescription in user.Prescriptions)
-                {
-                    userDto.Prescriptions.Add(prescription.PrescriptionId.ToString());
-                }
-            }
-            return userDto;
-        }
         public static Boolean isPatient(ApplicationUser user)
         {
             foreach (var role in user.Roles)
@@ -334,15 +295,7 @@ namespace CloudMedicApi.Controllers
             }
             return false;
         }
-        public static PrescriptionDto PrescriptionToDto(Prescription prescription)
-        {
-            var prescriptionDto = new PrescriptionDto();
-            prescriptionDto.InjectFrom(prescription);
-            prescriptionDto.MedicationName = prescription.Medication.GenericName;
-            prescriptionDto.MedicationCode = prescription.Medication.Code;
-            prescriptionDto.PatientName = prescription.Patient.FirstName + " " + prescription.Patient.LastName;
-            return prescriptionDto;
-        }
+
         public static int EditDistance(String StrA, String StrB)
         {
             int[,] matrix=new int[StrA.Length+1,StrB.Length+1];
