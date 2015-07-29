@@ -76,42 +76,54 @@ namespace CloudMedicApi.Controllers
         // GET: Users/Find
         [Route("Find")]
         [ResponseType(typeof(List<UserDto>))]
-        public async Task<IHttpActionResult> GetPatientsbyName(string Name)
+        public async Task<IHttpActionResult> GetAssignedPatients(string Name, string providerId)
         {
-            List<ApplicationUser> users;
-            string[] names=new string[2];
-            names[0] = Name.Split(' ')[0];
-            if (Name.Split(' ').Length == 1)
-                names[1] = "";
-            var query = from roleObj in _db.Roles
-                        where roleObj.Name == "Patient"
-                        from userRoles in roleObj.Users
-                        join user in _db.Users
-                        on userRoles.UserId equals user.Id
-                        select user;
-
-            users = await query.ToListAsync();
-
-            if (users == null)
+            var user = await _userManager.FindByIdAsync(providerId);
+            if (user == null)
             {
                 return NotFound();
             }
+            List<ApplicationUser> patients = new List<ApplicationUser>();
+            foreach (var careTeam in user.ProviderCareTeams)
+            {
+                patients.Add(careTeam.Patient);
+            }
+            if (patients == null)
+            {
+                return NotFound();
+            }
+
+            // Split search string for querying
+            string[] names = new string[2];
+            names[0] = Name.Split(' ')[0];
+            if (Name.Split(' ').Length == 1)
+            {
+                names[1] = "";
+            }
+           
             var usersDto = new List<UserDto>();
-            if (names[1]!="")
-              for (int i = 0; i <=6;i++ )
-              {
-                  foreach (var user in users)
-                  {
-                     if (EditDistance(Name,user.FirstName+" "+user.LastName) ==i)
-                         usersDto.Add(UserToDto(user));
-                  }
-              }
-            else
-                foreach (var user in users)
+
+            // Refine results based on edit distance
+            if (names[1] != "")
+            {
+                for (int i = 0; i <= 6; i++)
                 {
-                    if (EditDistance(names[0], user.FirstName) <=3|| EditDistance(names[0], user.LastName)<=3)
+                    foreach (var patient in patients)
+                    {
+                        if (EditDistance(Name, user.FirstName + " " + user.LastName) == i)
+                            usersDto.Add(UserToDto(user));
+                    }
+                }
+            }
+            else
+            {
+                foreach (var patient in patients)
+                {
+                    if (EditDistance(names[0], user.FirstName) <= 3 || EditDistance(names[0], user.LastName) <= 3)
                         usersDto.Add(UserToDto(user));
                 }
+            }
+
             return Ok(usersDto);
         }
 
