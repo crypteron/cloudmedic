@@ -68,39 +68,99 @@ namespace CloudMedicApi.Controllers
             return Ok(ToDto.CareTeamToDto(careTeam, roles));
         }
 
-        // PUT: CareTeams/5
-        [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutCareTeams(Guid id, CareTeam careTeam)
+        // POST: CareTeams/Update
+        [Route("Update")]
+        public async Task<IHttpActionResult> AddProvider(UpdateTeamBindingModel model)
         {
-            if (!ModelState.IsValid)
+            CareTeam careTeam = await db.CareTeam.FindAsync(model.TeamId);
+            if (careTeam == null)
             {
-                return BadRequest(ModelState);
+                return NotFound();
             }
 
-            if (id != careTeam.Id)
+            var providers = new List<ApplicationUser>();
+            foreach (var providerId in model.ProviderIds)
             {
-                return BadRequest();
-            }
-
-            db.Entry(careTeam).State = EntityState.Modified;
-
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CareTeamExists(id))
+                var provider = await userManager.FindByIdAsync(providerId);
+                if (provider == null)
                 {
                     return NotFound();
                 }
-                else
+
+                if (!careTeam.Providers.Contains(provider))
                 {
-                    throw;
+                    careTeam.Providers.Add(provider);
                 }
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
+            careTeam.Name = model.TeamName;
+
+            await db.SaveChangesAsync();
+            return Ok();
+        }
+
+        // POST: CareTeams/Update/Add
+        [Route("Update/Add")]
+        public async Task<IHttpActionResult> AddProvider(UpdateProviderBindingModel model)
+        {
+            CareTeam careTeam = await db.CareTeam.FindAsync(model.TeamId);
+            if (careTeam == null)
+            {
+                return NotFound();
+            }
+
+            var provider = await userManager.FindByIdAsync(model.ProviderId);
+            if (provider == null)
+            {
+                return NotFound();
+            }
+
+            careTeam.Providers.Add(provider);
+            await db.SaveChangesAsync();
+            return Ok();
+        }
+
+        // POST: CareTeams/Update/Remove
+        [Route("Update/Remove")]
+        public async Task<IHttpActionResult> RemoveProvider(UpdateProviderBindingModel model)
+        {
+            CareTeam careTeam = await db.CareTeam.FindAsync(model.TeamId);
+            if (careTeam == null)
+            {
+                return NotFound();
+            }
+
+            var provider = await userManager.FindByIdAsync(model.ProviderId);
+            if (provider == null)
+            {
+                return NotFound();
+            }
+            if (careTeam.Providers.Contains(provider))
+            {
+                return NotFound();
+            }
+            else
+            {
+                careTeam.Providers.Remove(provider);
+            }
+
+            await db.SaveChangesAsync();
+            return Ok();
+        }
+
+        // POST: CareTeams/Update/Name
+        [Route("Update/Name")]
+        public async Task<IHttpActionResult> ChangeName(UpdateNameBindingModel model)
+        {
+            CareTeam careTeam = await db.CareTeam.FindAsync(model.TeamId);
+            if (careTeam == null)
+            {
+                return NotFound();
+            }
+
+            careTeam.Name = model.TeamName;
+            await db.SaveChangesAsync();
+            return Ok();
         }
 
         // POST: CareTeams/Add

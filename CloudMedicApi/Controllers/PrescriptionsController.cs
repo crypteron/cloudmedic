@@ -62,42 +62,7 @@ namespace CloudMedicApi.Controllers
 
             return Ok(prescription);
         }
-
-        // PUT: Prescriptions/5
-        [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutPrescriptions(Guid id, Prescription prescription)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != prescription.PrescriptionId)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(prescription).State = EntityState.Modified;
-
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PrescriptionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-
+        
         // POST: Prescriptions/Add
         [Route("Add")]
         [ResponseType(typeof(Prescription))]
@@ -154,7 +119,6 @@ namespace CloudMedicApi.Controllers
 
         // POST: Prescriptions/Update
         [Route("Update")]
-        [ResponseType(typeof(Prescription))]
         public async Task<IHttpActionResult> UpdatePrescription(UpdatePrescriptionBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -168,37 +132,9 @@ namespace CloudMedicApi.Controllers
                 return NotFound();
             }
 
-            // remove current prescription entry and add updated prescription
-            var newPrescription = new Prescription()
-            {
-                PrescriptionId = prescription.PrescriptionId,
-                Medication = prescription.Medication,
-                Dosage = prescription.Dosage,
-                Frequency = prescription.Frequency,
-                StartDate = prescription.StartDate,
-                EndDate = model.EndDate,
-                Notes = model.Notes,
-                Patient = prescription.Patient
-            };
-            db.Prescription.Remove(prescription);
+            prescription.Notes = model.Notes;
+            prescription.EndDate = model.EndDate;
             await db.SaveChangesAsync();
-            db.Prescription.Add(newPrescription);
-
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (PrescriptionExists(prescription.PrescriptionId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
             return Ok();
         }
 
