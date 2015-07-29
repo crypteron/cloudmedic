@@ -119,8 +119,8 @@ namespace CloudMedicApi.Controllers
             {
                 foreach (var patient in patients)
                 {
-                    if (EditDistance(names[0], user.FirstName) <=3|| EditDistance(names[0], user.LastName)<=3)
-                        usersDto.Add(ToDto.UserToDto(user));
+                    if (EditDistance(names[0], patient.FirstName) <=3 || EditDistance(names[0], patient.LastName) <= 3)
+                        usersDto.Add(ToDto.UserToDto(patient));
                 }
             }
 
@@ -258,7 +258,7 @@ namespace CloudMedicApi.Controllers
             client.EnableSsl = true;
             client.Credentials = credentials;
             MailMessage mail = new MailMessage();
-            mail.From = new MailAddress("crypterondummytest@outlook.com", "no_repy_cloudmedic");
+            mail.From = new MailAddress("crypterondummytest@outlook.com", "no_reply_cloudmedic");
             mail.To.Add(new MailAddress(user.Email));
             mail.Subject = "Invitation to join CloudMedic";
             mail.Body = "Dear " + userDto.FirstName + " " + userDto.LastName + ", you have been added to CloudMedic by an administrator.\n\nPlease login with your assigned username and password:\n\nUsername: " + user.UserName + "\nPassword: " + password + "\n\n After logging in, change your password under the profile tab.";
