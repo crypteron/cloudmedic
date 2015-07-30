@@ -14,6 +14,7 @@ using Omu.ValueInjecter;
 using System.Collections.Generic;
 using System.Net.Mail;
 using System;
+using System.Security.Permissions;
 
 namespace CloudMedicApi.Controllers
 {
@@ -32,6 +33,7 @@ namespace CloudMedicApi.Controllers
       
         // GET: users
         [Route("")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "SysAdmin")]
         public async Task<IHttpActionResult> GetUsers(string role = null)
         {
             List<ApplicationUser> users;
@@ -76,7 +78,10 @@ namespace CloudMedicApi.Controllers
         // GET: Users/Find
         [Route("Find")]
         [ResponseType(typeof(List<UserDto>))]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Physician")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Nurse")]
         public async Task<IHttpActionResult> GetAssignedPatients(string providerId)
+
         {
             var user = await _userManager.FindByIdAsync(providerId);
             if (user == null)
@@ -117,6 +122,9 @@ namespace CloudMedicApi.Controllers
 
         // GET: users/prescriptions/5
         [Route("Prescriptions")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Patient")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Physician")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Nurse")]
         public async Task<IHttpActionResult> GetPrescriptions(string id) {
             var user = await _userManager.FindByIdAsync(id);
             if (user == null)
@@ -136,6 +144,8 @@ namespace CloudMedicApi.Controllers
         
         // GET: users/provider/5
         [Route("Provider")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Physician")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Nurse")]
         public async Task<IHttpActionResult> GetProviderCareTeams(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -157,6 +167,7 @@ namespace CloudMedicApi.Controllers
 
         // GET: users/patient/5
         [Route("Patient")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Patient")]
         public async Task<IHttpActionResult> GetPatientCareTeams(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -199,6 +210,7 @@ namespace CloudMedicApi.Controllers
 
         // POST: users
         [Route("Add")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "SysAdmin")]
         public async Task<IHttpActionResult> PostUser(UserDto userDto)
         {
             if (!ModelState.IsValid)
@@ -244,6 +256,7 @@ namespace CloudMedicApi.Controllers
 
         // DELETE: users/5
         [Route("")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "SysAdmin")]
         public async Task<IHttpActionResult> DeleteUser(string id)
         {
             if (string.IsNullOrWhiteSpace(id))

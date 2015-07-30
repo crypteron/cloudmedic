@@ -12,6 +12,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using CloudMedicApi.DAL;
 using CloudMedicApi.Models;
+using System.Security.Permissions;
 
 namespace CloudMedicApi.Controllers
 {
@@ -24,6 +25,8 @@ namespace CloudMedicApi.Controllers
 
         // GET: Medications
         [Route("")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Physician")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Nurse")]
         public async Task<IHttpActionResult> GetMedications()
         {
             List<Medication> medications;
@@ -56,44 +59,11 @@ namespace CloudMedicApi.Controllers
             return Ok(medication);
         }
 
-        // PUT: api/Medications/5
-        [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutMedication(Guid id, Medication medication)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != medication.MedicationId)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(medication).State = EntityState.Modified;
-
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                //if (!MedicationExists(id))
-                //{
-                //    return NotFound();
-                //}
-                //else
-                //{
-                //    throw;
-                //}
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-
         // POST: Medications/Add
         [Route("Add")]
         [ResponseType(typeof(Medication))]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Physician")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Nurse")]
         public async Task<IHttpActionResult> PostMedication(MedicationBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -131,6 +101,8 @@ namespace CloudMedicApi.Controllers
         // DELETE: Medications/5
         [Route("")]
         [ResponseType(typeof(Medication))]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Physician")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Nurse")]
         public async Task<IHttpActionResult> DeleteMedication(Guid id)
         {
             Medication medication = await db.Medication.FindAsync(id);

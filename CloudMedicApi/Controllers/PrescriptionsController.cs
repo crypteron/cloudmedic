@@ -13,6 +13,7 @@ using System.Web.Http.Description;
 using CloudMedicApi.DAL;
 using CloudMedicApi.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Security.Permissions;
 
 namespace CloudMedicApi.Controllers
 {
@@ -31,21 +32,25 @@ namespace CloudMedicApi.Controllers
 
         // GET: Prescriptions
         [Route("")]
-        public async Task<IHttpActionResult> GetPrescriptions()
+        [PrincipalPermission(SecurityAction.Demand, Role = "Physician")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Nurse")]
+        public async Task<IHttpActionResult> GetPrescriptions(string providerId)
         {
-            List<Prescription> prescriptions;
-
-            prescriptions = await db.Prescription
-                .Take(30)
-                .ToListAsync();
-
-            var prescriptionsDto = new List<PrescriptionDto>();
-
-            foreach (var prescription in prescriptions)
+            var provider = await userManager.FindByIdAsync(providerId);
+            if (provider == null)
             {
-                prescriptionsDto.Add(ToDto.PrescriptionToDto(prescription));
+                return NotFound();
             }
 
+            List<PrescriptionDto> prescriptionsDto = new List<PrescriptionDto>();
+
+            foreach (var careTeam in provider.ProviderCareTeams)
+            {
+                foreach (var prescription in careTeam.Patient.Prescriptions)
+                {
+                    prescriptionsDto.Add(ToDto.PrescriptionToDto(prescription));
+                }
+            }        
             return Ok(prescriptionsDto);
         }
 
@@ -66,6 +71,8 @@ namespace CloudMedicApi.Controllers
         // POST: Prescriptions/Add
         [Route("Add")]
         [ResponseType(typeof(Prescription))]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Physician")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Nurse")]
         public async Task<IHttpActionResult> PostPrescription(PrescribeBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -119,6 +126,8 @@ namespace CloudMedicApi.Controllers
 
         // POST: Prescriptions/Update
         [Route("Update")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Physician")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Nurse")]
         public async Task<IHttpActionResult> UpdatePrescription(UpdatePrescriptionBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -141,6 +150,8 @@ namespace CloudMedicApi.Controllers
         // DELETE: Prescriptions/5
         [Route("")]
         [ResponseType(typeof(Prescription))]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Physician")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Nurse")]
         public async Task<IHttpActionResult> DeletePrescription(Guid id)
         {
             Prescription prescription = await db.Prescription.FindAsync(id);

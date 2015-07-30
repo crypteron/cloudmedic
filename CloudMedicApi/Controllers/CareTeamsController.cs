@@ -14,6 +14,7 @@ using CloudMedicApi.DAL;
 using CloudMedicApi.Models;
 using CloudMedicApi.Controllers;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Security.Permissions;
 
 namespace CloudMedicApi.Controllers
 {
@@ -32,6 +33,7 @@ namespace CloudMedicApi.Controllers
 
         // GET: CareTeams
         [Route("")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "SysAdmin")]
         public async Task<IHttpActionResult> GetCareTeams()
         {
             List<CareTeam> careTeams;
@@ -70,7 +72,8 @@ namespace CloudMedicApi.Controllers
 
         // POST: CareTeams/Update
         [Route("Update")]
-        public async Task<IHttpActionResult> AddProvider(UpdateTeamBindingModel model)
+        [PrincipalPermission(SecurityAction.Demand, Role = "SysAdmin")]
+        public async Task<IHttpActionResult> UpdateTeam(UpdateTeamBindingModel model)
         {
             CareTeam careTeam = await db.CareTeam.FindAsync(model.TeamId);
             if (careTeam == null)
@@ -166,6 +169,7 @@ namespace CloudMedicApi.Controllers
         // POST: CareTeams/Add
         [Route("Add")]
         [ResponseType(typeof(Prescription))]
+        [PrincipalPermission(SecurityAction.Demand, Role = "SysAdmin")]
         public async Task<IHttpActionResult> PostCareTeam(CareTeamBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -222,6 +226,7 @@ namespace CloudMedicApi.Controllers
         // DELETE: CareTeam/5
         [Route("")]
         [ResponseType(typeof(CareTeam))]
+        [PrincipalPermission(SecurityAction.Demand, Role = "SysAdmin")]
         public async Task<IHttpActionResult> DeleteCareTeam(Guid id)
         {
             CareTeam careTeam = await db.CareTeam.FindAsync(id);
