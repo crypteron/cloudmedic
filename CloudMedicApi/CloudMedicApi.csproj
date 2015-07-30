@@ -187,12 +187,11 @@
     <Compile Include="BLL\RoleId.cs" />
     <Compile Include="BLL\RoleManager.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\CareTeamController.cs" />
+    <Compile Include="Controllers\CareTeamsController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\MedicationsController.cs" />
     <Compile Include="Controllers\PrescriptionsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
-    <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="DAL\CareTeam.cs" />
     <Compile Include="DAL\CloudMedicDbInitializer.cs" />

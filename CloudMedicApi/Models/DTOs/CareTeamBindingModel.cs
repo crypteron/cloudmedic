@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace CloudMedicApi.Models
 {
-    // Models used as parameters to MedicationsController actions.
+    // Models used as parameters to CareTeamsController actions.
 
     public class CareTeamBindingModel
     {
