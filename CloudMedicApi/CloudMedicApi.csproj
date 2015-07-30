@@ -187,12 +187,13 @@
     <Compile Include="BLL\RoleId.cs" />
     <Compile Include="BLL\RoleManager.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CareTeamsController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\MedicationsController.cs" />
     <Compile Include="Controllers\PrescriptionsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
-    <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="DAL\CareTeam.cs" />
     <Compile Include="DAL\CloudMedicDbInitializer.cs" />
     <Compile Include="DAL\Medication.cs" />
     <Compile Include="DAL\MedicationAdministered.cs" />
@@ -206,6 +207,8 @@
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CloudMedicContext.cs" />
+    <Compile Include="Models\DTOs\CareTeamDto.cs" />
+    <Compile Include="Models\DTOs\CareTeamBindingModel.cs" />
     <Compile Include="Models\DTOs\MedicationBindingModel.cs" />
     <Compile Include="Models\DTOs\MedicationDto.cs" />
     <Compile Include="Models\DTOs\PrescriptionDto.cs" />
@@ -215,6 +218,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\PrescriptionBindingModels.cs" />
+    <Compile Include="Models\ToDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />

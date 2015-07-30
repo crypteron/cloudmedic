@@ -25,6 +25,8 @@ namespace CloudMedicApi.DAL
 
         public DbSet<Prescription> Prescription { get; set; }
 
+        public DbSet<CareTeam> CareTeam { get; set; }
+
         // To work with boilerplate code generated in VS2013.3
         public static MyDbContext Create()
         {
@@ -55,6 +57,16 @@ namespace CloudMedicApi.DAL
                     em.ToTable("UserMedicationsAdministered");
                     em.MapLeftKey("UserId");
                     em.MapRightKey("MedicationsAdministeredId");
+                });
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(u => u.ProviderCareTeams)
+                .WithMany(p => p.Providers)
+                .Map(em =>
+                {
+                    em.ToTable("UserProviderCareTeams");
+                    em.MapLeftKey("UserId");
+                    em.MapRightKey("CareTeamId");
                 });
         }
     }

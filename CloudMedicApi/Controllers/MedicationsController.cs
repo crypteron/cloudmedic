@@ -36,7 +36,7 @@ namespace CloudMedicApi.Controllers
 
             foreach (var medication in medications)
             {
-                medicationsDto.Add(MedicationToDto(medication));
+                medicationsDto.Add(ToDto.MedicationToDto(medication));
             }
 
             return Ok(medicationsDto);
@@ -125,7 +125,7 @@ namespace CloudMedicApi.Controllers
                 throw;
             }
 
-            return Created("medications/" + medication.MedicationId, MedicationToDto(medication));
+            return Created("medications/" + medication.MedicationId, ToDto.MedicationToDto(medication));
         }
 
         // DELETE: Medications/5
@@ -144,14 +144,6 @@ namespace CloudMedicApi.Controllers
 
             return Ok(medication);
         }
-
-        public static MedicationDto MedicationToDto(Medication medication)
-        {
-            var medicationDto = new MedicationDto();
-            medicationDto.InjectFrom(medication);
-            return medicationDto;
-        }
-
 
         protected override void Dispose(bool disposing)
         {

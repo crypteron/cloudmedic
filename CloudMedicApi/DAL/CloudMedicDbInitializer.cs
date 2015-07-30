@@ -68,10 +68,57 @@ namespace CloudMedicApi.DAL
             #endregion
 
             #region [ Seeding for test usage ]
+            // Test users
+            var examplePatient = new ApplicationUser()
+            {
+                Id = Guid.NewGuid().ToString(),
+                FirstName = "Example",
+                LastName = "User",
+                DateOfBirth = new DateTime(1950, 3, 3),
+                GenderEnum = GenderEnum.Male,
+                Email = "patient@example.com",
+                PhoneNumber = "(123) 456-7890",
+                PhoneNumberConfirmed = true,
+                EmailConfirmed = true,
+                UserName = "patient1",
+                Specialty = ""
+            };
+            examplePatient.Roles.Add(new IdentityUserRole()
+            {
+                RoleId = RoleManager.GetRoleId(RoleId.Patient),
+                UserId = examplePatient.Id
+            });
+            var result1 = manager.Create(examplePatient, "Password1!");
+            if (!result1.Succeeded)
+                throw new Exception("Couldn't create test patient");
+            var exampleDoctor = new ApplicationUser()
+            {
+                Id = Guid.NewGuid().ToString(),
+                FirstName = "Example",
+                LastName = "User",
+                DateOfBirth = new DateTime(1950, 3, 3),
+                GenderEnum = GenderEnum.Male,
+                Email = "doctor@example.com",
+                PhoneNumber = "(123) 456-7890",
+                PhoneNumberConfirmed = true,
+                EmailConfirmed = true,
+                UserName = "doctor1",
+                Specialty = ""
+            };
+            exampleDoctor.Roles.Add(new IdentityUserRole()
+            {
+                RoleId = RoleManager.GetRoleId(RoleId.Physician),
+                UserId = exampleDoctor.Id
+            });
+            var result2 = manager.Create(exampleDoctor, "Password1?");
+            if (!result2.Succeeded)
+                throw new Exception("Couldn't create test physician");
+
             // Patients
             var p = new List<ApplicationUser>();
             for (var i = 0; i < 12; i++)
             {
+                //manager.CreateAsync(PersonRandomizer.CreateRandomPatient());
                 p.Add(PersonRandomizer.CreateRandomPatient());
             }
 
@@ -131,20 +178,90 @@ namespace CloudMedicApi.DAL
             };
             #endregion
 
-            //#region [ Prescriptions ]
-            //var pres = new List<Prescription>
-            //{
-            //  new Prescription
-            //  {
-            //    Medication = meds[0],
-            //    PrescriptionId = Guid.NewGuid(),
-            //    Patient = p[0],
-            //    Frequency="Twice a day",
-            //    Dosage="Two pills",
-            //    Notes="N/A"
-            //  }
-            //};
-            //#endregion
+            #region [ Prescriptions ]
+            secDb.Prescription.Add(new Prescription()
+            {
+                PrescriptionId = Guid.NewGuid(),
+                Dosage = "Twice a day",
+                Frequency = "2 tablets",
+                StartDate = (new DateTime(2015, 7, 25)).ToString(),
+                EndDate = (new DateTime(2015, 8, 31)).ToString(),
+                Notes = "Stop using this medication and call your doctor at once if you have any of these serious side effects: black, bloody, or tarry stools; coughing up blood or vomit that looks like coffee grounds; severe nausea, vomiting, or stomach pain; fever lasting longer than 3 days;swelling, or pain lasting longer than 10 days",
+                Medication = meds[5],
+                Patient = examplePatient
+            });
+            secDb.Prescription.Add(new Prescription()
+            {
+                PrescriptionId = Guid.NewGuid(),
+                Dosage = "Once a day",
+                Frequency = "1 mg",
+                StartDate = (new DateTime(2015, 7, 20)).ToString(),
+                EndDate = (new DateTime(2015, 7, 24)).ToString(),
+                Notes = "Brand names: Solu-cortef, Anucort-hc, Locoid, Westcort, Cortifoam, Pandel, A-hydrocort, Colocort, U-cort, Caldecort, Alacort, Procto-Kit, MiCort-HC, Cortef, CortAlo, Proctocort, Texacort, Hytone, Maximum-H, Theracort, Poli-A",
+                Medication = meds[4],
+                Patient = p[3]
+            });
+            secDb.Prescription.Add(new Prescription()
+            {
+                PrescriptionId = Guid.NewGuid(),
+                Dosage = "Every 6 hours",
+                Frequency = "2 mg",
+                StartDate = (new DateTime(2015, 8, 20)).ToString(),
+                EndDate = (new DateTime(2015, 10, 24)).ToString(),
+                Notes = "Brand names: Tylenol, Panadol, Mapap, Tempra, Ofirmev, Feverall, Formula: C8H9NO2; Pregnancy risk: Category C(Risk cannot be ruled out)Medication = meds[4]",
+                Medication = meds[2],
+                Patient = p[2]
+            });
+            secDb.Prescription.Add(new Prescription()
+            {
+                PrescriptionId = Guid.NewGuid(),
+                Dosage = "Once a day",
+                Frequency = "2 pills",
+                StartDate = (new DateTime(2015, 7, 23)).ToString(),
+                EndDate = (new DateTime(2015, 9, 24)).ToString(),
+                Notes = "Brand names: Solu-cortef, Anucort-hc, Locoid, Westcort, Cortifoam, Pandel, A-hydrocort, Colocort, U-cort, Caldecort, Alacort, Procto-Kit, MiCort-HC, Cortef, CortAlo, Proctocort, Texacort, Hytone, Maximum-H, Theracort, Poli-A",
+                Medication = meds[4],
+                Patient = p[6]
+            });
+            secDb.Prescription.Add(new Prescription()
+            {
+                PrescriptionId = Guid.NewGuid(),
+                Dosage = "Once a week",
+                Frequency = "5 mg",
+                StartDate = (new DateTime(2015, 7, 26)).ToString(),
+                EndDate = (new DateTime(2015, 10, 24)).ToString(),
+                Notes = "Brand names: Advil, Midol, NeoProfen, Caldolor, Motrin, Ibu",
+                Medication = meds[2],
+                Patient = p[8]
+            });
+            #endregion
+
+            #region [ CareTeams ]
+            secDb.CareTeam.Add(new CareTeam()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Justice League",
+                Active = true,
+                Providers = new Collection<ApplicationUser> { n[0], n[7], n[2], n[4], dr[0] },
+                Patient = p[4]
+            });
+            secDb.CareTeam.Add(new CareTeam()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Suicide Squad",
+                Active = true,
+                Providers = new Collection<ApplicationUser> { n[3], n[5], n[6], dr[1] },
+                Patient = p[3]
+            });
+            secDb.CareTeam.Add(new CareTeam()
+            {
+                Id = Guid.NewGuid(),
+                Name = "The Avengers",
+                Active = true,
+                Providers = new Collection<ApplicationUser> { n[0], n[4], n[5], dr[0], exampleDoctor },
+                Patient = examplePatient
+            });
+            #endregion
 
             #region [ Pharmacies ]
             var pharmacies = new List<Pharmacy>
