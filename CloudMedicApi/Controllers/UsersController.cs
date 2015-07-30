@@ -148,6 +148,8 @@ namespace CloudMedicApi.Controllers
         // GET: users/prescriptions/5
         [Route("Prescriptions")]
         [PrincipalPermission(SecurityAction.Demand, Role = "Patient")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Physician")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Nurse")]
         public async Task<IHttpActionResult> GetPrescriptions(string id) {
             var user = await _userManager.FindByIdAsync(id);
             if (user == null)
