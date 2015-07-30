@@ -118,7 +118,6 @@ namespace CloudMedicApi.DAL
             var p = new List<ApplicationUser>();
             for (var i = 0; i < 12; i++)
             {
-                //manager.CreateAsync(PersonRandomizer.CreateRandomPatient());
                 p.Add(PersonRandomizer.CreateRandomPatient());
             }
 
@@ -198,7 +197,7 @@ namespace CloudMedicApi.DAL
                 StartDate = (new DateTime(2015, 7, 20)).ToString(),
                 EndDate = (new DateTime(2015, 7, 24)).ToString(),
                 Notes = "Brand names: Solu-cortef, Anucort-hc, Locoid, Westcort, Cortifoam, Pandel, A-hydrocort, Colocort, U-cort, Caldecort, Alacort, Procto-Kit, MiCort-HC, Cortef, CortAlo, Proctocort, Texacort, Hytone, Maximum-H, Theracort, Poli-A",
-                Medication = meds[4],
+                Medication = meds[3],
                 Patient = p[3]
             });
             secDb.Prescription.Add(new Prescription()
@@ -209,7 +208,7 @@ namespace CloudMedicApi.DAL
                 StartDate = (new DateTime(2015, 8, 20)).ToString(),
                 EndDate = (new DateTime(2015, 10, 24)).ToString(),
                 Notes = "Brand names: Tylenol, Panadol, Mapap, Tempra, Ofirmev, Feverall, Formula: C8H9NO2; Pregnancy risk: Category C(Risk cannot be ruled out)Medication = meds[4]",
-                Medication = meds[2],
+                Medication = meds[1],
                 Patient = p[2]
             });
             secDb.Prescription.Add(new Prescription()
@@ -232,6 +231,17 @@ namespace CloudMedicApi.DAL
                 EndDate = (new DateTime(2015, 10, 24)).ToString(),
                 Notes = "Brand names: Advil, Midol, NeoProfen, Caldolor, Motrin, Ibu",
                 Medication = meds[2],
+                Patient = p[1]
+            });
+            secDb.Prescription.Add(new Prescription()
+            {
+                PrescriptionId = Guid.NewGuid(),
+                Dosage = "Once a week",
+                Frequency = "5 mg",
+                StartDate = (new DateTime(2015, 7, 26)).ToString(),
+                EndDate = (new DateTime(2015, 10, 24)).ToString(),
+                Notes = "Brand names: Advil, Midol, NeoProfen, Caldolor, Motrin, Ibu",
+                Medication = meds[0],
                 Patient = p[8]
             });
             #endregion
@@ -242,7 +252,7 @@ namespace CloudMedicApi.DAL
                 Id = Guid.NewGuid(),
                 Name = "Justice League",
                 Active = true,
-                Providers = new Collection<ApplicationUser> { n[0], n[7], n[2], n[4], dr[0] },
+                Providers = new Collection<ApplicationUser> { n[0], n[7], n[2], n[4], dr[0], dr[2] },
                 Patient = p[4]
             });
             secDb.CareTeam.Add(new CareTeam()
@@ -250,7 +260,7 @@ namespace CloudMedicApi.DAL
                 Id = Guid.NewGuid(),
                 Name = "Suicide Squad",
                 Active = true,
-                Providers = new Collection<ApplicationUser> { n[3], n[5], n[6], dr[1] },
+                Providers = new Collection<ApplicationUser> { n[3], n[1], n[5], n[6], dr[1], dr[3] },
                 Patient = p[3]
             });
             secDb.CareTeam.Add(new CareTeam()
@@ -281,44 +291,44 @@ namespace CloudMedicApi.DAL
             };
             #endregion
 
-            #region [ MedicationAdministered readings ]
-            secDb.MedicationAdministered.Add(new MedicationAdministered()
-            {
-                Id = Guid.NewGuid(),
-                Patient = p[0],
-                Medications = new Collection<Medication> { meds[0], meds[1] },
-                CareTeam = new Collection<ApplicationUser> { n[0], n[7], dr[0] },
-                Pharmacy = pharmacies[0],
-                TreatmentDate = PersonRandomizer.GetRandomTime(1)
-            });
-            secDb.MedicationAdministered.Add(new MedicationAdministered()
-            {
-                Id = Guid.NewGuid(),
-                Patient = p[1],
-                Medications = new Collection<Medication> { meds[2], meds[3] },
-                CareTeam = new Collection<ApplicationUser> { n[3] , dr[1] },
-                Pharmacy = pharmacies[1],
-                TreatmentDate = PersonRandomizer.GetRandomTime(1)
-            });
-            secDb.MedicationAdministered.Add(new MedicationAdministered()
-            {
-                Id = Guid.NewGuid(),
-                Patient = p[0],
-                Medications = new Collection<Medication> { meds[0], meds[3] },
-                CareTeam = new Collection<ApplicationUser> { n[1], n[2], n[6] , dr[2] },
-                Pharmacy = pharmacies[0],
-                TreatmentDate = PersonRandomizer.GetRandomTime(1)
-            });
-            secDb.MedicationAdministered.Add(new MedicationAdministered()
-            {
-                Id = Guid.NewGuid(),
-                Patient = p[2],
-                Medications = new Collection<Medication> { meds[0], meds[1], meds[3] },
-                CareTeam = new Collection<ApplicationUser> { n[0], n[4], n[5] , dr[0], dr[3] },
-                Pharmacy = pharmacies[1],
-                TreatmentDate = PersonRandomizer.GetRandomTime(1)
-            });
-            #endregion
+            //#region [ MedicationAdministered readings ]
+            //secDb.MedicationAdministered.Add(new MedicationAdministered()
+            //{
+            //    Id = Guid.NewGuid(),
+            //    Patient = p[0],
+            //    Medications = new Collection<Medication> { meds[0], meds[1] },
+            //    CareTeam = new Collection<ApplicationUser> { n[0], n[7], dr[0] },
+            //    Pharmacy = pharmacies[0],
+            //    TreatmentDate = PersonRandomizer.GetRandomTime(1)
+            //});
+            //secDb.MedicationAdministered.Add(new MedicationAdministered()
+            //{
+            //    Id = Guid.NewGuid(),
+            //    Patient = p[1],
+            //    Medications = new Collection<Medication> { meds[2], meds[3] },
+            //    CareTeam = new Collection<ApplicationUser> { n[3] , dr[1] },
+            //    Pharmacy = pharmacies[1],
+            //    TreatmentDate = PersonRandomizer.GetRandomTime(1)
+            //});
+            //secDb.MedicationAdministered.Add(new MedicationAdministered()
+            //{
+            //    Id = Guid.NewGuid(),
+            //    Patient = p[0],
+            //    Medications = new Collection<Medication> { meds[0], meds[3] },
+            //    CareTeam = new Collection<ApplicationUser> { n[1], n[2], n[6] , dr[2] },
+            //    Pharmacy = pharmacies[0],
+            //    TreatmentDate = PersonRandomizer.GetRandomTime(1)
+            //});
+            //secDb.MedicationAdministered.Add(new MedicationAdministered()
+            //{
+            //    Id = Guid.NewGuid(),
+            //    Patient = p[2],
+            //    Medications = new Collection<Medication> { meds[0], meds[1], meds[3] },
+            //    CareTeam = new Collection<ApplicationUser> { n[0], n[4], n[5] , dr[0], dr[3] },
+            //    Pharmacy = pharmacies[1],
+            //    TreatmentDate = PersonRandomizer.GetRandomTime(1)
+            //});
+            //#endregion
 
             secDb.SaveChanges();
             #endregion

@@ -91,7 +91,7 @@ namespace CloudMedicApi.Models
 
         public virtual ICollection<CareTeam> ProviderCareTeams { get; set; }
 
-        public virtual ICollection<MedicationAdministered> MedicationAdministered { get; set; }
+        //public virtual ICollection<MedicationAdministered> MedicationAdministered { get; set; }
 
         #endregion
 

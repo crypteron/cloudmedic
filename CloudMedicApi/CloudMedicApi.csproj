@@ -196,7 +196,6 @@
     <Compile Include="DAL\CareTeam.cs" />
     <Compile Include="DAL\CloudMedicDbInitializer.cs" />
     <Compile Include="DAL\Medication.cs" />
-    <Compile Include="DAL\MedicationAdministered.cs" />
     <Compile Include="DAL\MyDbContext.cs" />
     <Compile Include="DAL\Pharmacy.cs" />
     <Compile Include="DAL\Prescription.cs" />

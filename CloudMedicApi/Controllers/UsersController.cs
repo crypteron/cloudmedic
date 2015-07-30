@@ -296,6 +296,16 @@ namespace CloudMedicApi.Controllers
                     return NotFound();
                 }
 
+                while (patient.PatientCareTeams.Count != 0)
+                {
+                    _db.CareTeam.Remove(patient.PatientCareTeams.ElementAt(0));
+                }
+
+                while (patient.Prescriptions.Count != 0)
+                {
+                    _db.Prescription.Remove(patient.Prescriptions.ElementAt(0));
+                }
+
                 await _userManager.DeleteAsync(patient);
 
                 return Ok(patient);

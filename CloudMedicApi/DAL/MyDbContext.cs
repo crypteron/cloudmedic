@@ -17,7 +17,7 @@ namespace CloudMedicApi.DAL
             }
         }
 
-        public DbSet<MedicationAdministered> MedicationAdministered { get; set; }
+        //public DbSet<MedicationAdministered> MedicationAdministered { get; set; }
 
         public DbSet<Pharmacy> Pharmacy { get; set; }
         
@@ -45,19 +45,19 @@ namespace CloudMedicApi.DAL
             modelBuilder.Entity<IdentityUserClaim>().ToTable("UserClaims");
 
             // Fix the artifacts of the in-built default pluralization
-            modelBuilder.Entity<MedicationAdministered>().ToTable("MedicationsAdministered");
+            //modelBuilder.Entity<MedicationAdministered>().ToTable("MedicationsAdministered");
 
             // See this link if you want to change such relationships 
             // http://www.entityframeworktutorial.net/code-first/configure-many-to-many-relationship-in-code-first.aspx
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.MedicationAdministered)
-                .WithMany(ma => ma.CareTeam)
-                .Map(em =>
-                {
-                    em.ToTable("UserMedicationsAdministered");
-                    em.MapLeftKey("UserId");
-                    em.MapRightKey("MedicationsAdministeredId");
-                });
+            //modelBuilder.Entity<ApplicationUser>()
+            //    .HasMany(u => u.MedicationAdministered)
+            //    .WithMany(ma => ma.CareTeam)
+            //    .Map(em =>
+            //    {
+            //        em.ToTable("UserMedicationsAdministered");
+            //        em.MapLeftKey("UserId");
+            //        em.MapRightKey("MedicationsAdministeredId");
+            //    });
 
             modelBuilder.Entity<ApplicationUser>()
                 .HasMany(u => u.ProviderCareTeams)
