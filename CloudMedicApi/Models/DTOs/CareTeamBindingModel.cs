@@ -21,6 +21,7 @@ namespace CloudMedicApi.Models
         [Display(Name = "Patient Id")]
         public string PatientId { get; set; }
     }
+
     public class UpdateTeamBindingModel
     {
         [Required]

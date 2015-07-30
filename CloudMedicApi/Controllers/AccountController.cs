@@ -19,7 +19,7 @@ using CloudMedicApi.Providers;
 using CloudMedicApi.Results;
 using System.Web.Mail;
 using CloudMedicApi.BLL;
-
+using System.Linq;
 
 namespace CloudMedicApi.Controllers
 {
@@ -77,6 +77,7 @@ namespace CloudMedicApi.Controllers
             Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
             return Ok();
         }
+
         //GET Account/Profile
         [Route("Profile")]
          public async Task<UserProfileViewModel> GetProfile()
@@ -88,6 +89,27 @@ namespace CloudMedicApi.Controllers
            model.Email = currentuser.Email;           
            return model;
         }
+
+        // POST /Account/Profile
+        [Route("Profile")]
+        public async Task<IHttpActionResult> ProfileUpdate(ProfileUpdateBindingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            ApplicationUser currentuser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            currentuser.FirstName = model.FirstName;
+            currentuser.LastName = model.LastName;
+            currentuser.Email = model.Email;
+            IdentityResult result = await UserManager.UpdateAsync(currentuser);
+            if (!result.Succeeded)
+            {
+                return GetErrorResult(result);
+            }
+            return Ok();
+        }
+
         // GET api/Account/ManageInfo?returnUrl=%2F&generateState=true
         [Route("ManageInfo")]
         public async Task<ManageInfoViewModel> GetManageInfo(string returnUrl, bool generateState = false)
@@ -166,6 +188,7 @@ namespace CloudMedicApi.Controllers
 
             return Ok();
         }
+
         // POST api/Account/AddExternalLogin
         [Route("AddExternalLogin")]
         public async Task<IHttpActionResult> AddExternalLogin(AddExternalLoginBindingModel model)
@@ -233,62 +256,63 @@ namespace CloudMedicApi.Controllers
             return Ok();
         }
 
-        //// GET api/Account/ExternalLogin
-        //[OverrideAuthentication]
-        //[HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)]
-        //[AllowAnonymous]
-        //[Route("ExternalLogin", Name = "ExternalLogin")]
-        //public async Task<IHttpActionResult> GetExternalLogin(string provider, string error = null)
-        //{
-        //    if (error != null)
-        //    {
-        //        return Redirect(Url.Content("~/") + "#error=" + Uri.EscapeDataString(error));
-        //    }
+        // GET api/Account/ExternalLogin
+        [OverrideAuthentication]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)]
+        [AllowAnonymous]
+        [Route("ExternalLogin", Name = "ExternalLogin")]
+        public async Task<IHttpActionResult> GetExternalLogin(string provider, string error = null)
+        {
+            if (error != null)
+            {
+                return Redirect(Url.Content("~/") + "#error=" + Uri.EscapeDataString(error));
+            }
 
-        //    if (!User.Identity.IsAuthenticated)
-        //    {
-        //        return new ChallengeResult(provider, this);
-        //    }
+            if (!User.Identity.IsAuthenticated)
+            {
+                return new ChallengeResult(provider, this);
+            }
 
-        //    ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
+            ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
 
-        //    if (externalLogin == null)
-        //    {
-        //        return InternalServerError();
-        //    }
+            if (externalLogin == null)
+            {
+                return InternalServerError();
+            }
 
-        //    if (externalLogin.LoginProvider != provider)
-        //    {
-        //        Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-        //        return new ChallengeResult(provider, this);
-        //    }
+            if (externalLogin.LoginProvider != provider)
+            {
+                Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+                return new ChallengeResult(provider, this);
+            }
 
-        //    ApplicationUser user = await UserManager.FindAsync(new UserLoginInfo(externalLogin.LoginProvider,
-        //        externalLogin.ProviderKey));
+            ApplicationUser user = await UserManager.FindAsync(new UserLoginInfo(externalLogin.LoginProvider,
+                externalLogin.ProviderKey));
 
-        //    bool hasRegistered = user != null;
+            bool hasRegistered = user != null;
 
-        //    if (hasRegistered)
-        //    {
-        //        Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-                
-        //         ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
-        //            OAuthDefaults.AuthenticationType);
-        //        ClaimsIdentity cookieIdentity = await user.GenerateUserIdentityAsync(UserManager,
-        //            CookieAuthenticationDefaults.AuthenticationType);
+            if (hasRegistered)
+            {
+                Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
 
-        //        AuthenticationProperties properties = ApplicationOAuthProvider.CreateProperties(user.UserName);
-        //        Authentication.SignIn(properties, oAuthIdentity, cookieIdentity);
-        //    }
-        //    else
-        //    {
-        //        IEnumerable<Claim> claims = externalLogin.GetClaims();
-        //        ClaimsIdentity identity = new ClaimsIdentity(claims, OAuthDefaults.AuthenticationType);
-        //        Authentication.SignIn(identity);
-        //    }
+                ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
+                   OAuthDefaults.AuthenticationType);
+                ClaimsIdentity cookieIdentity = await user.GenerateUserIdentityAsync(UserManager,
+                    CookieAuthenticationDefaults.AuthenticationType);
 
-        //    return Ok();
-        //}
+                List<Claim> roles = oAuthIdentity.Claims.Where(c => c.Type == ClaimTypes.Role).ToList();
+                AuthenticationProperties properties = ApplicationOAuthProvider.CreateProperties(user.UserName, user.Id, Newtonsoft.Json.JsonConvert.SerializeObject(roles.Select(x => x.Value)));
+                Authentication.SignIn(properties, oAuthIdentity, cookieIdentity);
+            }
+            else
+            {
+                IEnumerable<Claim> claims = externalLogin.GetClaims();
+                ClaimsIdentity identity = new ClaimsIdentity(claims, OAuthDefaults.AuthenticationType);
+                Authentication.SignIn(identity);
+            }
+
+            return Ok();
+        }
 
         // GET api/Account/ExternalLogins?returnUrl=%2F&generateState=true
         [AllowAnonymous]
@@ -330,6 +354,7 @@ namespace CloudMedicApi.Controllers
 
             return logins;
         }
+
         // POST Account/ForgetPassword
         [AllowAnonymous]
         [Route("ForgetPassword")]
@@ -356,6 +381,7 @@ namespace CloudMedicApi.Controllers
             }
             return Ok();
         }
+
         // POST Account/Register
         [AllowAnonymous]
         [Route("Register")]
@@ -426,26 +452,6 @@ namespace CloudMedicApi.Controllers
             }
             return Ok();
         }
-        // POST /Account/Profile
-        [Route("Profile")]
-        public async Task<IHttpActionResult> ProfileUpdate(ProfileUpdateBindingModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            ApplicationUser currentuser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-            currentuser.FirstName = model.FirstName;
-            currentuser.LastName=model.LastName;            
-            currentuser.Email = model.Email;
-            IdentityResult result = await UserManager.UpdateAsync(currentuser);
-            if (!result.Succeeded)
-            {
-                return GetErrorResult(result);
-            }
-            return Ok();
-        }
-
 
         protected override void Dispose(bool disposing)
         {

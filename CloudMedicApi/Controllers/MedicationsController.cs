@@ -111,6 +111,12 @@ namespace CloudMedicApi.Controllers
                 return NotFound();
             }
 
+            // Clear prescriptions dependent on medication
+            while (medication.Prescriptions.Count != 0)
+            {
+                db.Prescription.Remove(medication.Prescriptions.ElementAt(0));
+            }
+
             db.Medication.Remove(medication);
             await db.SaveChangesAsync();
 

@@ -192,7 +192,6 @@
     <Compile Include="Controllers\MedicationsController.cs" />
     <Compile Include="Controllers\PrescriptionsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="DAL\CareTeam.cs" />
     <Compile Include="DAL\CloudMedicDbInitializer.cs" />
     <Compile Include="DAL\Medication.cs" />
