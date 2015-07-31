@@ -80,7 +80,8 @@ namespace CloudMedicApi.Controllers
         [ResponseType(typeof(List<UserDto>))]
         [PrincipalPermission(SecurityAction.Demand, Role = "Physician")]
         [PrincipalPermission(SecurityAction.Demand, Role = "Nurse")]
-        public async Task<IHttpActionResult> GetAssignedPatients(string Name, string providerId)
+        public async Task<IHttpActionResult> GetAssignedPatients(string providerId)
+
         {
             var user = await _userManager.FindByIdAsync(providerId);
             if (user == null)
@@ -95,39 +96,13 @@ namespace CloudMedicApi.Controllers
             if (patients == null)
             {
                 return NotFound();
-            }
-
-            // Split search string for querying
-            string[] names = new string[2];
-            names[0] = Name.Split(' ')[0];
-            if (Name.Split(' ').Length == 1)
-            {
-                names[1] = "";
-            }
-           
+            }           
             var usersDto = new List<UserDto>();
-
-            // Refine results based on edit distance
-            if (names[1] != "")
+            // Refine results based on edit distance          
+            foreach (var patient in patients)
             {
-                for (int i = 0; i <= 6; i++)
-                {
-                    foreach (var patient in patients)
-                    {
-                        if (EditDistance(Name, user.FirstName + " " + user.LastName) == i)
-                            usersDto.Add(ToDto.UserToDto(user));
-                    }
-                }
-            }
-            else
-            {
-                foreach (var patient in patients)
-                {
-                    if (EditDistance(names[0], patient.FirstName) <=3 || EditDistance(names[0], patient.LastName) <= 3)
-                        usersDto.Add(ToDto.UserToDto(patient));
-                }
-            }
-
+              usersDto.Add(ToDto.UserToDto(patient));
+            }            
             return Ok(usersDto);
         }
 
