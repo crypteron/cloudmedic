@@ -88,7 +88,9 @@ namespace CloudMedicApi.Controllers
             {
                 return NotFound();
             }
+
             List<ApplicationUser> patients = new List<ApplicationUser>();
+
             foreach (var careTeam in user.ProviderCareTeams)
             {
                 patients.Add(careTeam.Patient);
@@ -96,13 +98,15 @@ namespace CloudMedicApi.Controllers
             if (patients == null)
             {
                 return NotFound();
-            }           
+            }
+
             var usersDto = new List<UserDto>();
-            // Refine results based on edit distance          
+
             foreach (var patient in patients)
             {
               usersDto.Add(ToDto.UserToDto(patient));
             }            
+
             return Ok(usersDto);
         }
 
