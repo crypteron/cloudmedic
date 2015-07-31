@@ -33,6 +33,14 @@ namespace CloudMedicApi.Models
                     userDto.Prescriptions.Add(prescription.PrescriptionId.ToString());
                 }
             }
+            userDto.Supporters = new List<UserDto>();
+            if (user.Supporters != null)
+            {
+                foreach (var supporter in user.Supporters)
+                {
+                    userDto.Supporters.Add(ToDto.UserToDto(supporter));
+                }
+            }
             return userDto;
         }
 

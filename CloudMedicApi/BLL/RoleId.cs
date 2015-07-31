@@ -11,6 +11,9 @@
         SysManager = 3,
 
         // System Root Administrators
-        SysAdmin = 4
+        SysAdmin = 4,
+
+        // Peripheral members
+        Supporter = 5
     }
 }

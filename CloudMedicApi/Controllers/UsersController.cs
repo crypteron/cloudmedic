@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Net.Mail;
 using System;
 using System.Security.Permissions;
+using CloudMedicApi.BLL;
 
 namespace CloudMedicApi.Controllers
 {
@@ -129,6 +130,7 @@ namespace CloudMedicApi.Controllers
         [PrincipalPermission(SecurityAction.Demand, Role = "Patient")]
         [PrincipalPermission(SecurityAction.Demand, Role = "Physician")]
         [PrincipalPermission(SecurityAction.Demand, Role = "Nurse")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Supporter")]
         public async Task<IHttpActionResult> GetPrescriptions(string id) {
             var user = await _userManager.FindByIdAsync(id);
             if (user == null)
@@ -145,7 +147,7 @@ namespace CloudMedicApi.Controllers
 
             return Ok(prescriptionsDto);
         }
-        
+
         // GET: users/provider/5
         [Route("Provider")]
         [PrincipalPermission(SecurityAction.Demand, Role = "Physician")]

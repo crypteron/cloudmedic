@@ -21,5 +21,6 @@ namespace CloudMedicApi.Controllers
         public string Gender { get; set; }
         public List<string> Prescriptions { get; set; }
         public List<string> Roles { get; set; }
+        public List<UserDto> Supporters { get; set; }
     }
 }

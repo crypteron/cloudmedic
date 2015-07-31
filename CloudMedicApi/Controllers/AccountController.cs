@@ -20,6 +20,7 @@ using CloudMedicApi.Results;
 using System.Web.Mail;
 using CloudMedicApi.BLL;
 using System.Linq;
+using CloudMedicApi.DAL;
 
 namespace CloudMedicApi.Controllers
 {
@@ -410,8 +411,54 @@ namespace CloudMedicApi.Controllers
             });
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
-            //await UserManager.AddToRoleAsync(user.Id, "Patient");
             
+            if (!result.Succeeded)
+            {
+                return GetErrorResult(result);
+            }
+
+            return Ok();
+        }
+
+        // POST Account/Supporter
+        [AllowAnonymous]
+        [Route("Supporter")]
+        public async Task<IHttpActionResult> SupporterRegistration(RegisterSupporterBindingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var patient = await UserManager.FindByIdAsync(model.PatientId);
+            if (patient == null)
+            {
+                return NotFound();
+            }
+
+            var supporter = new ApplicationUser()
+            {
+                UserName = model.UserName,
+                Email = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Gender = model.Gender,
+                DOB = model.DOB,
+                PhoneNumber = model.PhoneNumber,
+                Specialty = "",
+                SupportedPatients = new List<ApplicationUser>()
+            };
+
+            supporter.SupportedPatients.Add(patient);
+
+            supporter.Roles.Add(new IdentityUserRole()
+            {
+                RoleId = RoleManager.GetRoleId(RoleId.Supporter),
+                UserId = supporter.Id
+            });
+
+            IdentityResult result = await UserManager.CreateAsync(supporter, model.Password);
+
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);
