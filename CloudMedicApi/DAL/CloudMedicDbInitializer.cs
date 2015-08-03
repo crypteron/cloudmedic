@@ -74,7 +74,7 @@ namespace CloudMedicApi.DAL
                 Id = Guid.NewGuid().ToString(),
                 FirstName = "Example",
                 LastName = "User",
-                DateOfBirth = new DateTime(1950, 3, 3),
+                DOB = (new DateTime(1950, 3, 3)).ToString(),
                 GenderEnum = GenderEnum.Male,
                 Email = "patient@example.com",
                 PhoneNumber = "(123) 456-7890",
@@ -91,12 +91,13 @@ namespace CloudMedicApi.DAL
             var result1 = manager.Create(examplePatient, "Password1!");
             if (!result1.Succeeded)
                 throw new Exception("Couldn't create test patient");
+
             var exampleDoctor = new ApplicationUser()
             {
                 Id = Guid.NewGuid().ToString(),
                 FirstName = "Example",
                 LastName = "User",
-                DateOfBirth = new DateTime(1950, 3, 3),
+                DOB = (new DateTime(1950, 3, 3)).ToString(),
                 GenderEnum = GenderEnum.Male,
                 Email = "doctor@example.com",
                 PhoneNumber = "(123) 456-7890",
@@ -113,6 +114,31 @@ namespace CloudMedicApi.DAL
             var result2 = manager.Create(exampleDoctor, "Password1?");
             if (!result2.Succeeded)
                 throw new Exception("Couldn't create test physician");
+
+            var exampleSupporter = new ApplicationUser()
+            {
+                Id = Guid.NewGuid().ToString(),
+                FirstName = "Example",
+                LastName = "Supporter",
+                DOB = (new DateTime(1950, 3, 3)).ToString(),
+                GenderEnum = GenderEnum.Male,
+                Email = "supporter@example.com",
+                PhoneNumber = "(123) 456-7890",
+                PhoneNumberConfirmed = true,
+                EmailConfirmed = true,
+                UserName = "supporter1",
+                SupportedPatients = new List<ApplicationUser>(),
+                Specialty = ""
+            };
+            exampleSupporter.Roles.Add(new IdentityUserRole()
+            {
+                RoleId = RoleManager.GetRoleId(RoleId.Supporter),
+                UserId = exampleSupporter.Id
+            });
+            exampleSupporter.SupportedPatients.Add(examplePatient);
+            var result3 = manager.Create(exampleSupporter, "Password1.");
+            if (!result3.Succeeded)
+                throw new Exception("Couldn't create test supporter");
 
             // Patients
             var p = new List<ApplicationUser>();

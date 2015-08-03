@@ -33,30 +33,58 @@ namespace CloudMedicApi.Models
                     userDto.Prescriptions.Add(prescription.PrescriptionId.ToString());
                 }
             }
-            userDto.Supporters = new List<UserDto>();
+            userDto.Supporters = new List<SupporterDto>();
             if (user.Supporters != null)
             {
                 foreach (var supporter in user.Supporters)
                 {
-                    userDto.Supporters.Add(ToDto.UserToDto(supporter));
+                    userDto.Supporters.Add(ToDto.SupporterToDto(supporter));
+                }
+            }
+            userDto.SupportedPatients = new List<SupportedPatientDto>();
+            if (user.SupportedPatients != null)
+            {
+                foreach (var supportedPatient in user.SupportedPatients)
+                {
+                    userDto.SupportedPatients.Add(ToDto.SupportedPatientToDto(supportedPatient));
                 }
             }
             return userDto;
+        }
+
+        public static SupporterDto SupporterToDto(ApplicationUser user)
+        {
+            var supporterDto = new SupporterDto();
+            supporterDto.InjectFrom(user);
+            supporterDto.UserId = user.Id;
+            return supporterDto;
+        }
+
+        public static SupportedPatientDto SupportedPatientToDto(ApplicationUser user)
+        {
+            var supportedPatientDto = new SupportedPatientDto();
+            supportedPatientDto.InjectFrom(user);
+            supportedPatientDto.UserId = user.Id;
+            supportedPatientDto.Prescriptions = new List<string>();
+            if (user.Prescriptions != null)
+            {
+                foreach (var prescription in user.Prescriptions)
+                {
+                    supportedPatientDto.Prescriptions.Add(prescription.PrescriptionId.ToString());
+                }
+            }
+            return supportedPatientDto;
         }
 
         public static CareTeamDto CareTeamToDto(CareTeam careTeam, Dictionary<string, IdentityRole> roles = null)
         {
             var careTeamDto = new CareTeamDto();
             careTeamDto.InjectFrom(careTeam);
-            //careTeamDto.PatientId = careTeam.Patient.Id;
             careTeamDto.Patient = UserToDto(careTeam.Patient, roles);
-            //careTeamDto.ProviderIds = new List<string>();
             careTeamDto.Providers = new List<UserDto>();
             foreach (var provider in careTeam.Providers)
             {
-                //careTeamDto.ProviderIds.Add(provider.Id);
                 careTeamDto.Providers.Add(UserToDto(provider, roles));
-
             }
             return careTeamDto;
         }

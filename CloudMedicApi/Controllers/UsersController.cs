@@ -217,7 +217,7 @@ namespace CloudMedicApi.Controllers
         // POST: users
         [Route("Add")]
         [PrincipalPermission(SecurityAction.Demand, Role = "SysAdmin")]
-        public async Task<IHttpActionResult> PostUser(UserDto userDto)
+        public async Task<IHttpActionResult> PostUser(CreateUserBindingModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -225,8 +225,17 @@ namespace CloudMedicApi.Controllers
             }
 
             var password = Randomizer.GetRandomString(10);
-            var user = new ApplicationUser();
-            user.InjectFrom(userDto);
+            var user = new ApplicationUser()
+            {
+                UserName = model.UserName,
+                Email = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Gender = model.Gender,
+                DOB = model.DOB,
+                PhoneNumber = model.PhoneNumber,
+                Specialty = model.Specialty
+            };
             
             var identityResult = await _userManager.CreateAsync(user, password);
 
@@ -234,7 +243,7 @@ namespace CloudMedicApi.Controllers
                 return BuildErrorResult(identityResult);
 
             Crypteron.CipherDb.Session.Unseal(user);
-            identityResult = await _userManager.AddToRolesAsync(user.Id, userDto.Roles.ToArray());
+            identityResult = await _userManager.AddToRolesAsync(user.Id, model.Roles.ToArray());
 
 
             Crypteron.CipherDb.Session.Unseal(user);
@@ -253,11 +262,44 @@ namespace CloudMedicApi.Controllers
             mail.From = new MailAddress("crypterondummytest@outlook.com", "no_reply_cloudmedic");
             mail.To.Add(new MailAddress(user.Email));
             mail.Subject = "Invitation to join CloudMedic";
-            mail.Body = "Dear " + userDto.FirstName + " " + userDto.LastName + ", you have been added to CloudMedic by an administrator.\n\nPlease login with your assigned username and password:\n\nUsername: " + user.UserName + "\nPassword: " + password + "\n\n After logging in, change your password under the profile tab.";
+            mail.Body = "Dear " + user.FirstName + " " + user.LastName + ", you have been added to CloudMedic by an administrator.\n\nPlease login with your assigned username and password:\n\nUsername: " + user.UserName + "\nPassword: " + password + "\n\n After logging in, change your password under the profile tab.";
 
             client.Send(mail);
 
-            return Created("users/" + user.Id, userDto);       
+            return Created("users/" + user.Id, ToDto.UserToDto(user));       
+        }
+
+        // POST: users/supporter
+        [Route("Supporter")]
+        public async Task<IHttpActionResult> AddSupporter(InviteSupporterBindingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.FindByIdAsync(model.PatientId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            SmtpClient client = new SmtpClient("smtp-mail.outlook.com");
+            client.Port = 587;
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.UseDefaultCredentials = false;
+            System.Net.NetworkCredential credentials = new System.Net.NetworkCredential("crypterondummytest@outlook.com", "cloudmedicrocks!");
+            client.EnableSsl = true;
+            client.Credentials = credentials;
+            MailMessage mail = new MailMessage();
+            mail.From = new MailAddress("crypterondummytest@outlook.com", "no_reply_cloudmedic");
+            mail.To.Add(new MailAddress(model.Email));
+            mail.Subject = "Invitation to join CloudMedic";
+            mail.Body = "Dear " + model.Name + ", you have been invited to be a supporter on CloudMedic by a patient, " + user.FirstName + " " + user.LastName + ".\n\nPlease register as a supporter with this Patient Id: " + user.Id;
+
+            client.Send(mail);
+
+            return Ok();
         }
 
         // DELETE: users/5

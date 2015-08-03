@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using CloudMedicApi.Models;
+using System.Globalization;
 
 namespace CloudMedicApi.DAL
 {
@@ -24,7 +25,7 @@ namespace CloudMedicApi.DAL
         {
             get
             {
-                DateTime dos;
+                DateTime dos = new DateTime(0, DateTimeKind.Utc);
                 return DateTime.TryParse(StartDate, out dos) ? dos : default(DateTime);
             }
             set
@@ -37,7 +38,7 @@ namespace CloudMedicApi.DAL
         {
             get
             {
-                DateTime doe;
+                DateTime doe = new DateTime(0, DateTimeKind.Utc);
                 return DateTime.TryParse(EndDate, out doe) ? doe : default(DateTime);
             }
             set
