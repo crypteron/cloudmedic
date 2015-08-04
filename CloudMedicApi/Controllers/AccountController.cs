@@ -85,6 +85,7 @@ namespace CloudMedicApi.Controllers
         {
            ApplicationUser currentuser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
            var model = new UserProfileViewModel();
+           model.Username = currentuser.UserName;
            model.FirstName = currentuser.FirstName;
            model.LastName = currentuser.LastName;
            model.Email = currentuser.Email;           
@@ -100,6 +101,7 @@ namespace CloudMedicApi.Controllers
                 return BadRequest(ModelState);
             }
             ApplicationUser currentuser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            currentuser.UserName = model.Username;
             currentuser.FirstName = model.FirstName;
             currentuser.LastName = model.LastName;
             currentuser.Email = model.Email;
