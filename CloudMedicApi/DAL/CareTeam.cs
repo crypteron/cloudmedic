@@ -21,7 +21,7 @@ namespace CloudMedicApi.DAL
 
         public virtual ICollection<ApplicationUser> Providers { get; set; }
 
-        //public virtual ICollection<ApplicationUser> Supporters { get; set; }
+       public virtual ICollection<ApplicationUser> Supporters { get; set; }
 
         public virtual ApplicationUser Patient { get; set; }
     }

@@ -76,8 +76,22 @@ namespace CloudMedicApi.Controllers
             return Ok(usersDto);
         }
 
-        // GET: Users/Find
-        [Route("Find")]
+        // GET: users/5
+        [Route("{id}")]
+        [ResponseType(typeof(ApplicationUser))]
+        public async Task<IHttpActionResult> GetUser(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var roles = await _db.Roles.ToDictionaryAsync(r => r.Id);
+            return Ok(ToDto.UserToDto(user, roles));
+        }
+
+        // GET: users/patients
+        [Route("Patients")]
         [ResponseType(typeof(List<UserDto>))]
         [PrincipalPermission(SecurityAction.Demand, Role = "Physician")]
         [PrincipalPermission(SecurityAction.Demand, Role = "Nurse")]
@@ -105,24 +119,73 @@ namespace CloudMedicApi.Controllers
 
             foreach (var patient in patients)
             {
-              usersDto.Add(ToDto.UserToDto(patient));
-            }            
+                usersDto.Add(ToDto.UserToDto(patient));
+            }
 
             return Ok(usersDto);
         }
 
-        // GET: users/5
-        [Route("{id}")]
-        [ResponseType(typeof(ApplicationUser))]
-        public async Task<IHttpActionResult> GetUser(string id)
+        // GET: users/providers
+        [Route("Providers")]
+        [ResponseType(typeof(List<UserDto>))]
+        public async Task<IHttpActionResult> GetProvidersByName(string id) {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+            string[] name = id.Split(' ');
+            if (name.Length >= 3)
+            {
+                return NotFound();
+            }
+
+            List<ApplicationUser> providers;
+            var search = from roleObj in _db.Roles
+                        where roleObj.Name == "Physician" || roleObj.Name == "Nurse"
+                        from userRoles in roleObj.Users
+                        join user in _db.Users
+                        on userRoles.UserId equals user.Id
+                        select user;
+
+            providers = await search.ToListAsync();
+            List<UserDto> results = new List<UserDto>();
+            var roles = await _db.Roles.ToDictionaryAsync(r => r.Id);
+
+            if (name.Length > 1)
+                for (int i = 0; i <= 6; i++)
+                {
+                    foreach (var provider in providers)
+                    {
+                        if (EditDistance(id, provider.FirstName + " " + provider.LastName) == i)
+                            results.Add(ToDto.UserToDto(provider, roles));
+                    }
+                }
+            else
+                for (int i = 0; i <= 3; i++)
+                {
+                    foreach (var provider in providers)
+                    {
+                        if (EditDistance(id, provider.LastName) == i || EditDistance(id, provider.FirstName) == i)
+                            results.Add(ToDto.UserToDto(provider));
+                    }
+                }
+
+            return Ok(results);
+        }
+
+        // GET: users/find
+        [Route("Find")]
+        public async Task<IHttpActionResult> FindByEmail(string email)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
             {
                 return NotFound();
             }
-            var roles = await _db.Roles.ToDictionaryAsync(r => r.Id);
-            return Ok(ToDto.UserToDto(user, roles));
+            else
+            {
+                return Ok(ToDto.UserToDto(user));
+            }
         }
 
         // GET: users/prescriptions/5
@@ -225,9 +288,10 @@ namespace CloudMedicApi.Controllers
             }
 
             var password = Randomizer.GetRandomString(10);
+
             var user = new ApplicationUser()
             {
-                UserName = model.UserName,
+                UserName = model.FirstName + model.LastName + Randomizer.GetRandomInt(),
                 Email = model.Email,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
@@ -267,39 +331,6 @@ namespace CloudMedicApi.Controllers
             client.Send(mail);
 
             return Created("users/" + user.Id, ToDto.UserToDto(user));       
-        }
-
-        // POST: users/supporter
-        [Route("Supporter")]
-        public async Task<IHttpActionResult> AddSupporter(InviteSupporterBindingModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var user = await _userManager.FindByIdAsync(model.PatientId);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            SmtpClient client = new SmtpClient("smtp-mail.outlook.com");
-            client.Port = 587;
-            client.DeliveryMethod = SmtpDeliveryMethod.Network;
-            client.UseDefaultCredentials = false;
-            System.Net.NetworkCredential credentials = new System.Net.NetworkCredential("crypterondummytest@outlook.com", "cloudmedicrocks!");
-            client.EnableSsl = true;
-            client.Credentials = credentials;
-            MailMessage mail = new MailMessage();
-            mail.From = new MailAddress("crypterondummytest@outlook.com", "no_reply_cloudmedic");
-            mail.To.Add(new MailAddress(model.Email));
-            mail.Subject = "Invitation to join CloudMedic";
-            mail.Body = "Dear " + model.Name + ", you have been invited to be a supporter on CloudMedic by a patient, " + user.FirstName + " " + user.LastName + ".\n\nPlease register as a supporter with this Patient Id: " + user.Id;
-
-            client.Send(mail);
-
-            return Ok();
         }
 
         // DELETE: users/5
@@ -355,21 +386,21 @@ namespace CloudMedicApi.Controllers
 
         public static int EditDistance(String StrA, String StrB)
         {
-            int[,] matrix=new int[StrA.Length+1,StrB.Length+1];
-            char[] ArrayA=StrA.ToCharArray();
-            char[] ArrayB=StrB.ToCharArray();
+            int[,] matrix = new int[StrA.Length+1, StrB.Length + 1];
+            char[] ArrayA = StrA.ToCharArray();
+            char[] ArrayB = StrB.ToCharArray();
             int current;
             for (int i = 0; i <= StrA.Length; i++)
                 matrix[i, 0] = i;
             for (int i = 0; i <= StrB.Length; i++)
                 matrix[0, i] = i;
-	        for (int i=1;i<=StrA.Length;i++)
-	    	  for(int j=1;j<=StrB.Length;j++)
+	        for (int i = 1;i <= StrA.Length; i++)
+	    	  for(int j = 1;j <= StrB.Length; j++)
 	    	  {
-	    		  current=1;
-	    		  if (Char.ToLower(ArrayA[i-1])==Char.ToLower(ArrayB[j-1]))
-	    		     current=0;
-	    		  matrix[i,j]=matrix[i-1,j-1]+current;
+	    		  current = 1;
+	    		  if (Char.ToLower(ArrayA[i-1]) == Char.ToLower(ArrayB[j-1]))
+	    		     current = 0;
+	    		  matrix[i,j] = matrix[i - 1,j - 1] + current;
                   if (matrix[i, j] > matrix[i - 1, j] + 1)
                       matrix[i, j] = matrix[i - 1, j] + 1;
                   if (matrix[i, j] > matrix[i , j-1] + 1)
@@ -377,6 +408,7 @@ namespace CloudMedicApi.Controllers
 	    	  }
             return matrix[StrA.Length, StrB.Length];
            }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

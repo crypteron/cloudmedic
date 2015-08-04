@@ -78,6 +78,18 @@ namespace CloudMedicApi.Utility
             return p;
         }
 
+        public static ApplicationUser CreateRandomSupporter()
+        {
+            var s = CreateRandomPerson();
+            s.Roles.Add(new IdentityUserRole()
+            {
+                RoleId = RoleManager.GetRoleId(RoleId.Supporter),
+                UserId = s.Id
+            });
+
+            return s;
+        }
+
         public static ApplicationUser CreateRandomPerson()
         {
             // We need to setup an actual user who can login

@@ -127,7 +127,6 @@ namespace CloudMedicApi.DAL
                 PhoneNumberConfirmed = true,
                 EmailConfirmed = true,
                 UserName = "supporter1",
-                SupportedPatients = new List<ApplicationUser>(),
                 Specialty = ""
             };
             exampleSupporter.Roles.Add(new IdentityUserRole()
@@ -135,7 +134,6 @@ namespace CloudMedicApi.DAL
                 RoleId = RoleManager.GetRoleId(RoleId.Supporter),
                 UserId = exampleSupporter.Id
             });
-            exampleSupporter.SupportedPatients.Add(examplePatient);
             var result3 = manager.Create(exampleSupporter, "Password1.");
             if (!result3.Succeeded)
                 throw new Exception("Couldn't create test supporter");
@@ -159,6 +157,13 @@ namespace CloudMedicApi.DAL
             for (var i = 0; i < 4; i++)
             {
                 dr.Add(PersonRandomizer.CreateRandomPhysician());
+            }
+
+            // Supporters
+            var s = new List<ApplicationUser>();
+            for (var i = 0; i < 6; i++)
+            {
+                s.Add(PersonRandomizer.CreateRandomSupporter());
             }
 
             #region [ Medications ]
@@ -279,6 +284,7 @@ namespace CloudMedicApi.DAL
                 Name = "Justice League",
                 Active = true,
                 Providers = new Collection<ApplicationUser> { n[0], n[7], n[2], n[4], dr[0], dr[2] },
+                Supporters = new Collection<ApplicationUser> { exampleSupporter, s[3], s[5] },
                 Patient = p[4]
             });
             secDb.CareTeam.Add(new CareTeam()
@@ -287,6 +293,7 @@ namespace CloudMedicApi.DAL
                 Name = "Suicide Squad",
                 Active = true,
                 Providers = new Collection<ApplicationUser> { n[3], n[1], n[5], n[6], dr[1], dr[3] },
+                Supporters = new Collection<ApplicationUser> { s[1], s[4], s[2] },
                 Patient = p[3]
             });
             secDb.CareTeam.Add(new CareTeam()
@@ -295,66 +302,10 @@ namespace CloudMedicApi.DAL
                 Name = "The Avengers",
                 Active = true,
                 Providers = new Collection<ApplicationUser> { n[0], n[4], n[5], dr[0], exampleDoctor },
+                Supporters = new Collection<ApplicationUser> { exampleSupporter, s[0], s[2] },
                 Patient = examplePatient
             });
             #endregion
-
-            #region [ Pharmacies ]
-            var pharmacies = new List<Pharmacy>
-            {
-                new Pharmacy
-                {
-                    PharmacyId = Guid.NewGuid(),
-                    Location = "3000 Valley Centre Dr, San Diego, CA 92130",
-                    Name = "Sons Pharmacy"
-                },
-                new Pharmacy
-                {
-                    PharmacyId = Guid.NewGuid(),
-                    Location = "101 W Broadway, San Diego, CA 92101",
-                    Name = "Green Cross"
-                }
-            };
-            #endregion
-
-            //#region [ MedicationAdministered readings ]
-            //secDb.MedicationAdministered.Add(new MedicationAdministered()
-            //{
-            //    Id = Guid.NewGuid(),
-            //    Patient = p[0],
-            //    Medications = new Collection<Medication> { meds[0], meds[1] },
-            //    CareTeam = new Collection<ApplicationUser> { n[0], n[7], dr[0] },
-            //    Pharmacy = pharmacies[0],
-            //    TreatmentDate = PersonRandomizer.GetRandomTime(1)
-            //});
-            //secDb.MedicationAdministered.Add(new MedicationAdministered()
-            //{
-            //    Id = Guid.NewGuid(),
-            //    Patient = p[1],
-            //    Medications = new Collection<Medication> { meds[2], meds[3] },
-            //    CareTeam = new Collection<ApplicationUser> { n[3] , dr[1] },
-            //    Pharmacy = pharmacies[1],
-            //    TreatmentDate = PersonRandomizer.GetRandomTime(1)
-            //});
-            //secDb.MedicationAdministered.Add(new MedicationAdministered()
-            //{
-            //    Id = Guid.NewGuid(),
-            //    Patient = p[0],
-            //    Medications = new Collection<Medication> { meds[0], meds[3] },
-            //    CareTeam = new Collection<ApplicationUser> { n[1], n[2], n[6] , dr[2] },
-            //    Pharmacy = pharmacies[0],
-            //    TreatmentDate = PersonRandomizer.GetRandomTime(1)
-            //});
-            //secDb.MedicationAdministered.Add(new MedicationAdministered()
-            //{
-            //    Id = Guid.NewGuid(),
-            //    Patient = p[2],
-            //    Medications = new Collection<Medication> { meds[0], meds[1], meds[3] },
-            //    CareTeam = new Collection<ApplicationUser> { n[0], n[4], n[5] , dr[0], dr[3] },
-            //    Pharmacy = pharmacies[1],
-            //    TreatmentDate = PersonRandomizer.GetRandomTime(1)
-            //});
-            //#endregion
 
             secDb.SaveChanges();
             #endregion

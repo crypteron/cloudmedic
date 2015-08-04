@@ -17,8 +17,6 @@ namespace CloudMedicApi.DAL
             }
         }
 
-        //public DbSet<MedicationAdministered> MedicationAdministered { get; set; }
-
         public DbSet<Pharmacy> Pharmacy { get; set; }
         
         public DbSet<Medication> Medication { get; set; }
@@ -49,15 +47,6 @@ namespace CloudMedicApi.DAL
 
             // See this link if you want to change such relationships 
             // http://www.entityframeworktutorial.net/code-first/configure-many-to-many-relationship-in-code-first.aspx
-            //modelBuilder.Entity<ApplicationUser>()
-            //    .HasMany(u => u.MedicationAdministered)
-            //    .WithMany(ma => ma.CareTeam)
-            //    .Map(em =>
-            //    {
-            //        em.ToTable("UserMedicationsAdministered");
-            //        em.MapLeftKey("UserId");
-            //        em.MapRightKey("MedicationsAdministeredId");
-            //    });
 
             modelBuilder.Entity<ApplicationUser>()
                 .HasMany(u => u.ProviderCareTeams)
@@ -70,24 +59,14 @@ namespace CloudMedicApi.DAL
                 });
 
             modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.SupportedPatients)
+                .HasMany(u => u.SupporterCareTeams)
                 .WithMany(s => s.Supporters)
                 .Map(em =>
                 {
-                    em.ToTable("UserSupportedPatients");
+                    em.ToTable("UserSupporterCareTeams");
                     em.MapLeftKey("UserId");
-                    em.MapRightKey("SupportedId");
+                    em.MapRightKey("CareTeamId");
                 });
-
-            //modelBuilder.Entity<ApplicationUser>()
-            //    .HasMany(u => u.SupporterCareTeams)
-            //    .WithMany(s => s.Supporters)
-            //    .Map(em =>
-            //    {
-            //        em.ToTable("UserSupporterCareTeams");
-            //        em.MapLeftKey("UserId");
-            //        em.MapRightKey("CareTeamId");
-            //    });
         }
     }
 }

@@ -430,12 +430,6 @@ namespace CloudMedicApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var patient = await UserManager.FindByIdAsync(model.PatientId);
-            if (patient == null)
-            {
-                return NotFound();
-            }
-
             var supporter = new ApplicationUser()
             {
                 UserName = model.UserName,
@@ -445,11 +439,8 @@ namespace CloudMedicApi.Controllers
                 Gender = model.Gender,
                 DOB = model.DOB,
                 PhoneNumber = model.PhoneNumber,
-                Specialty = "",
-                SupportedPatients = new List<ApplicationUser>()
+                Specialty = ""
             };
-
-            supporter.SupportedPatients.Add(patient);
 
             supporter.Roles.Add(new IdentityUserRole()
             {
