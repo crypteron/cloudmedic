@@ -47,6 +47,10 @@ namespace CloudMedicApi.Models
         [Display(Name = "Email")]
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string Email { get; set; }
+
+        [Required]
+        [Display(Name = "Username")]
+        public string Username { get; set; }
     }
 
     public class RegisterBindingModel
