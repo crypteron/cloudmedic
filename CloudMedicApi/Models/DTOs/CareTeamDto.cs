@@ -20,6 +20,6 @@ namespace CloudMedicApi.Controllers
 
         public List<UserDto> Providers { get; set; }
 
-        public List<string> SupporterId { get; set; }
+        public List<UserDto> Supporters { get; set; }
     }
 }

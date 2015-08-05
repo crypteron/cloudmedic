@@ -25,8 +25,8 @@ namespace CloudMedicApi.Models
                 }
             }
             userDto.UserId = user.Id;
+
             userDto.Prescriptions = new List<string>();
-            userDto.CareTeamNames = new List<string>();
             if (user.Prescriptions != null)
             {
                 foreach (var prescription in user.Prescriptions)
@@ -35,39 +35,15 @@ namespace CloudMedicApi.Models
                 }
             }
 
-            if(user.PatientCareTeams != null)
+            userDto.SupporterCareTeamNames = new List<string>();
+            if (user.SupporterCareTeams != null)
             {
-                foreach(var careteam in user.PatientCareTeams)
+                foreach(var careTeam in user.SupporterCareTeams)
                 {
-                    userDto.CareTeamNames.Add(careteam.Name);
+                    userDto.SupporterCareTeamNames.Add(careTeam.Name);
                 }
-
             }
             return userDto;
-        }
-
-        public static SupporterDto SupporterToDto(ApplicationUser user)
-        {
-            var supporterDto = new SupporterDto();
-            supporterDto.InjectFrom(user);
-            supporterDto.UserId = user.Id;
-            return supporterDto;
-        }
-
-        public static SupportedPatientDto SupportedPatientToDto(ApplicationUser user)
-        {
-            var supportedPatientDto = new SupportedPatientDto();
-            supportedPatientDto.InjectFrom(user);
-            supportedPatientDto.UserId = user.Id;
-            supportedPatientDto.Prescriptions = new List<string>();
-            if (user.Prescriptions != null)
-            {
-                foreach (var prescription in user.Prescriptions)
-                {
-                    supportedPatientDto.Prescriptions.Add(prescription.PrescriptionId.ToString());
-                }
-            }
-            return supportedPatientDto;
         }
 
         public static CareTeamDto CareTeamToDto(CareTeam careTeam, Dictionary<string, IdentityRole> roles = null)
@@ -76,7 +52,7 @@ namespace CloudMedicApi.Models
             careTeamDto.InjectFrom(careTeam);
             careTeamDto.Patient = UserToDto(careTeam.Patient, roles);
             careTeamDto.Providers = new List<UserDto>();
-            careTeamDto.SupporterId = new List<string>();
+            careTeamDto.Supporters = new List<UserDto>();
 
             foreach (var provider in careTeam.Providers)
             {
@@ -85,7 +61,7 @@ namespace CloudMedicApi.Models
 
             foreach (var supporter in careTeam.Supporters)
             {
-                careTeamDto.SupporterId.Add(SupporterToDto(supporter).UserId);
+                careTeamDto.Supporters.Add(UserToDto(supporter, roles));
 
             }
             return careTeamDto;
@@ -107,6 +83,5 @@ namespace CloudMedicApi.Models
             medicationDto.InjectFrom(medication);
             return medicationDto;
         }
-
     }
 }
