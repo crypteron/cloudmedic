@@ -148,10 +148,12 @@ namespace CloudMedicApi.Controllers
                         select user;
 
             providers = await search.ToListAsync();
+            providers = providers.Distinct().ToList();
             List<UserDto> results = new List<UserDto>();
             var roles = await _db.Roles.ToDictionaryAsync(r => r.Id);
 
             if (name.Length > 1)
+            {
                 for (int i = 0; i <= 6; i++)
                 {
                     foreach (var provider in providers)
@@ -160,7 +162,9 @@ namespace CloudMedicApi.Controllers
                             results.Add(ToDto.UserToDto(provider, roles));
                     }
                 }
+            }
             else
+            {
                 for (int i = 0; i <= 3; i++)
                 {
                     foreach (var provider in providers)
@@ -169,6 +173,7 @@ namespace CloudMedicApi.Controllers
                             results.Add(ToDto.UserToDto(provider, roles));
                     }
                 }
+            }
 
             return Ok(results);
         }
@@ -188,7 +193,7 @@ namespace CloudMedicApi.Controllers
                 return NotFound();
             }
 
-            List<ApplicationUser> providers;
+            List<ApplicationUser> supporters;
             var search = from roleObj in _db.Roles
                          where roleObj.Name == "Supporter"
                          from userRoles in roleObj.Users
@@ -196,28 +201,33 @@ namespace CloudMedicApi.Controllers
                          on userRoles.UserId equals user.Id
                          select user;
 
-            providers = await search.ToListAsync();
+            supporters = await search.ToListAsync();
+            supporters = supporters.Distinct().ToList();
             List<UserDto> results = new List<UserDto>();
             var roles = await _db.Roles.ToDictionaryAsync(r => r.Id);
 
             if (name.Length > 1)
+            {
                 for (int i = 0; i <= 6; i++)
                 {
-                    foreach (var provider in providers)
+                    foreach (var supporter in supporters)
                     {
-                        if (EditDistance(id, provider.FirstName + " " + provider.LastName) == i)
-                            results.Add(ToDto.UserToDto(provider, roles));
+                        if (EditDistance(id, supporter.FirstName + " " + supporter.LastName) == i)
+                            results.Add(ToDto.UserToDto(supporter, roles));
                     }
                 }
+            }
             else
+            {
                 for (int i = 0; i <= 3; i++)
                 {
-                    foreach (var provider in providers)
+                    foreach (var supporter in supporters)
                     {
-                        if (EditDistance(id, provider.LastName) == i || EditDistance(id, provider.FirstName) == i)
-                            results.Add(ToDto.UserToDto(provider, roles));
+                        if (EditDistance(id, supporter.LastName) == i || EditDistance(id, supporter.FirstName) == i)
+                            results.Add(ToDto.UserToDto(supporter, roles));
                     }
                 }
+            }
 
             return Ok(results);
         }
