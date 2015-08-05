@@ -173,6 +173,55 @@ namespace CloudMedicApi.Controllers
             return Ok(results);
         }
 
+        // GET: users/supporters
+        [Route("Supporters")]
+        [ResponseType(typeof(List<UserDto>))]
+        public async Task<IHttpActionResult> GetSupportersByName(string id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+            string[] name = id.Split(' ');
+            if (name.Length >= 3)
+            {
+                return NotFound();
+            }
+
+            List<ApplicationUser> providers;
+            var search = from roleObj in _db.Roles
+                         where roleObj.Name == "Supporter"
+                         from userRoles in roleObj.Users
+                         join user in _db.Users
+                         on userRoles.UserId equals user.Id
+                         select user;
+
+            providers = await search.ToListAsync();
+            List<UserDto> results = new List<UserDto>();
+            var roles = await _db.Roles.ToDictionaryAsync(r => r.Id);
+
+            if (name.Length > 1)
+                for (int i = 0; i <= 6; i++)
+                {
+                    foreach (var provider in providers)
+                    {
+                        if (EditDistance(id, provider.FirstName + " " + provider.LastName) == i)
+                            results.Add(ToDto.UserToDto(provider, roles));
+                    }
+                }
+            else
+                for (int i = 0; i <= 3; i++)
+                {
+                    foreach (var provider in providers)
+                    {
+                        if (EditDistance(id, provider.LastName) == i || EditDistance(id, provider.FirstName) == i)
+                            results.Add(ToDto.UserToDto(provider, roles));
+                    }
+                }
+
+            return Ok(results);
+        }
+
         // GET: users/prescriptions/5
         [Route("Prescriptions")]
         [PrincipalPermission(SecurityAction.Demand, Role = "Patient")]

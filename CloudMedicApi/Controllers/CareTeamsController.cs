@@ -81,7 +81,6 @@ namespace CloudMedicApi.Controllers
                 return NotFound();
             }
 
-            var providers = new List<ApplicationUser>();
             foreach (var providerId in model.ProviderIds)
             {
                 var provider = await userManager.FindByIdAsync(providerId);
@@ -96,72 +95,22 @@ namespace CloudMedicApi.Controllers
                 }
             }
 
-            careTeam.Name = model.TeamName;
-
-            await db.SaveChangesAsync();
-            return Ok();
-        }
-
-        // POST: CareTeams/Update/Add
-        [Route("Update/Add")]
-        public async Task<IHttpActionResult> AddProvider(UpdateProviderBindingModel model)
-        {
-            CareTeam careTeam = await db.CareTeam.FindAsync(model.TeamId);
-            if (careTeam == null)
+            foreach (var supporterId in model.SupporterIds)
             {
-                return NotFound();
-            }
+                var supporter = await userManager.FindByIdAsync(supporterId);
+                if (supporter == null)
+                {
+                    return NotFound();
+                }
 
-            var provider = await userManager.FindByIdAsync(model.ProviderId);
-            if (provider == null)
-            {
-                return NotFound();
-            }
-
-            careTeam.Providers.Add(provider);
-            await db.SaveChangesAsync();
-            return Ok();
-        }
-
-        // POST: CareTeams/Update/Remove
-        [Route("Update/Remove")]
-        public async Task<IHttpActionResult> RemoveProvider(UpdateProviderBindingModel model)
-        {
-            CareTeam careTeam = await db.CareTeam.FindAsync(model.TeamId);
-            if (careTeam == null)
-            {
-                return NotFound();
-            }
-
-            var provider = await userManager.FindByIdAsync(model.ProviderId);
-            if (provider == null)
-            {
-                return NotFound();
-            }
-            if (careTeam.Providers.Contains(provider))
-            {
-                return NotFound();
-            }
-            else
-            {
-                careTeam.Providers.Remove(provider);
-            }
-
-            await db.SaveChangesAsync();
-            return Ok();
-        }
-
-        // POST: CareTeams/Update/Name
-        [Route("Update/Name")]
-        public async Task<IHttpActionResult> ChangeName(UpdateNameBindingModel model)
-        {
-            CareTeam careTeam = await db.CareTeam.FindAsync(model.TeamId);
-            if (careTeam == null)
-            {
-                return NotFound();
+                if (!careTeam.Supporters.Contains(supporter))
+                {
+                    careTeam.Supporters.Add(supporter);
+                }
             }
 
             careTeam.Name = model.TeamName;
+
             await db.SaveChangesAsync();
             return Ok();
         }
@@ -194,12 +143,24 @@ namespace CloudMedicApi.Controllers
                 providers.Add(provider);
             }
 
+            List<ApplicationUser> supporters = new List<ApplicationUser>();
+            foreach (string SupporterId in model.SupporterIds)
+            {
+                var supporter = await userManager.FindByIdAsync(SupporterId);
+                if (supporter == null)
+                {
+                    return NotFound();
+                }
+                supporters.Add(supporter);
+            }
+
             var careTeam = new CareTeam()
             {
                 Id = Guid.NewGuid(),
                 Name = model.Name,
                 Active = false,
                 Providers = providers,
+                Supporters = supporters,
                 Patient = patient
             };
 
