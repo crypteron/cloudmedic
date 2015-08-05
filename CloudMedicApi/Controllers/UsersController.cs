@@ -166,26 +166,11 @@ namespace CloudMedicApi.Controllers
                     foreach (var provider in providers)
                     {
                         if (EditDistance(id, provider.LastName) == i || EditDistance(id, provider.FirstName) == i)
-                            results.Add(ToDto.UserToDto(provider));
+                            results.Add(ToDto.UserToDto(provider, roles));
                     }
                 }
 
             return Ok(results);
-        }
-
-        // GET: users/find
-        [Route("Find")]
-        public async Task<IHttpActionResult> FindByEmail(string email)
-        {
-            var user = await _userManager.FindByEmailAsync(email);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                return Ok(ToDto.UserToDto(user));
-            }
         }
 
         // GET: users/prescriptions/5
