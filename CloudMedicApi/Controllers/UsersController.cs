@@ -128,6 +128,7 @@ namespace CloudMedicApi.Controllers
         // GET: users/providers
         [Route("Providers")]
         [ResponseType(typeof(List<UserDto>))]
+        [PrincipalPermission(SecurityAction.Demand, Role = "SysAdmin")]
         public async Task<IHttpActionResult> GetProvidersByName(string id) {
             if (id == null)
             {
@@ -181,6 +182,7 @@ namespace CloudMedicApi.Controllers
         // GET: users/supporters
         [Route("Supporters")]
         [ResponseType(typeof(List<UserDto>))]
+        [PrincipalPermission(SecurityAction.Demand, Role = "SysAdmin")]
         public async Task<IHttpActionResult> GetSupportersByName(string id)
         {
             if (id == null)
@@ -335,7 +337,7 @@ namespace CloudMedicApi.Controllers
 
             var user = new ApplicationUser()
             {
-                UserName = model.FirstName + model.LastName + Randomizer.GetRandomInt(),
+                UserName = model.FirstName + model.LastName + Randomizer.GetRandom(100000),
                 Email = model.Email,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
