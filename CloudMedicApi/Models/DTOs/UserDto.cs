@@ -19,7 +19,7 @@ namespace CloudMedicApi.Controllers
         public string PhoneNumber { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string Gender { get; set; }
-        public List<string> Prescriptions { get; set; }
+        public List<string> PrescriptionId { get; set; }
         public List<string> Roles { get; set; }
         public List<string> SupporterCareTeamNames { get; set; }
     }

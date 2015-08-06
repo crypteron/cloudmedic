@@ -26,12 +26,12 @@ namespace CloudMedicApi.Models
             }
             userDto.UserId = user.Id;
 
-            userDto.Prescriptions = new List<string>();
+            userDto.PrescriptionId = new List<string>();
             if (user.Prescriptions != null)
             {
                 foreach (var prescription in user.Prescriptions)
                 {
-                    userDto.Prescriptions.Add(prescription.PrescriptionId.ToString());
+                    userDto.PrescriptionId.Add(prescription.PrescriptionId.ToString());
                 }
             }
 
