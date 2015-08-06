@@ -255,6 +255,28 @@ namespace CloudMedicApi.Controllers
             return Ok(prescriptionsDto);
         }
 
+        // GET: supporters/careteams
+        [Route("CareTeams")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Supporter")]
+        public async Task<IHttpActionResult> GetSupporterCareTeams(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var careTeamsDto = new List<CareTeamDto>();
+            var roles = await _db.Roles.ToDictionaryAsync(r => r.Id);
+
+            foreach (var careTeam in user.SupporterCareTeams)
+            {
+                careTeamsDto.Add(ToDto.CareTeamToDto(careTeam, roles));
+            }
+
+            return Ok(careTeamsDto);
+        }
+
         // GET: users/provider/5
         [Route("Provider")]
         [PrincipalPermission(SecurityAction.Demand, Role = "Physician")]
