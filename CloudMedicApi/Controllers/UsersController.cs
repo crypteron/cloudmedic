@@ -108,7 +108,10 @@ namespace CloudMedicApi.Controllers
 
             foreach (var careTeam in user.ProviderCareTeams)
             {
-                patients.Add(careTeam.Patient);
+                if (careTeam.Active)
+                {
+                    patients.Add(careTeam.Patient);
+                }
             }
             if (patients == null)
             {
@@ -273,7 +276,10 @@ namespace CloudMedicApi.Controllers
 
             foreach (var careTeam in user.SupporterCareTeams)
             {
-                careTeamsDto.Add(ToDto.CareTeamToDto(careTeam, roles));
+                if (careTeam.Active)
+                {
+                    careTeamsDto.Add(ToDto.CareTeamToDto(careTeam, roles));
+                }
             }
 
             return Ok(careTeamsDto);
@@ -296,7 +302,10 @@ namespace CloudMedicApi.Controllers
 
             foreach (var careTeam in user.ProviderCareTeams)
             {
-                careTeamsDto.Add(ToDto.CareTeamToDto(careTeam, roles));
+                if (careTeam.Active)
+                {
+                    careTeamsDto.Add(ToDto.CareTeamToDto(careTeam, roles));
+                }
             }
 
             return Ok(careTeamsDto);
