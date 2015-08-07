@@ -115,6 +115,23 @@ namespace CloudMedicApi.Controllers
             return Ok();
         }
 
+        // POST: CareTeams/Activate
+        [Route("Activate")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Patient")]
+        public async Task<IHttpActionResult> ActivateTeam(ActivateTeamBindingModel model)
+        {
+            var careTeam = await db.CareTeam.FindAsync(model.Id);
+            if (careTeam == null)
+            {
+                return NotFound();
+            }
+
+            careTeam.Active = true;
+
+            await db.SaveChangesAsync();
+            return Ok();
+        }
+
         // POST: CareTeams/Add
         [Route("Add")]
         [ResponseType(typeof(Prescription))]
