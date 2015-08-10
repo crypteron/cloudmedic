@@ -30,7 +30,7 @@ namespace CloudMedicApi.Models
     {
         [Required]
         [Display(Name = "Id")]
-        public string Id { get; set; }
+        public Guid Id { get; set; }
     }
 
     public class UpdateTeamBindingModel
