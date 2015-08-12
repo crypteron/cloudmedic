@@ -137,14 +137,8 @@ namespace CloudMedicApi.Controllers
             bool code_check = db.Medication.Count(e => e.Code == medication.Code) > 0;
             bool name_check = db.Medication.Count(e => e.GenericName == medication.GenericName) > 0;
 
-            if(code_check || name_check)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return (code_check || name_check);
+
         }
 
     }
