@@ -205,6 +205,7 @@ namespace CloudMedicApi.Controllers
         [Route("")]
         [ResponseType(typeof(CareTeam))]
         [PrincipalPermission(SecurityAction.Demand, Role = "SysAdmin")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Patient")]
         public async Task<IHttpActionResult> DeleteCareTeam(Guid id)
         {
             CareTeam careTeam = await db.CareTeam.FindAsync(id);

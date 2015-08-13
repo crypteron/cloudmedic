@@ -16,6 +16,7 @@ using System.Net.Mail;
 using System;
 using System.Security.Permissions;
 using CloudMedicApi.BLL;
+using CloudMedicApi.Utility;
 
 namespace CloudMedicApi.Controllers
 {
@@ -392,20 +393,11 @@ namespace CloudMedicApi.Controllers
             if (!identityResult.Succeeded)
                 return BuildErrorResult(identityResult);
 
-            SmtpClient client = new SmtpClient("smtp-mail.outlook.com");
-            client.Port = 587;
-            client.DeliveryMethod = SmtpDeliveryMethod.Network;
-            client.UseDefaultCredentials = false;
-            System.Net.NetworkCredential credentials = new System.Net.NetworkCredential("crypterondummytest@outlook.com", "cloudmedicrocks!");
-            client.EnableSsl = true;
-            client.Credentials = credentials;
-            MailMessage mail = new MailMessage();
-            mail.From = new MailAddress("crypterondummytest@outlook.com", "no_reply_cloudmedic");
-            mail.To.Add(new MailAddress(user.Email));
-            mail.Subject = "Invitation to join CloudMedic";
-            mail.Body = "Dear " + user.FirstName + " " + user.LastName + ", you have been added to CloudMedic by an administrator.\n\nPlease login with your assigned username and password:\n\nUsername: " + user.UserName + "\nPassword: " + password + "\n\n After logging in, change your password under the profile tab.";
+            // Send an invitation to login and change password
+            MailSender sender = new MailSender();
+            string mailBody = "Dear " + user.FirstName + " " + user.LastName + ", you have been added to CloudMedic by an administrator.\n\nPlease login with your assigned username and password:\n\nUsername: " + user.UserName + "\nPassword: " + password + "\n\n After logging in, change your password under the profile tab.";
 
-            client.Send(mail);
+            sender.SendInvite(mailBody, user.Email);
 
             return Created("users/" + user.Id, ToDto.UserToDto(user));       
         }

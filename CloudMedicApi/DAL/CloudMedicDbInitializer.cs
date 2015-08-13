@@ -80,7 +80,7 @@ namespace CloudMedicApi.DAL
                 PhoneNumber = "(123) 456-7890",
                 PhoneNumberConfirmed = true,
                 EmailConfirmed = true,
-                UserName = "patient1",
+                UserName = "Patient1",
                 Specialty = ""
             };
             examplePatient.Roles.Add(new IdentityUserRole()
@@ -103,7 +103,7 @@ namespace CloudMedicApi.DAL
                 PhoneNumber = "(123) 456-7890",
                 PhoneNumberConfirmed = true,
                 EmailConfirmed = true,
-                UserName = "doctor1",
+                UserName = "Doctor1",
                 Specialty = ""
             };
             exampleDoctor.Roles.Add(new IdentityUserRole()
@@ -126,7 +126,7 @@ namespace CloudMedicApi.DAL
                 PhoneNumber = "(123) 456-7890",
                 PhoneNumberConfirmed = true,
                 EmailConfirmed = true,
-                UserName = "supporter1",
+                UserName = "Supporter1",
                 Specialty = ""
             };
             exampleSupporter.Roles.Add(new IdentityUserRole()

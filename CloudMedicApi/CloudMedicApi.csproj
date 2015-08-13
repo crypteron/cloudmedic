@@ -221,6 +221,7 @@
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utility\MailSender.cs" />
     <Compile Include="Utility\PersonRandomizer.cs" />
     <Compile Include="Utility\StringEnum.cs" />
   </ItemGroup>
