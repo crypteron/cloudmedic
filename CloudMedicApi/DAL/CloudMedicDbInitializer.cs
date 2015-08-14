@@ -73,7 +73,7 @@ namespace CloudMedicApi.DAL
             {
                 Id = Guid.NewGuid().ToString(),
                 FirstName = "Example",
-                LastName = "User",
+                LastName = "Patient",
                 DOB = (new DateTime(1950, 3, 3)).ToString(),
                 GenderEnum = GenderEnum.Male,
                 Email = "patient@example.com",
@@ -96,7 +96,7 @@ namespace CloudMedicApi.DAL
             {
                 Id = Guid.NewGuid().ToString(),
                 FirstName = "Example",
-                LastName = "User",
+                LastName = "Doctor",
                 DOB = (new DateTime(1950, 3, 3)).ToString(),
                 GenderEnum = GenderEnum.Male,
                 Email = "doctor@example.com",
@@ -273,7 +273,7 @@ namespace CloudMedicApi.DAL
                 EndDate = (new DateTime(2015, 10, 24)).ToString(),
                 Notes = "Brand names: Advil, Midol, NeoProfen, Caldolor, Motrin, Ibu",
                 Medication = meds[0],
-                Patient = p[8]
+                Patient = examplePatient
             });
             #endregion
 
@@ -283,7 +283,7 @@ namespace CloudMedicApi.DAL
                 Id = Guid.NewGuid(),
                 Name = "Justice League",
                 Active = true,
-                Providers = new Collection<ApplicationUser> { n[0], n[7], n[2], n[4], dr[0], dr[2] },
+                Providers = new Collection<ApplicationUser> { n[0], n[7], n[2], n[4], dr[0], dr[2], exampleDoctor },
                 Supporters = new Collection<ApplicationUser> { exampleSupporter, s[3], s[5] },
                 Patient = p[4]
             });
@@ -294,7 +294,7 @@ namespace CloudMedicApi.DAL
                 Active = true,
                 Providers = new Collection<ApplicationUser> { n[3], n[1], n[5], n[6], dr[1], dr[3] },
                 Supporters = new Collection<ApplicationUser> { s[1], s[4], s[2] },
-                Patient = p[3]
+                Patient = examplePatient
             });
             secDb.CareTeam.Add(new CareTeam()
             {
