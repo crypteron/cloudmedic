@@ -120,7 +120,7 @@ namespace CloudMedicApi.Controllers
         [PrincipalPermission(SecurityAction.Demand, Role = "Patient")]
         public async Task<IHttpActionResult> ActivateTeam(ActivateTeamBindingModel model)
         {
-            var careTeam = await db.CareTeam.FindAsync(model.Id);
+            var careTeam = await db.CareTeam.FindAsync(new Guid(model.Id));
             if (careTeam == null)
             {
                 return NotFound();
