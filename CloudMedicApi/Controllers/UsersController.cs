@@ -20,7 +20,7 @@ using CloudMedicApi.Utility;
 
 namespace CloudMedicApi.Controllers
 {
-    [RoutePrefix("Users")]
+    [RoutePrefix("api/users")]
     public class UsersController : ApiController
     {
         private readonly ApplicationUserManager _userManager;

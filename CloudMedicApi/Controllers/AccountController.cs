@@ -25,7 +25,7 @@ using CloudMedicApi.DAL;
 namespace CloudMedicApi.Controllers
 {
     [Authorize]
-    [RoutePrefix("Account")]
+    [RoutePrefix("api/account")]
     public class AccountController : ApiController
     {
         private const string LocalLoginProvider = "Local";
