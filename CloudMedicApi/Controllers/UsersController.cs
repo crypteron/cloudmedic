@@ -35,7 +35,7 @@ namespace CloudMedicApi.Controllers
       
         // GET: users
         [Route("")]
-        [PrincipalPermission(SecurityAction.Demand, Role = "SysAdmin")]
+        [Authorize(Roles = "SysAdmin")]
         public async Task<IHttpActionResult> GetUsers(string role = null)
         {
             List<ApplicationUser> users;
@@ -94,8 +94,7 @@ namespace CloudMedicApi.Controllers
         // GET: users/patients
         [Route("Patients")]
         [ResponseType(typeof(List<UserDto>))]
-        [PrincipalPermission(SecurityAction.Demand, Role = "Physician")]
-        [PrincipalPermission(SecurityAction.Demand, Role = "Nurse")]
+        [Authorize(Roles = "Physician, Nurse")]
         public async Task<IHttpActionResult> GetAssignedPatients(string providerId)
 
         {
@@ -132,7 +131,7 @@ namespace CloudMedicApi.Controllers
         // GET: users/providers
         [Route("Providers")]
         [ResponseType(typeof(List<UserDto>))]
-        [PrincipalPermission(SecurityAction.Demand, Role = "SysAdmin")]
+        [Authorize(Roles = "SysAdmin")]
         public async Task<IHttpActionResult> GetProvidersByName(string id) {
             if (id == null)
             {
@@ -186,7 +185,7 @@ namespace CloudMedicApi.Controllers
         // GET: users/supporters
         [Route("Supporters")]
         [ResponseType(typeof(List<UserDto>))]
-        [PrincipalPermission(SecurityAction.Demand, Role = "SysAdmin")]
+        [Authorize(Roles = "SysAdmin")]
         public async Task<IHttpActionResult> GetSupportersByName(string id)
         {
             if (id == null)
@@ -240,10 +239,7 @@ namespace CloudMedicApi.Controllers
 
         // GET: users/prescriptions/5
         [Route("Prescriptions")]
-        [PrincipalPermission(SecurityAction.Demand, Role = "Patient")]
-        [PrincipalPermission(SecurityAction.Demand, Role = "Physician")]
-        [PrincipalPermission(SecurityAction.Demand, Role = "Nurse")]
-        [PrincipalPermission(SecurityAction.Demand, Role = "Supporter")]
+        [Authorize(Roles = "Patient, Physician, Nurse, Supporter")]
         public async Task<IHttpActionResult> GetPrescriptions(string id) {
             var user = await _userManager.FindByIdAsync(id);
             if (user == null)
@@ -263,7 +259,7 @@ namespace CloudMedicApi.Controllers
 
         // GET: supporters/careteams
         [Route("CareTeams")]
-        [PrincipalPermission(SecurityAction.Demand, Role = "Supporter")]
+        [Authorize(Roles = "Supporter")]
         public async Task<IHttpActionResult> GetSupporterCareTeams(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -288,8 +284,7 @@ namespace CloudMedicApi.Controllers
 
         // GET: users/provider/5
         [Route("Provider")]
-        [PrincipalPermission(SecurityAction.Demand, Role = "Physician")]
-        [PrincipalPermission(SecurityAction.Demand, Role = "Nurse")]
+        [Authorize(Roles = "Physician, Nurse")]
         public async Task<IHttpActionResult> GetProviderCareTeams(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -314,7 +309,7 @@ namespace CloudMedicApi.Controllers
 
         // GET: users/patient/5
         [Route("Patient")]
-        [PrincipalPermission(SecurityAction.Demand, Role = "Patient")]
+        [Authorize(Roles = "Patient")]
         public async Task<IHttpActionResult> GetPatientCareTeams(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -357,7 +352,7 @@ namespace CloudMedicApi.Controllers
 
         // POST: users
         [Route("Add")]
-        [PrincipalPermission(SecurityAction.Demand, Role = "SysAdmin")]
+        [Authorize(Roles = "SysAdmin")]
         public async Task<IHttpActionResult> PostUser(CreateUserBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -404,7 +399,7 @@ namespace CloudMedicApi.Controllers
 
         // DELETE: users/5
         [Route("")]
-        [PrincipalPermission(SecurityAction.Demand, Role = "SysAdmin")]
+        [Authorize(Roles = "SysAdmin")]
         public async Task<IHttpActionResult> DeleteUser(string id)
         {
             if (string.IsNullOrWhiteSpace(id))

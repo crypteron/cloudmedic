@@ -25,8 +25,7 @@ namespace CloudMedicApi.Controllers
 
         // GET: Medications
         [Route("")]
-        [PrincipalPermission(SecurityAction.Demand, Role = "Physician")]
-        [PrincipalPermission(SecurityAction.Demand, Role = "Nurse")]
+        [Authorize(Roles = "Physician, Nurse")]
         public async Task<IHttpActionResult> GetMedications()
         {
             List<Medication> medications;
@@ -62,8 +61,7 @@ namespace CloudMedicApi.Controllers
         // POST: Medications/Add
         [Route("Add")]
         [ResponseType(typeof(Medication))]
-        [PrincipalPermission(SecurityAction.Demand, Role = "Physician")]
-        [PrincipalPermission(SecurityAction.Demand, Role = "Nurse")]
+        [Authorize(Roles = "Physician, Nurse")]
         public async Task<IHttpActionResult> PostMedication(MedicationBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -101,8 +99,7 @@ namespace CloudMedicApi.Controllers
         // DELETE: Medications/5
         [Route("")]
         [ResponseType(typeof(Medication))]
-        [PrincipalPermission(SecurityAction.Demand, Role = "Physician")]
-        [PrincipalPermission(SecurityAction.Demand, Role = "Nurse")]
+        [Authorize(Roles = "Physician, Nurse")]
         public async Task<IHttpActionResult> DeleteMedication(Guid id)
         {
             Medication medication = await db.Medication.FindAsync(id);

@@ -33,7 +33,7 @@ namespace CloudMedicApi.Controllers
 
         // GET: CareTeams
         [Route("")]
-        [PrincipalPermission(SecurityAction.Demand, Role = "SysAdmin")]
+        [Authorize(Roles = "SysAdmin")]
         public async Task<IHttpActionResult> GetCareTeams()
         {
             List<CareTeam> careTeams;
@@ -72,7 +72,7 @@ namespace CloudMedicApi.Controllers
 
         // POST: CareTeams/Update
         [Route("Update")]
-        [PrincipalPermission(SecurityAction.Demand, Role = "SysAdmin")]
+        [Authorize(Roles = "SysAdmin")]
         public async Task<IHttpActionResult> UpdateTeam(UpdateTeamBindingModel model)
         {
             CareTeam careTeam = await db.CareTeam.FindAsync(model.TeamId);
@@ -117,7 +117,7 @@ namespace CloudMedicApi.Controllers
 
         // POST: CareTeams/Activate
         [Route("Activate")]
-        [PrincipalPermission(SecurityAction.Demand, Role = "Patient")]
+        [Authorize(Roles = "Patient")]
         public async Task<IHttpActionResult> ActivateTeam(ActivateTeamBindingModel model)
         {
             var careTeam = await db.CareTeam.FindAsync(new Guid(model.Id));
@@ -135,7 +135,7 @@ namespace CloudMedicApi.Controllers
         // POST: CareTeams/Add
         [Route("Add")]
         [ResponseType(typeof(Prescription))]
-        [PrincipalPermission(SecurityAction.Demand, Role = "SysAdmin")]
+        [Authorize(Roles = "SysAdmin")]
         public async Task<IHttpActionResult> PostCareTeam(CareTeamBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -204,8 +204,7 @@ namespace CloudMedicApi.Controllers
         // DELETE: CareTeam/5
         [Route("")]
         [ResponseType(typeof(CareTeam))]
-        [PrincipalPermission(SecurityAction.Demand, Role = "SysAdmin")]
-        [PrincipalPermission(SecurityAction.Demand, Role = "Patient")]
+        [Authorize(Roles = "SysAdmin, Patient")]
         public async Task<IHttpActionResult> DeleteCareTeam(Guid id)
         {
             CareTeam careTeam = await db.CareTeam.FindAsync(id);
