@@ -20,7 +20,7 @@ using CloudMedicApi.Utility;
 
 namespace CloudMedicApi.Controllers
 {
-    [RoutePrefix("Users")]
+    [RoutePrefix("api/users")]
     public class UsersController : ApiController
     {
         private readonly ApplicationUserManager _userManager;
@@ -35,7 +35,7 @@ namespace CloudMedicApi.Controllers
       
         // GET: users
         [Route("")]
-        [PrincipalPermission(SecurityAction.Demand, Role = "SysAdmin")]
+        [Authorize(Roles = "SysAdmin")]
         public async Task<IHttpActionResult> GetUsers(string role = null)
         {
             List<ApplicationUser> users;

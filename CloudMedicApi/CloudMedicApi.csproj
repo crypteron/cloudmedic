@@ -183,6 +183,7 @@
   <ItemGroup>
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Utility\TextExceptionHandler.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="BLL\RoleId.cs" />
     <Compile Include="BLL\RoleManager.cs" />
@@ -190,6 +191,7 @@
     <Compile Include="Controllers\CareTeamsController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\MedicationsController.cs" />
+    <Compile Include="Controllers\PingController.cs" />
     <Compile Include="Controllers\PrescriptionsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="DAL\CareTeam.cs" />

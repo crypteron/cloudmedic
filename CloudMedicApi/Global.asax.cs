@@ -7,6 +7,7 @@ using System.Web.Http;
 using System.Web.Optimization;
 using System.Web.Routing;
 using CloudMedicApi.DAL;
+using CloudMedicApi.Utility;
 
 namespace CloudMedicApi
 {
@@ -22,6 +23,17 @@ namespace CloudMedicApi
             GlobalConfiguration.Configure(WebApiConfig.Register);
             //FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             //RouteConfig.RegisterRoutes(RouteTable.Routes);
+        }
+
+        void Application_Error(object sender, EventArgs e)
+        {
+            // Code that runs when an unhandled error occurs
+            // Get the exception object.
+            Exception exc = Server.GetLastError();
+            Response.Write(TextExceptionHandler.ErrorMessage);
+
+            // Clear the error from the server
+            Server.ClearError();
         }
     }
 }

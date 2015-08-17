@@ -19,7 +19,7 @@ using System.Security.Permissions;
 namespace CloudMedicApi.Controllers
 {
     [Authorize]
-    [RoutePrefix("CareTeams")]
+    [RoutePrefix("api/careteams")]
     public class CareTeamsController : ApiController
     {
         private MyDbContext db = new MyDbContext();
