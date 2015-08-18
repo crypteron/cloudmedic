@@ -14,6 +14,9 @@ using System.Collections.Generic;
 using System;
 using CloudMedicApi.Utility;
 using CloudMedicApi.BLL;
+using System.Net.Http;
+using System.Web;
+using CloudMedicApi.Models.DTOs;
 
 namespace CloudMedicApi.Controllers
 {
@@ -22,6 +25,7 @@ namespace CloudMedicApi.Controllers
     {
         private readonly ApplicationUserManager _userManager;
         private readonly MyDbContext _db;
+        private const int pageSize = 20;
 
         public UsersController()
         {
@@ -32,45 +36,70 @@ namespace CloudMedicApi.Controllers
         // GET: users
         [Route("")]
         [Authorize(Roles = "SysAdmin")]
-        public async Task<IHttpActionResult> GetUsers(string role = null)
+        public async Task<IHttpActionResult> GetUsers(int page = 1, string role = null)
         {
             List<ApplicationUser> users;
-            
+
+            // Variables initialized depending on whether role specified
+            int totalUsers;
+            int maxPage;
+            int skipUsers;
+
             // If no role specified, just query the last 30 users
             if (string.IsNullOrWhiteSpace(role))
             {
+                totalUsers = await _db.Users.CountAsync();
+                // The maximum number of pages, rounded up
+                maxPage = ((totalUsers + pageSize + 1) / pageSize);
+                page = Math.Max(1, page);
+                page = Math.Min(maxPage, page);
+                skipUsers = (page - 1) * pageSize;
+
                 users = await  _db.Users
+                    .OrderBy(u => u.Id)
                     .Include(u => u.Roles)
-                    .Take(30)
+                    .Skip(skipUsers)
+                    .Take(pageSize)
                     .ToListAsync();
             }
             else
             {
-                // If role is specified, we have to do a more complicated query to get the users
-                // based on the role
-               var query = from roleObj in _db.Roles
-                        where roleObj.Name == role
-                        from userRoles in roleObj.Users
-                        join user in _db.Users
-                        on userRoles.UserId equals user.Id
-                        select user;
+                var roleId = RoleManager.GetRoleIdFromRoleName(role);
 
-                users = await query
-                    .Take(30)
+                totalUsers = await _db.Users
+                    .Where(u => u.Roles.Any(r => r.RoleId == roleId))
+                    .CountAsync();
+
+                // The maximum number of pages, rounded up
+                maxPage = ((totalUsers + pageSize - 1) / pageSize);
+                page = Math.Max(1, page);
+                page = Math.Min(maxPage, page);
+                skipUsers = (page - 1) * pageSize;
+
+                users = await _db.Users
+                    .Where(u => u.Roles.Any(r => r.RoleId == roleId))
+                    .OrderBy(u=> u.Id)
+                    .Include(u => u.Roles)
+                    .Skip(skipUsers)
+                    .Take(pageSize)
                     .ToListAsync();
             }
-            
-            // Convert the user objects to a list of serializable data transfer objects
-            var usersDto = new List<UserDto>();
 
-            // Build a Dictionary Lookup of role objects by ID
-            var roles = await _db.Roles.ToDictionaryAsync(r => r.Id);
+            UsersPageDto result = new UsersPageDto()
+            {
+                Users = new List<UserDto>(),
+                HasNext = (page < maxPage),
+                HasPrev = (page > 1),
+                CurrentCount = totalUsers
+            };
+
+            // Convert the user objects to a list of serializable data transfer objects
             foreach (var user in users)
             {   
-                usersDto.Add(ToDto.UserToDto(user, roles));
+                result.Users.Add(ToDto.UserToDto(user));
             }
 
-            return Ok(usersDto);
+            return Ok(result);
         }
 
         // GET: users/5
@@ -78,13 +107,16 @@ namespace CloudMedicApi.Controllers
         [ResponseType(typeof(ApplicationUser))]
         public async Task<IHttpActionResult> GetUser(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _db.Users.Where(u => u.Id.Equals(id, StringComparison.InvariantCultureIgnoreCase))
+                .Include(u => u.Roles)
+                .FirstOrDefaultAsync();
+
             if (user == null)
             {
                 return NotFound();
             }
-            var roles = await _db.Roles.ToDictionaryAsync(r => r.Id);
-            return Ok(ToDto.UserToDto(user, roles));
+
+            return Ok(ToDto.UserToDto(user));
         }
 
         // GET: users/patients
@@ -128,92 +160,25 @@ namespace CloudMedicApi.Controllers
         [Route("Providers")]
         [ResponseType(typeof(UserDto))]
         [Authorize(Roles = "SysAdmin")]
-        public async Task<IHttpActionResult> GetProvidersByName(string email) {
-            if (email == null)
-            {
-                return BadRequest();
-            }
+        public async Task<IHttpActionResult> GetProvidersByEmail(string email)
+        {
+            var roleIdStrList = new List<string>();
+            roleIdStrList.Add(((int)RoleId.Physician).ToString());
+            roleIdStrList.Add(((int)RoleId.Nurse).ToString());
 
-            List<ApplicationUser> providers;
-            var search = from roleObj in _db.Roles
-                        where roleObj.Name == "Physician" || roleObj.Name == "Nurse"
-                        from userRoles in roleObj.Users
-                        join user in _db.Users
-                        on userRoles.UserId equals user.Id
-                        select user;
-
-            providers = await search.ToListAsync();
-            providers = providers.Distinct().ToList();
-            List<UserDto> results = new List<UserDto>();
-            var roles = await _db.Roles.ToDictionaryAsync(r => r.Id);
-
-
-            foreach(var provider in providers)
-            {
-                if(email == provider.Email)
-                {
-                    return Ok(provider);
-
-                }
-
-            }
-
-            return NotFound();
+            return await GetUsersByRoleIds(email, roleIdStrList);
         }
 
         // GET: users/supporters
         [Route("Supporters")]
         [ResponseType(typeof(List<UserDto>))]
         [Authorize(Roles = "SysAdmin")]
-        public async Task<IHttpActionResult> GetSupportersByName(string id)
+        public async Task<IHttpActionResult> GetSupportersByEmail(string email)
         {
-            if (id == null)
-            {
-                return BadRequest();
-            }
-            string[] name = id.Split(' ');
-            if (name.Length >= 3)
-            {
-                return NotFound();
-            }
+            var roleIdStrList = new List<string>();
+            roleIdStrList.Add(((int)RoleId.Supporter).ToString());
 
-            List<ApplicationUser> supporters;
-            var search = from roleObj in _db.Roles
-                         where roleObj.Name == "Supporter"
-                         from userRoles in roleObj.Users
-                         join user in _db.Users
-                         on userRoles.UserId equals user.Id
-                         select user;
-
-            supporters = await search.ToListAsync();
-            supporters = supporters.Distinct().ToList();
-            List<UserDto> results = new List<UserDto>();
-            var roles = await _db.Roles.ToDictionaryAsync(r => r.Id);
-
-            if (name.Length > 1)
-            {
-                for (int i = 0; i <= 6; i++)
-                {
-                    foreach (var supporter in supporters)
-                    {
-                        if (EditDistance(id, supporter.FirstName + " " + supporter.LastName) == i)
-                            results.Add(ToDto.UserToDto(supporter, roles));
-                    }
-                }
-            }
-            else
-            {
-                for (int i = 0; i <= 3; i++)
-                {
-                    foreach (var supporter in supporters)
-                    {
-                        if (EditDistance(id, supporter.LastName) == i || EditDistance(id, supporter.FirstName) == i)
-                            results.Add(ToDto.UserToDto(supporter, roles));
-                    }
-                }
-            }
-
-            return Ok(results);
+            return await GetUsersByRoleIds(email, roleIdStrList);
         }
 
         // GET: users/prescriptions/5
@@ -427,38 +392,6 @@ namespace CloudMedicApi.Controllers
             return false;
         }
 
-        /// <summary>
-        /// Calculates the smallest number of edits (character inserts/deletes) 
-        /// between the two supplied strings
-        /// </summary>
-        /// <param name="StrA"></param>
-        /// <param name="StrB"></param>
-        /// <returns></returns>
-        private static int EditDistance(string StrA, string StrB)
-        {
-            int[,] matrix = new int[StrA.Length + 1, StrB.Length + 1];
-            char[] ArrayA = StrA.ToCharArray();
-            char[] ArrayB = StrB.ToCharArray();
-            int current;
-            for (int i = 0; i <= StrA.Length; i++)
-                matrix[i, 0] = i;
-            for (int i = 0; i <= StrB.Length; i++)
-                matrix[0, i] = i;
-	        for (int i = 1;i <= StrA.Length; i++)
-	    	  for(int j = 1;j <= StrB.Length; j++)
-	    	  {
-	    		  current = 1;
-	    		  if (char.ToLower(ArrayA[i-1]) == char.ToLower(ArrayB[j-1]))
-	    		     current = 0;
-	    		  matrix[i,j] = matrix[i - 1,j - 1] + current;
-                  if (matrix[i, j] > matrix[i - 1, j] + 1)
-                      matrix[i, j] = matrix[i - 1, j] + 1;
-                  if (matrix[i, j] > matrix[i , j-1] + 1)
-                      matrix[i, j] = matrix[i, j-1] + 1;
-	    	  }
-            return matrix[StrA.Length, StrB.Length];
-           }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -473,5 +406,37 @@ namespace CloudMedicApi.Controllers
         {
             return user.Prescriptions.Contains(p);
         }
+
+        private async Task<IHttpActionResult> GetUsersByRoleIds(string email, List<string> roleIdStrList)
+        {
+            if (email == null)
+            {
+                return BadRequest();
+            }
+
+            var proxyCreation = _db.Configuration.ProxyCreationEnabled;
+            _db.Configuration.ProxyCreationEnabled = false;
+
+            List<ApplicationUser> providers;
+
+            providers = await _db.Users
+                .Where(u => u.Roles.Any(r => roleIdStrList.Any(rid => rid == r.RoleId)))
+                .Include(u => u.Roles)
+                .ToListAsync();
+
+            _db.Configuration.ProxyCreationEnabled = proxyCreation;
+
+            providers = providers.Distinct().ToList();
+
+            foreach (var provider in providers)
+            {
+                if (email == provider.Email)
+                {
+                    return Ok(ToDto.UserToDto(provider));
+                }
+            }
+            return NotFound();
+        }
+
     }
 }

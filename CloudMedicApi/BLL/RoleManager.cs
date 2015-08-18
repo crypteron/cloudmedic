@@ -25,8 +25,19 @@ namespace CloudMedicApi.BLL
 
         public static string GetRoleId(string roleIdStr)
         {
-            var roleId = (RoleId) Enum.Parse(typeof (RoleId), roleIdStr, true);
+            var roleId = (RoleId)Enum.Parse(typeof(RoleId), roleIdStr, true);
             return GetRoleId(roleId);
+        }
+
+        /// <summary>
+        /// Given a role string (Nurse), get the string of it's id ("2")
+        /// </summary>
+        /// <param name="roleNameStr"></param>
+        /// <returns></returns>
+        public static string GetRoleIdFromRoleName(string roleNameStr)
+        {
+            var roleId = (RoleId)Enum.Parse(typeof(RoleId), roleNameStr, true);
+            return ((int)roleId).ToString();
         }
 
         public static bool IsRole(IdentityUserRole userRole, RoleId roleId)

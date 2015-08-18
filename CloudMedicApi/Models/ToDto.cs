@@ -1,4 +1,5 @@
-﻿using CloudMedicApi.Controllers;
+﻿using CloudMedicApi.BLL;
+using CloudMedicApi.Controllers;
 using CloudMedicApi.DAL;
 using Crypteron.CipherCore.ValueInjecter;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -12,18 +13,17 @@ namespace CloudMedicApi.Models
     public class ToDto
     {
 
-        public static UserDto UserToDto(ApplicationUser user, Dictionary<string, IdentityRole> roles = null)
+        public static UserDto UserToDto(ApplicationUser user)
         {
             var userDto = new UserDto();
             userDto.InjectFrom(user);
+            
             userDto.Roles = new List<string>();
-            if (roles != null)
+            foreach (var role in user.Roles)
             {
-                foreach (var role in user.Roles)
-                {
-                    userDto.Roles.Add(roles[role.RoleId].Name);
-                }
+                userDto.Roles.Add(RoleManager.GetRoleName(role.RoleId));
             }
+
             userDto.UserId = user.Id;
 
             userDto.PrescriptionId = new List<string>();
@@ -50,18 +50,18 @@ namespace CloudMedicApi.Models
         {
             var careTeamDto = new CareTeamDto();
             careTeamDto.InjectFrom(careTeam);
-            careTeamDto.Patient = UserToDto(careTeam.Patient, roles);
+            careTeamDto.Patient = UserToDto(careTeam.Patient);
             careTeamDto.Providers = new List<UserDto>();
             careTeamDto.Supporters = new List<UserDto>();
 
             foreach (var provider in careTeam.Providers)
             {
-                careTeamDto.Providers.Add(UserToDto(provider, roles));
+                careTeamDto.Providers.Add(UserToDto(provider));
             }
 
             foreach (var supporter in careTeam.Supporters)
             {
-                careTeamDto.Supporters.Add(UserToDto(supporter, roles));
+                careTeamDto.Supporters.Add(UserToDto(supporter));
 
             }
             return careTeamDto;
