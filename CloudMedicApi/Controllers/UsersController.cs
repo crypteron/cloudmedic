@@ -10,13 +10,10 @@ using Crypteron.CipherCore.Entropy;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Linq;
-using Omu.ValueInjecter;
 using System.Collections.Generic;
-using System.Net.Mail;
 using System;
-using System.Security.Permissions;
-using CloudMedicApi.BLL;
 using CloudMedicApi.Utility;
+using CloudMedicApi.BLL;
 
 namespace CloudMedicApi.Controllers
 {
@@ -30,7 +27,6 @@ namespace CloudMedicApi.Controllers
         {
             _db = new MyDbContext();
             _userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(_db));
-
         }
       
         // GET: users
@@ -438,19 +434,26 @@ namespace CloudMedicApi.Controllers
             }
         }
 
-        public static Boolean isPatient(ApplicationUser user)
+        public static bool IsPatient(ApplicationUser user)
         {
             foreach (var role in user.Roles)
             {
-                if (role.RoleId == "0")
+                if (RoleManager.IsRole(role, RoleId.Patient))
                     return true;
             }
             return false;
         }
 
-        public static int EditDistance(String StrA, String StrB)
+        /// <summary>
+        /// Calculates the smallest number of edits (character inserts/deletes) 
+        /// between the two supplied strings
+        /// </summary>
+        /// <param name="StrA"></param>
+        /// <param name="StrB"></param>
+        /// <returns></returns>
+        private static int EditDistance(string StrA, string StrB)
         {
-            int[,] matrix = new int[StrA.Length+1, StrB.Length + 1];
+            int[,] matrix = new int[StrA.Length + 1, StrB.Length + 1];
             char[] ArrayA = StrA.ToCharArray();
             char[] ArrayB = StrB.ToCharArray();
             int current;
@@ -462,7 +465,7 @@ namespace CloudMedicApi.Controllers
 	    	  for(int j = 1;j <= StrB.Length; j++)
 	    	  {
 	    		  current = 1;
-	    		  if (Char.ToLower(ArrayA[i-1]) == Char.ToLower(ArrayB[j-1]))
+	    		  if (char.ToLower(ArrayA[i-1]) == char.ToLower(ArrayB[j-1]))
 	    		     current = 0;
 	    		  matrix[i,j] = matrix[i - 1,j - 1] + current;
                   if (matrix[i, j] > matrix[i - 1, j] + 1)

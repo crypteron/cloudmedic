@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Microsoft.AspNet.Identity.EntityFramework;
-using CloudMedicApi.Models;
-using System.Text;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 
 namespace CloudMedicApi.BLL
 {
@@ -32,6 +27,19 @@ namespace CloudMedicApi.BLL
         {
             var roleId = (RoleId) Enum.Parse(typeof (RoleId), roleIdStr, true);
             return GetRoleId(roleId);
+        }
+
+        public static bool IsRole(IdentityUserRole userRole, RoleId roleId)
+        {
+            if (userRole.RoleId == null)
+                return false;
+
+            var currRole = (RoleId) Enum.Parse(typeof(RoleId), userRole.RoleId);
+
+            if (currRole == roleId)
+                return true;
+
+            return true;
         }
 
         //public static string GetAllRolesString(ApplicationUser appUser)
