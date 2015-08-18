@@ -1,20 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
-using Omu.ValueInjecter;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using CloudMedicApi.DAL;
 using CloudMedicApi.Models;
-using CloudMedicApi.Controllers;
 using Microsoft.AspNet.Identity.EntityFramework;
-using System.Security.Permissions;
 
 namespace CloudMedicApi.Controllers
 {
@@ -38,6 +32,7 @@ namespace CloudMedicApi.Controllers
         {
             List<CareTeam> careTeams;
 
+            //TODO: Add pagination to support over 30 care teams
             careTeams = await db.CareTeam
                 .Take(30)
                 .ToListAsync();
