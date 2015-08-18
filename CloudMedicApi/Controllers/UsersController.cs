@@ -126,17 +126,12 @@ namespace CloudMedicApi.Controllers
 
         // GET: users/providers
         [Route("Providers")]
-        [ResponseType(typeof(List<UserDto>))]
+        [ResponseType(typeof(UserDto))]
         [Authorize(Roles = "SysAdmin")]
-        public async Task<IHttpActionResult> GetProvidersByName(string id) {
-            if (id == null)
+        public async Task<IHttpActionResult> GetProvidersByName(string email) {
+            if (email == null)
             {
                 return BadRequest();
-            }
-            string[] name = id.Split(' ');
-            if (name.Length >= 3)
-            {
-                return NotFound();
             }
 
             List<ApplicationUser> providers;
@@ -152,30 +147,18 @@ namespace CloudMedicApi.Controllers
             List<UserDto> results = new List<UserDto>();
             var roles = await _db.Roles.ToDictionaryAsync(r => r.Id);
 
-            if (name.Length > 1)
+
+            foreach(var provider in providers)
             {
-                for (int i = 0; i <= 6; i++)
+                if(email == provider.Email)
                 {
-                    foreach (var provider in providers)
-                    {
-                        if (EditDistance(id, provider.FirstName + " " + provider.LastName) == i)
-                            results.Add(ToDto.UserToDto(provider, roles));
-                    }
+                    return Ok(provider);
+
                 }
-            }
-            else
-            {
-                for (int i = 0; i <= 3; i++)
-                {
-                    foreach (var provider in providers)
-                    {
-                        if (EditDistance(id, provider.LastName) == i || EditDistance(id, provider.FirstName) == i)
-                            results.Add(ToDto.UserToDto(provider, roles));
-                    }
-                }
+
             }
 
-            return Ok(results);
+            return NotFound();
         }
 
         // GET: users/supporters
