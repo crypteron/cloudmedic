@@ -20,7 +20,6 @@ namespace CloudMedicApi.Controllers
     [RoutePrefix("api/medications")]
     public class MedicationsController : ApiController
     {
-        //private CloudMedicContext db = new CloudMedicContext();
         private MyDbContext db = new MyDbContext();
 
         // GET: Medications
