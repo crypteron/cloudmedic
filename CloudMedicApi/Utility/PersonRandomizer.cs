@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mime;
-using System.Web;
 using CloudMedicApi.BLL;
-using CloudMedicApi.DAL;
 using CloudMedicApi.Models;
-using Crypteron.CipherCore.Entropy;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Crypteron.Entropy;
 
 namespace CloudMedicApi.Utility
 {

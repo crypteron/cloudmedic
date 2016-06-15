@@ -6,7 +6,7 @@ using System.Web.Http.Description;
 using System.Web.Http.Results;
 using CloudMedicApi.DAL;
 using CloudMedicApi.Models;
-using Crypteron.CipherCore.Entropy;
+using Crypteron.Entropy;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Linq;
@@ -14,8 +14,6 @@ using System.Collections.Generic;
 using System;
 using CloudMedicApi.Utility;
 using CloudMedicApi.BLL;
-using System.Net.Http;
-using System.Web;
 using CloudMedicApi.Models.DTOs;
 
 namespace CloudMedicApi.Controllers
@@ -322,12 +320,12 @@ namespace CloudMedicApi.Controllers
 
             if (!identityResult.Succeeded)
                 return BuildErrorResult(identityResult);
-
-            Crypteron.CipherDb.Session.Unseal(user);
+            
+            Crypteron.CipherDb.Session.Unseal(user, _db);
             identityResult = await _userManager.AddToRolesAsync(user.Id, model.Roles.ToArray());
 
 
-            Crypteron.CipherDb.Session.Unseal(user);
+            Crypteron.CipherDb.Session.Unseal(user, _db);
 
             if (!identityResult.Succeeded)
                 return BuildErrorResult(identityResult);

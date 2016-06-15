@@ -46,14 +46,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="CipherCore">
-      <HintPath>Libs\CipherCore.dll</HintPath>
+    <Reference Include="CipherCore, Version=2016.5.5981.712, Culture=neutral, PublicKeyToken=e0287981ec67bb47, processorArchitecture=MSIL">
+      <HintPath>..\packages\CipherCore.2016.5.1.2\lib\net45\CipherCore.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="CipherDb.EF6">
-      <HintPath>Libs\CipherDb.EF6.dll</HintPath>
-    </Reference>
-    <Reference Include="CipherStor">
-      <HintPath>Libs\CipherStor.dll</HintPath>
+    <Reference Include="CipherDB.EF6, Version=2016.5.5981.713, Culture=neutral, PublicKeyToken=e0287981ec67bb47, processorArchitecture=MSIL">
+      <HintPath>..\packages\CipherDB.EF6.2016.5.1.2\lib\net45\CipherDB.EF6.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -207,7 +206,6 @@
     </Compile>
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\CloudMedicContext.cs" />
     <Compile Include="Models\DTOs\CareTeamDto.cs" />
     <Compile Include="Models\CareTeamBindingModel.cs" />
     <Compile Include="Models\MedicationBindingModel.cs" />
