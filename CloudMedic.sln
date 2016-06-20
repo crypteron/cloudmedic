@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudMedic.Tests", "CloudMedic.Tests\CloudMedic.Tests.csproj", "{6CA23E2B-CD6F-4E57-AEF1-9F11DF47BB36}"
 EndProject
@@ -13,6 +13,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{9434F0
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4464D226-0D43-4F8C-AB62-7A7C6EF491D0}"
+	ProjectSection(SolutionItems) = preProject
+		Class1.cs = Class1.cs
 	EndProjectSection
 EndProject
 Global

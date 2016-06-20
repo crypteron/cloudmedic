@@ -7,8 +7,10 @@ using System.Web.Http.ExceptionHandling;
 
 namespace CloudMedicApi.Utility
 {
+
     public class TextExceptionHandler : ExceptionHandler
     {
+ 
         public const string ErrorMessage = "Something went wrong. Please report this on the github project so we can try to fix it.";
 
         public override void Handle(ExceptionHandlerContext context)
