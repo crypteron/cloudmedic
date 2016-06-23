@@ -118,7 +118,7 @@ namespace CloudMedicApi.Controllers
         }
 
         // GET: users/patients
-        [Route("patients")]
+        [Route("Patients")]
         [ResponseType(typeof(List<UserDto>))]
         [Authorize(Roles = "Physician, Nurse")]
         public async Task<IHttpActionResult> GetAssignedPatients(string providerId)
@@ -155,7 +155,7 @@ namespace CloudMedicApi.Controllers
         }
 
         // GET: users/providers
-        [Route("providers")]
+        [Route("Providers")]
         [ResponseType(typeof(UserDto))]
         [Authorize(Roles = "SysAdmin")]
         public async Task<IHttpActionResult> GetProvidersByEmail(string email)
@@ -168,7 +168,7 @@ namespace CloudMedicApi.Controllers
         }
 
         // GET: users/supporters
-        [Route("supporters")]
+        [Route("Supporters")]
         [ResponseType(typeof(List<UserDto>))]
         [Authorize(Roles = "SysAdmin")]
         public async Task<IHttpActionResult> GetSupportersByEmail(string email)
@@ -180,7 +180,7 @@ namespace CloudMedicApi.Controllers
         }
 
         // GET: users/prescriptions/5
-        [Route("prescriptions")]
+        [Route("Prescriptions")]
         [Authorize(Roles = "Patient, Physician, Nurse, Supporter")]
         public async Task<IHttpActionResult> GetPrescriptions(string id) {
             var user = await _userManager.FindByIdAsync(id);
@@ -200,7 +200,7 @@ namespace CloudMedicApi.Controllers
         }
 
         // GET: supporters/careteams
-        [Route("careteams")]
+        [Route("CareTeams")]
         [Authorize(Roles = "Supporter")]
         public async Task<IHttpActionResult> GetSupporterCareTeams(string id)
         {
@@ -225,7 +225,7 @@ namespace CloudMedicApi.Controllers
         }
 
         // GET: users/provider/5
-        [Route("provider")]
+        [Route("Provider")]
         [Authorize(Roles = "Physician, Nurse")]
         public async Task<IHttpActionResult> GetProviderCareTeams(string id)
         {
@@ -250,7 +250,7 @@ namespace CloudMedicApi.Controllers
         }
 
         // GET: users/patient/5
-        [Route("patient")]
+        [Route("Patient")]
         [Authorize(Roles = "Patient")]
         public async Task<IHttpActionResult> GetPatientCareTeams(string id)
         {
@@ -293,7 +293,7 @@ namespace CloudMedicApi.Controllers
         }
 
         // POST: users
-        [Route("add")]
+        [Route("Add")]
         [Authorize(Roles = "SysAdmin")]
         public async Task<IHttpActionResult> PostUser(CreateUserBindingModel model)
         {
