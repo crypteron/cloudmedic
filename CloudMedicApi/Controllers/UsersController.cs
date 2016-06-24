@@ -88,6 +88,7 @@ namespace CloudMedicApi.Controllers
                 Users = new List<UserDto>(),
                 HasNext = (page < maxPage),
                 HasPrev = (page > 1),
+                NumPages = maxPage,
                 CurrentCount = totalUsers
             };
 
