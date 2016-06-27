@@ -7,9 +7,20 @@ namespace CloudMedicApi.DAL
     // Usually DbContext, it's IdentityDbContext to pull in ASP.NET Identity Framework's context
     public class MyDbContext : IdentityDbContext<ApplicationUser>
     {
+        static MyDbContext()
+        {
+            // Init code-first database, switch in production!
+#if DEBUG
+            Database.SetInitializer(new CloudMedicDbInitializer()); // Development
+#else
+            Database.SetInitializer<MyDbContext>(null); // Production
+#endif
+        }
+
         public MyDbContext(bool byPassCipherDb = false)
             : base("MyDbContext", throwIfV1Schema: true)
         {
+
             if (!byPassCipherDb)
             {
                 // power this context with CipherDB

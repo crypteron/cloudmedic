@@ -15,12 +15,6 @@ namespace CloudMedicApi
     {
         protected void Application_Start()
         {
-            // Init code-first database, switch in production!
-#if DEBUG 
-            Database.SetInitializer(new CloudMedicDbInitializer()); // Development
-#else
-            Database.SetInitializer<MyDbContext>(null); // Production
-#endif
             //AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             //FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

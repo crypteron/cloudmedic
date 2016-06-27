@@ -23,7 +23,7 @@ namespace CloudMedicApi.Controllers
     {
         private readonly ApplicationUserManager _userManager;
         private readonly MyDbContext _db;
-        private const int pageSize = 20;
+        private const int pageSize = 5;
 
         public UsersController()
         {
