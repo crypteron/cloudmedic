@@ -119,10 +119,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.3.5\lib\net45\NLog.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Omu.ValueInjecter, Version=3.0.1.0, Culture=neutral, PublicKeyToken=c7694541b0ac80e4, processorArchitecture=MSIL">
       <HintPath>..\packages\valueinjecter.3.0.1.1\lib\net45\Omu.ValueInjecter.dll</HintPath>
       <Private>True</Private>
@@ -187,7 +183,6 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Models\DTOs\UsersPageDto.cs" />
-    <Compile Include="Utility\NLogExceptionLogger.cs" />
     <Compile Include="Utility\TextExceptionHandler.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="BLL\RoleId.cs" />
@@ -255,14 +250,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="readme.md" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="NLog.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Include="NLog.xsd">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
