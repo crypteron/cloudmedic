@@ -75,7 +75,7 @@ namespace CloudMedicApi.Controllers
             {
                 return NotFound();
             }
-
+            careTeam.Providers.Clear();
             foreach (var providerId in model.ProviderIds)
             {
                 var provider = await userManager.FindByIdAsync(providerId);
@@ -89,7 +89,7 @@ namespace CloudMedicApi.Controllers
                     careTeam.Providers.Add(provider);
                 }
             }
-
+            careTeam.Supporters.Clear();
             foreach (var supporterId in model.SupporterIds)
             {
                 var supporter = await userManager.FindByIdAsync(supporterId);

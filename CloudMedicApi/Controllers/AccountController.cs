@@ -72,7 +72,7 @@ namespace CloudMedicApi.Controllers
         }
 
         // POST api/Account/Logout
-        [Route("logout")]
+        [Route("Logout")]
         public IHttpActionResult Logout()
         {
             Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
@@ -80,7 +80,7 @@ namespace CloudMedicApi.Controllers
         }
 
         //GET Account/Profile
-        [Route("profile")]
+        [Route("Profile")]
          public async Task<UserProfileViewModel> GetProfile()
         {
            ApplicationUser currentuser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
@@ -93,7 +93,7 @@ namespace CloudMedicApi.Controllers
         }
 
         // POST /Account/Profile
-        [Route("profile")]
+        [Route("Profile")]
         public async Task<IHttpActionResult> ProfileUpdate(ProfileUpdateBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -114,7 +114,7 @@ namespace CloudMedicApi.Controllers
         }
 
         // GET api/Account/ManageInfo?returnUrl=%2F&generateState=true
-        [Route("manageinfo")]
+        [Route("ManageInfo")]
         public async Task<ManageInfoViewModel> GetManageInfo(string returnUrl, bool generateState = false)
         {
             IdentityUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
@@ -387,7 +387,7 @@ namespace CloudMedicApi.Controllers
 
         // POST Account/Register
         [AllowAnonymous]
-        [Route("register")]
+        [Route("Register")]
         public async Task<IHttpActionResult> Register(RegisterBindingModel model)
         {
             if (!ModelState.IsValid)
