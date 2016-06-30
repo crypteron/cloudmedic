@@ -7,14 +7,14 @@ using System.Text;
 using System.Web.Http.ExceptionHandling;
 using NLog;
 
-namespace CloudMedicApi.utility
+namespace CloudMedicApi.Utility
 {
     public class NLogExceptionLogger : ExceptionLogger
     {
         private static readonly Logger Nlog = LogManager.GetCurrentClassLogger();
         public override void Log(ExceptionLoggerContext context)
         {
-            Nlog.Log(LogLevel.Error, RequestToString(context.Request), context.Exception);
+            Nlog.Log(LogLevel.Trace, context.Exception);
         }
 
         private static string RequestToString(HttpRequestMessage request)
