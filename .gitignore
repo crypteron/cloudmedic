@@ -195,3 +195,4 @@ CloudMedicApi/Libs/*.dll
 # Keep sensitive files off GIT
 CloudMedicApi/crypteronCipherCore.config
 .nuget/NuGet.exe
+CloudMedicApi/Web.config
