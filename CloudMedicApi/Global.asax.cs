@@ -24,11 +24,15 @@ namespace CloudMedicApi
         void Application_Error(object sender, EventArgs e)
         {
             // Code that runs when an unhandled error occurs
-            // Get the exception object.
-            Exception exc = Server.GetLastError();
+
+            // 1. Log the exception object.
+            Exception ex = Server.GetLastError();
+            Logger.Log(ex);
+
+            // 2. Send generic error response to client
             Response.Write(TextExceptionHandler.ErrorMessage);
 
-            // Clear the error from the server
+            // 3. Done, clear the error from the server
             Server.ClearError();
         }
     }

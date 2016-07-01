@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
+using System.Diagnostics;
 
 namespace CloudMedicApi.Utility
 {
@@ -13,6 +14,7 @@ namespace CloudMedicApi.Utility
 
         public override void Handle(ExceptionHandlerContext context)
         {
+            Debug.WriteLine("Handling");
             context.Result = new TextPlainErrorResult
             {
                 Request = context.ExceptionContext.Request,
@@ -28,7 +30,7 @@ namespace CloudMedicApi.Utility
 
             public Task<HttpResponseMessage> ExecuteAsync(CancellationToken cancellationToken)
             {
-                HttpResponseMessage response =
+                HttpResponseMessage response = 
                                  new HttpResponseMessage(HttpStatusCode.InternalServerError);
                 response.Content = new StringContent(Content);
                 response.RequestMessage = Request;

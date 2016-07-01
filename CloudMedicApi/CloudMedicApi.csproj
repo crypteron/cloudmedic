@@ -187,6 +187,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Models\DTOs\UsersPageDto.cs" />
+    <Compile Include="Utility\Logger.cs" />
     <Compile Include="Utility\NLogExceptionLogger.cs" />
     <Compile Include="Utility\TextExceptionHandler.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />

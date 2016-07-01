@@ -18,7 +18,7 @@ namespace CloudMedicApi
 
             // Configure default exception handling
             config.Services.Replace(typeof(IExceptionHandler), new TextExceptionHandler());
-            config.Services.Add(typeof(IExceptionLogger), new NLogExceptionLogger());
+            config.Services.Add(typeof(IExceptionLogger), new Logger());
 
             // Configure Web API to use only bearer token authentication.
             config.SuppressDefaultHostAuthentication();
