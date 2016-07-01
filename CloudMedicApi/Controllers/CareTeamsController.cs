@@ -70,6 +70,8 @@ namespace CloudMedicApi.Controllers
         [Authorize(Roles = "SysAdmin")]
         public async Task<IHttpActionResult> UpdateTeam(UpdateTeamBindingModel model)
         {
+
+
             CareTeam careTeam = await db.CareTeam.FindAsync(model.TeamId);
             if (careTeam == null)
             {

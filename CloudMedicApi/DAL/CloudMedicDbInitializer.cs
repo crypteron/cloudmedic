@@ -23,7 +23,6 @@ namespace CloudMedicApi.DAL
         {
             // See http://www.asp.net/mvc/overview/getting-started/getting-started-with-ef-using-mvc/migrations-and-deployment-with-the-entity-framework-in-an-asp-net-mvc-application
             // if you wish to customize it
-            throw new ArgumentException("Barnacle Boy", "original");
 
             // We need to enable CipherDB for this session
             var secDb = Crypteron.CipherDb.Session.Create(myDbContext);
