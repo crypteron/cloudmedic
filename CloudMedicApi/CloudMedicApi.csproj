@@ -186,6 +186,9 @@
   <ItemGroup>
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="DAL\DbSetup.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Models\DTOs\UsersPageDto.cs" />
     <Compile Include="Utility\Logger.cs" />
     <Compile Include="Utility\NLogExceptionLogger.cs" />
@@ -234,6 +237,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="scripts\script1.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
