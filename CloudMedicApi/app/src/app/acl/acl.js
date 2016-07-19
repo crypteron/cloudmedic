@@ -1,1 +1,0 @@
-angular.module('cloudmedic.acl', ['cloudmedic.acl.list']);

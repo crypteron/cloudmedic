@@ -1,1 +1,0 @@
-angular.module('cloudmedic.keys', ['cloudmedic.keys.detail', 'cloudmedic.keys.add']);

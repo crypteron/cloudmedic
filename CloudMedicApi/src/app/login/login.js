@@ -74,7 +74,6 @@ angular.module('cloudmedic.login', [
 
     // Login method
     $scope.login = function () {
-        console.log("Executing login method in login.js");
         $scope.loginData.isSubmitting = true;
         localizedNotifications.removeForCurrent();
         auth.login($scope.loginData)

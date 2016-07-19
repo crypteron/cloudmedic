@@ -154,7 +154,6 @@ angular.module('auth.service', ['localizedNotifications','ui.router','LocalStora
 
         // Log user in
         var _login = function (loginData) {
-            console.log("Passing in authentication information");
             var data = "grant_type=password&username=" + loginData.username + "&password=" + loginData.password;
             var deferred = $q.defer();
             $http.post(provider.apiUrl + provider.tokenPath, data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
