@@ -17,8 +17,15 @@ namespace CloudMedicApi.DAL
     /// DropCreateDatabaseIfModelChanges, Seed data, test accounts etc). 
     /// Alter for production as needed
     /// </summary>
-    public class CloudMedicDbInitializer : DropCreateDatabaseAlways<MyDbContext>
-    {      
+    public class CloudMedicDbInitializer
+#if DEBUG
+        : DropCreateDatabaseAlways<MyDbContext>
+#else
+        // For more sophisticated production scenarios, also see 
+        // http://stackoverflow.com/questions/15998931/what-is-the-correct-use-of-idatabaseinitializer-in-ef
+        : CreateDatabaseIfNotExists<MyDbContext>
+#endif
+    {
         protected override void Seed(MyDbContext myDbContext)
         {
             // See http://www.asp.net/mvc/overview/getting-started/getting-started-with-ef-using-mvc/migrations-and-deployment-with-the-entity-framework-in-an-asp-net-mvc-application

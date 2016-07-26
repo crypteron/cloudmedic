@@ -13,22 +13,12 @@ namespace CloudMedicApi.DAL
         {
             var myCrypteronAccount = new Crypteron.ConfigFile.MyCrypteronAccount()
             {
-                // Copy over other values too?  
                 AppSecret = System.Configuration.ConfigurationManager.AppSettings["secretcode"]
-        };
+            };
 
             CrypteronConfig.Config.MyCrypteronAccount = myCrypteronAccount;
             // Init code-first database, switch in production!
-#if DEBUG
-            Database.SetInitializer(new CloudMedicDbInitializer()); // Development
-#else
-            if (DbSetup.CheckForTables()) { //if there are no tables
-                Database.SetInitializer<MyDbContext>(null); // Production
-                DbSetup.Page_Load();
-                new CloudMedicDbInitializer();
-            }
-
-#endif
+            Database.SetInitializer(new CloudMedicDbInitializer());
         }
 
         public MyDbContext(bool byPassCipherDb = false)
