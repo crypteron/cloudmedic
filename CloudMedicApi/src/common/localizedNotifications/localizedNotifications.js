@@ -1,1 +1,0 @@
-angular.module('localizedNotifications', ['localizedNotifications.service', 'localizedNotifications.directive']);
