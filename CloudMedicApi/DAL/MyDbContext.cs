@@ -13,7 +13,7 @@ namespace CloudMedicApi.DAL
         {
             var myCrypteronAccount = new Crypteron.ConfigFile.MyCrypteronAccount()
             {
-                AppSecret = System.Configuration.ConfigurationManager.AppSettings["secretcode"]
+                AppSecret = System.Configuration.ConfigurationManager.AppSettings["crypteron:AppSecret"]
             };
 
             CrypteronConfig.Config.MyCrypteronAccount = myCrypteronAccount;
