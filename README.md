@@ -16,7 +16,7 @@ This is the ASP.NET back-end for CloudMedic. Note that there is also an open-sou
 
 A bootstrapped healthcare app by Crypteron for our fans and customers. Secured by CipherDB and CipherStor.
 
-   - For a demo visit [cloudmedic.io](http://cloudmedic.io)
+   - For a demo and deployment instructions, visit [cloudmedic.io](http://cloudmedic.io)
    - Commercial usage, contact us at info@crypteron.com 
    - About Crypteron: [crypteron.com](https://www.crypteron.com)
 
